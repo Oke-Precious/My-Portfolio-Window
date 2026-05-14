@@ -88,8 +88,8 @@
       title: 'Resume',
       icon: ICONS.notepad,
       htmlFile: 'apps/notepad.html',
-      width: 720,
-      height: 580
+      width: 960,
+      height: 700
     },
     'edge': {
       id: 'edge',
