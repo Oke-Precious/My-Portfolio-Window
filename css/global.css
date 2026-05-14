@@ -132,8 +132,8 @@ svg {
 .transition { transition: all var(--win11-transition-base); }
 
 /* ============================================================
-   Desktop Area
-   ============================================================ */
+    Utility Classes
+    ============================================================ */
 #desktop {
   position: absolute;
   inset: 0;

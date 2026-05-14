@@ -1,0 +1,248 @@
+/* ============================================================
+   Taskbar Styles - Windows 11 Portfolio
+   ============================================================ */
+
+#taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--win11-taskbar-height);
+  background: rgba(25, 25, 25, 0.85);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  z-index: var(--win11-z-taskbar);
+  overflow: hidden;
+}
+
+#taskbar-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: 2px;
+}
+
+#taskbar-left {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding-left: 8px;
+}
+
+#taskbar-right {
+  position: absolute;
+  right: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding-right: 8px;
+}
+
+.taskbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 120ms ease;
+  position: relative;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.taskbar-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.taskbar-btn:active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.taskbar-btn.active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.taskbar-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 3px;
+  background: var(--win11-accent);
+  border-radius: 2px;
+}
+
+.taskbar-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+#start-btn {
+  width: 44px;
+}
+
+#start-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.taskbar-search-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 120ms ease;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.taskbar-search-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.taskbar-search-pill svg {
+  width: 18px;
+  height: 18px;
+}
+
+.taskbar-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 4px;
+}
+
+/* App icons in taskbar */
+.taskbar-app-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 120ms ease;
+  position: relative;
+}
+
+.taskbar-app-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.taskbar-app-btn.active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.taskbar-app-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 3px;
+  background: var(--win11-accent);
+  border-radius: 2px;
+}
+
+.taskbar-app-btn img,
+.taskbar-app-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Taskbar tooltips */
+.taskbar-tooltip {
+  position: fixed;
+  bottom: 56px;
+  background: rgba(32, 32, 32, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: #fff;
+  pointer-events: none;
+  z-index: var(--win11-z-tooltip);
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  display: none;
+}
+
+.taskbar-tooltip.visible {
+  display: block;
+  animation: fadeIn 100ms ease;
+}
+
+/* ============================================================
+   System Tray (Right side)
+   ============================================================ */
+
+#system-tray {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: 2px;
+  padding: 0 4px;
+}
+
+.tray-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 36px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 120ms ease;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.tray-icon:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.tray-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+#tray-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0  8px;
+  height: 36px;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 120ms ease;
+  min-width: 60px;
+}
+
+#tray-clock:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+#tray-time {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.2;
+}
+
+#tray-date {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.2;
+}
