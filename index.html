@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="css/desktop.css" />
   <link rel="stylesheet" href="css/taskbar.css" />
   <link rel="stylesheet" href="css/windows.css" />
+  <link rel="stylesheet" href="css/startmenu.css" />
 </head>
 <body>
 
@@ -54,30 +55,80 @@
     <div class="desktop-icons-grid"></div>
   </div>
 
-  <!-- Windows Container (for dynamically created windows) -->
+  <!-- Windows Container -->
   <div id="windows-container"></div>
 
   <!-- Start Menu -->
-  <div id="start-menu">
-    <div id="start-search">
-      <input type="text" placeholder="Search apps, settings, and documents" />
-    </div>
-    <div id="start-grid">
-      <h3>Pinned</h3>
-      <div id="start-apps-grid" class="start-apps-grid"></div>
-    </div>
-    <div id="start-menu-footer">
-      <div id="start-user">
-        <div id="start-user-avatar">A</div>
-        <span id="start-user-name">Alex</span>
+  <div id="startMenu">
+    <div class="sm-search-wrap">
+      <div class="sm-search-container">
+        <span class="sm-search-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        </span>
+        <input type="text" class="sm-search" id="smSearch" placeholder="Type to search" />
       </div>
-      <div id="start-power" title="Power">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42A6.92 6.92 0 0119 12c0-3.87-3.13-7-7-7a6.98 6.98 0 00-5.58 2.47l-1.42-1.42A8.96 8.96 0 0112 4c4.97 0 9 4.03 9 9s-4.03 9-9 9a8.96 8.96 0 01-6.83-3.33z"/>
-        </svg>
+    </div>
+
+    <div class="sm-body">
+      <!-- Search Results -->
+      <div class="sm-search-results" id="smSearchResults"></div>
+
+      <!-- Pinned Apps -->
+      <div class="sm-pinned-hdr sm-section-header">
+        <span class="sm-section-label">Pinned</span>
+        <span class="sm-section-btn" id="smAllAppsBtn">All apps &gt;</span>
+      </div>
+      <div class="sm-pinned-grid" id="smPinned"></div>
+
+      <!-- All Apps View -->
+      <div class="sm-all-apps" id="smAllApps">
+        <div class="sm-all-apps-header">
+          <div class="sm-back-btn" id="smBackBtn">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            Back
+          </div>
+          <span class="sm-section-label">All apps</span>
+        </div>
+        <div class="sm-all-apps-list" id="smAllAppsList"></div>
+      </div>
+    </div>
+
+    <!-- Recommended -->
+    <div class="sm-recommended">
+      <div class="sm-section-header" style="padding: 0 4px;">
+        <span class="sm-section-label">Recommended</span>
+        <span class="sm-section-btn" id="smRecMore">More &gt;</span>
+      </div>
+      <div class="sm-rec-list" id="smRecList"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="sm-footer">
+      <div class="sm-user">
+        <div class="sm-user-avatar">A</div>
+        <span class="sm-user-name">Alex</span>
+      </div>
+      <div class="sm-power-btn" id="smPowerBtn" title="Power">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42A6.92 6.92 0 0119 12c0-3.87-3.13-7-7-7a6.98 6.98 0 00-5.58 2.47l-1.42-1.42A8.96 8.96 0 0112 4c4.97 0 9 4.03 9 9s-4.03 9-9 9a8.96 8.96 0 01-6.83-3.33z"/></svg>
+        <div class="sm-power-menu" id="smPowerMenu">
+          <div class="sm-power-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg> Sleep</div>
+          <div class="sm-power-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v9l4-2.5V5.5L12 3z"/><path d="M12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10z" fill="none" stroke="currentColor" stroke-width="2"/></svg> Restart</div>
+          <div class="sm-power-item danger" data-action="shutdown"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42A6.92 6.92 0 0119 12c0-3.87-3.13-7-7-7a6.98 6.98 0 00-5.58 2.47l-1.42-1.42A8.96 8.96 0 0112 4c4.97 0 9 4.03 9 9s-4.03 9-9 9a8.96 8.96 0 01-6.83-3.33z"/></svg> Shut down</div>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Search Overlay -->
+  <div id="searchOverlay">
+    <div id="searchPanel">
+      <input type="text" id="searchInputLarge" placeholder="Search for apps, settings, and documents" />
+      <div id="searchResultsLarge"></div>
+    </div>
+  </div>
+
+  <!-- Shutdown Screen -->
+  <div id="shutdownScreen"></div>
 
   <!-- Taskbar -->
   <div id="taskbar"></div>
@@ -88,5 +139,6 @@
   <script src="js/lockscreen.js"></script>
   <script src="js/desktop.js"></script>
   <script src="js/taskbar.js"></script>
+  <script src="js/startmenu.js"></script>
 </body>
 </html>

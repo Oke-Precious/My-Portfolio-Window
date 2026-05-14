@@ -99,16 +99,7 @@
   }
 
   function toggleStartMenu() {
-    const menu = document.getElementById('start-menu');
-    if (!menu) return;
-    const isOpen = menu.classList.contains('visible');
-    menu.classList.remove('closing');
-    if (isOpen) {
-      menu.classList.add('closing');
-      setTimeout(() => { menu.classList.remove('visible', 'closing'); }, 150);
-    } else {
-      menu.classList.add('visible');
-    }
+    // Delegated to startmenu.js
   }
 
   window.toggleStartMenu = toggleStartMenu;
