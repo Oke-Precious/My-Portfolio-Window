@@ -116,11 +116,11 @@
       content: `
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;height:100%;padding:40px 32px;box-sizing:border-box;justify-content:center;background:rgba(0,0,0,0.3)">
           <div style="width:72px;height:72px;margin-bottom:20px;">${ICONS.about}</div>
-          <h2 style="font-size:22px;font-weight:600;margin-bottom:8px;">Windows 11 Portfolio</h2>
+          <h2 style="font-size:22px;font-weight:600;margin-bottom:8px;">Oke Precious Portfolio</h2>
           <p style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:24px;">Interactive Desktop Experience</p>
           <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:24px;max-width:360px;text-align:left;margin-bottom:16px;">
             <p style="font-size:13px;line-height:1.8;color:rgba(255,255,255,0.75);">
-              A fully functional Windows 11 desktop environment built with vanilla JavaScript.
+              A fully functional desktop environment built with vanilla JavaScript by Oke Precious.
             </p>
             <ul style="font-size:12px;line-height:2;color:rgba(255,255,255,0.6);padding-left:18px;margin-top:8px;">
               <li>Lock screen & login</li>

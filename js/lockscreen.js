@@ -154,7 +154,7 @@
 
       await sleep(1000);
       if (typeof showToast === 'function') {
-        showToast('Welcome to Oke Precious\'s Windows 11 Portfolio!', 'info', '👋');
+        showToast('Welcome to Oke Precious\'s Portfolio!', 'info', '👋');
       }
     }
   }

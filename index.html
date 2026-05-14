@@ -35,10 +35,30 @@
 
 <!-- Boot Screen -->
   <div id="bootScreen" style="display:none">
+    <div class="logo-glow"></div>
+    <div class="os-logo">
+      <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="logoGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <g filter="url(#logoGlow)">
+          <rect class="logo-pane pane-tl" x="8" y="8" width="28" height="28" rx="4" fill="#F25022"/>
+          <rect class="logo-pane pane-tr" x="44" y="8" width="28" height="28" rx="4" fill="#7FBA00"/>
+          <rect class="logo-pane pane-bl" x="8" y="44" width="28" height="28" rx="4" fill="#00A4EF"/>
+          <rect class="logo-pane pane-br" x="44" y="44" width="28" height="28" rx="4" fill="#FFB900"/>
+        </g>
+      </svg>
+    </div>
+    <div class="boot-ring-wrap">
+      <div class="boot-ring"></div>
+    </div>
+  </div>
 
   <!-- Lock Screen -->
   <div id="lockScreen" style="display:none">
-  <div id="lockScreen">
     <div id="lockScreen-content">
       <div id="lockClock"></div>
       <div id="lockDate"></div>
@@ -121,8 +141,8 @@
 
     <div class="sm-footer">
       <div class="sm-user">
-        <div class="sm-user-avatar">A</div>
-        <span class="sm-user-name">Alex</span>
+        <div class="sm-user-avatar">OP</div>
+        <span class="sm-user-name">Oke Precious</span>
       </div>
       <div class="sm-power-btn" id="smPowerBtn" title="Power">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42A6.92 6.92 0 0119 12c0-3.87-3.13-7-7-7a6.98 6.98 0 00-5.58 2.47l-1.42-1.42A8.96 8.96 0 0112 4c4.97 0 9 4.03 9 9s-4.03 9-9 9a8.96 8.96 0 01-6.83-3.33z"/></svg>

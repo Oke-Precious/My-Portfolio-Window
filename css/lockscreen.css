@@ -236,6 +236,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  /* Always hidden until unlock — JS controls display */
 }
 
 /* Bloom wallpaper background */
