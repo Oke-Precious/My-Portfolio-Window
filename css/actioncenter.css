@@ -1,0 +1,750 @@
+/* ============================================================
+   Action Center & Notifications - Windows 11 Portfolio
+   ============================================================ */
+
+/* ============================================================
+   Action Center Panel
+   ============================================================ */
+
+#actionCenter {
+  position: fixed;
+  bottom: calc(var(--win11-taskbar-height) + 12px);
+  right: 12px;
+  width: 380px;
+  background: var(--win11-bg-glass);
+  backdrop-filter: blur(60px) saturate(160%);
+  -webkit-backdrop-filter: blur(60px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--win11-radius-lg);
+  box-shadow: var(--win11-shadow-hover);
+  z-index: var(--win11-z-notifications);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 520px;
+  opacity: 0;
+  transform: translateY(12px) scale(0.97);
+}
+
+#actionCenter.visible {
+  display: flex;
+  animation: acSlideIn 200ms cubic-bezier(0.34, 1.1, 0.64, 1) forwards;
+  pointer-events: auto;
+}
+
+#actionCenter.closing {
+  animation: acSlideOut 150ms ease-in forwards;
+}
+
+@keyframes acSlideIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes acSlideOut {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(8px) scale(0.97); }
+}
+
+/* ============================================================
+   Tabs
+   ============================================================ */
+
+.ac-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.ac-tab {
+  flex: 1;
+  padding: 10px 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  text-align: center;
+  border-bottom: 2px solid transparent;
+  transition: all 100ms;
+  margin-bottom: -1px;
+}
+
+.ac-tab:hover { color: rgba(255, 255, 255, 0.9); }
+
+.ac-tab.active {
+  color: rgba(255, 255, 255, 0.95);
+  border-bottom-color: var(--win11-accent);
+}
+
+/* ============================================================
+   Tab Content
+   ============================================================ */
+
+.ac-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.ac-content > div { display: none; }
+.ac-content > div.active { display: flex; flex-direction: column; animation: acFadeIn 150ms ease; }
+
+@keyframes acFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================================
+   Quick Settings
+   ============================================================ */
+
+.ac-quick-settings {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.ac-quick-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 100ms;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ac-quick-tile:hover { background: rgba(255, 255, 255, 0.1); }
+
+.ac-quick-tile.active {
+  background: rgba(0, 120, 212, 0.25);
+  color: var(--win11-accent-light);
+}
+
+.ac-quick-tile svg { width: 20px; height: 20px; }
+
+.ac-quick-tile .tile-label { line-height: 1; }
+
+.ac-quick-tile.wifi.active svg { fill: var(--win11-accent-light); }
+.ac-quick-tile.bluetooth.active svg { fill: #9C27B0; }
+.ac-quick-tile.airplane.active svg { fill: #FF9800; }
+
+/* ============================================================
+   Sliders (Brightness & Volume)
+   ============================================================ */
+
+.ac-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.ac-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ac-slider-icon { width: 18px; height: 18px; color: rgba(255, 255, 255, 0.7); flex-shrink: 0; }
+
+.ac-slider-icon svg { width: 18px; height: 18px; }
+
+.ac-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.ac-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  transition: transform 80ms;
+}
+
+.ac-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* ============================================================
+   Notifications Section
+   ============================================================ */
+
+.ac-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.ac-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ac-clear-btn {
+  font-size: 11px;
+  color: var(--win11-accent-light);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background 80ms;
+}
+
+.ac-clear-btn:hover { background: rgba(0, 120, 212, 0.15); }
+
+.ac-notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.ac-notif-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 100ms;
+  position: relative;
+}
+
+.ac-notif-card:hover { background: rgba(255, 255, 255, 0.07); }
+
+.ac-notif-card.dismissing {
+  animation: acNotifDismiss 300ms ease forwards;
+}
+
+@keyframes acNotifDismiss {
+  to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+
+.ac-notif-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ac-notif-body { flex: 1; min-width: 0; }
+
+.ac-notif-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ac-notif-sub {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ac-notif-time {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ac-notif-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 80ms;
+  flex-shrink: 0;
+}
+
+.ac-notif-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ac-no-notifs {
+  text-align: center;
+  padding: 24px;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 13px;
+}
+
+/* ============================================================
+   Calendar Tab
+   ============================================================ */
+
+.ac-cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.ac-cal-month {
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ac-cal-nav {
+  display: flex;
+  gap: 4px;
+}
+
+.ac-cal-nav-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.5);
+  transition: all 80ms;
+}
+
+.ac-cal-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ac-cal-nav-btn svg { width: 14px; height: 14px; }
+
+.ac-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+
+.ac-day-header {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+  padding: 4px 0;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.ac-day-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 80ms;
+}
+
+.ac-day-cell:hover { background: rgba(255, 255, 255, 0.08); }
+
+.ac-day-cell.today {
+  background: var(--win11-accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.ac-day-cell.other-month { opacity: 0.3; }
+
+.ac-day-cell.selected {
+  background: rgba(0, 120, 212, 0.3);
+  outline: 1px solid rgba(0, 120, 212, 0.5);
+  color: #fff;
+}
+
+.ac-events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 12px;
+}
+
+.ac-event-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  border-left: 3px solid var(--win11-accent);
+}
+
+.ac-event-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--win11-accent);
+  flex-shrink: 0;
+}
+
+.ac-event-name {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.ac-event-time {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   Focus Tab
+   ============================================================ */
+
+.ac-focus-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 16px;
+  gap: 12px;
+}
+
+.ac-focus-icon {
+  font-size: 40px;
+  opacity: 0.7;
+}
+
+.ac-focus-status {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ac-focus-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.6;
+}
+
+.ac-focus-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: rgba(0, 120, 212, 0.2);
+  border: 1px solid rgba(0, 120, 212, 0.3);
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--win11-accent-light);
+  cursor: pointer;
+  transition: all 100ms;
+}
+
+.ac-focus-toggle:hover {
+  background: rgba(0, 120, 212, 0.3);
+}
+
+.ac-focus-toggle.active {
+  background: var(--win11-accent);
+  color: #fff;
+  border-color: var(--win11-accent);
+}
+
+/* ============================================================
+   Toast Notifications
+   ============================================================ */
+
+#toastContainer {
+  position: fixed;
+  bottom: 60px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.ac-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 320px;
+  max-width: 380px;
+  padding: 14px 16px;
+  background: var(--win11-bg-glass);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--win11-radius);
+  box-shadow: var(--win11-shadow);
+  pointer-events: auto;
+  position: relative;
+  overflow: hidden;
+  animation: toastIn 250ms cubic-bezier(0.34, 1.1, 0.64, 1) forwards;
+}
+
+.ac-toast.dismissing {
+  animation: toastOut 200ms ease-in forwards;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(110%); }
+}
+
+.ac-toast::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--win11-accent);
+}
+
+.ac-toast.success::before { background: #4CAF50; }
+.ac-toast.warning::before { background: #FF9800; }
+.ac-toast.error::before { background: #F44336; }
+
+.ac-toast-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: -2px;
+}
+
+.ac-toast-body { flex: 1; }
+
+.ac-toast-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2px;
+}
+
+.ac-toast-msg {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+}
+
+.ac-toast-close {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 80ms;
+  flex-shrink: 0;
+}
+
+.ac-toast-close:hover { background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.8); }
+
+.ac-toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  animation: toastProgress 4s linear forwards;
+}
+
+@keyframes toastProgress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+/* ============================================================
+   Contact Window
+   ============================================================ */
+
+.contact-window {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.contact-header {
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.contact-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.contact-header p {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-input {
+  width: 100%;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 0 14px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 100ms;
+}
+
+.contact-input:focus { border-color: var(--win11-accent); background: rgba(255, 255, 255, 0.08); }
+.contact-input::placeholder { color: rgba(255, 255, 255, 0.4); }
+
+.contact-select {
+  width: 100%;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 0 14px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='rgba(255,255,255,0.4)'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.contact-select:focus { border-color: var(--win11-accent); }
+.contact-select option { background: #2a2a2a; color: #fff; }
+
+.contact-textarea {
+  width: 100%;
+  min-height: 100px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  outline: none;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+  line-height: 1.5;
+  transition: border-color 100ms;
+}
+
+.contact-textarea:focus { border-color: var(--win11-accent); }
+.contact-textarea::placeholder { color: rgba(255, 255, 255, 0.4); }
+
+.contact-submit {
+  width: 100%;
+  height: 38px;
+  background: var(--win11-accent);
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  transition: background 100ms;
+  font-family: inherit;
+}
+
+.contact-submit:hover { background: var(--win11-accent-hover); }
+
+.contact-socials {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.contact-social {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all 100ms;
+}
+
+.contact-social:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+}
+
+.contact-social svg { width: 18px; height: 18px; }
