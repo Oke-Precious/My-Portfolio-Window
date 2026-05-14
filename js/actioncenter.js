@@ -380,7 +380,7 @@
     if (typeof window.__win11 !== 'undefined' && window.__win11.openApp) {
       const config = {
         id: 'contact-window',
-        title: 'Send Message — Oke Precious Abioye',
+        title: 'Send Message — Contact Oke Precious',
         icon: `<svg viewBox="0 0 24 24"><defs><linearGradient id="cm-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" style="stop-color:#5C9CE6"/><stop offset="100%" style="stop-color:#4078C0"/></linearGradient></defs><rect x="2" y="5" width="20" height="14" rx="2" fill="url(#cm-g)"/><path d="M2 8L12 14L22 8" stroke="#2E5C9E" stroke-width="1.5" fill="none"/></svg>`,
         content: `
           <div class="contact-window">
