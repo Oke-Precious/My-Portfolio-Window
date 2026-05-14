@@ -1,21 +1,449 @@
-<div class="edge-toolbar">
-  <button class="edge-nav-btn" title="Back"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
-  <button class="edge-nav-btn" title="Forward"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></button>
-  <button class="edge-nav-btn" title="Refresh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
-  <button class="edge-nav-btn" title="Home"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></button>
-  <div class="edge-address-bar">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="#666" style="margin-right:8px;flex-shrink:0;"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-    <input type="text" placeholder="Search or enter URL" />
+<!-- Edge Browser - GitHub & Links -->
+<style>
+.edge-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.15);
+  font-family: var(--win11-font);
+}
+.edge-topbar {
+  background: rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+}
+.edge-tabs {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px 0;
+  gap: 2px;
+}
+.edge-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 6px 6px 0 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 200px;
+  cursor: pointer;
+}
+.edge-tab.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.95);
+}
+.edge-tab-favicon {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.edge-tab-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.edge-tab-close {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.edge-tab-close:hover { background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.9); }
+.edge-new-tab-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 4px;
+}
+.edge-new-tab-btn:hover { background: rgba(255, 255, 255, 0.06); color: rgba(255, 255, 255, 0.9); }
+.edge-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  gap: 6px;
+}
+.edge-nav-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 80ms;
+}
+.edge-nav-btn:hover { background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.9); }
+.edge-nav-btn svg { width: 16px; height: 16px; }
+.edge-addr {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 34px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 17px;
+  padding: 0 14px;
+  gap: 8px;
+}
+.edge-addr:focus-within {
+  border-color: var(--win11-accent);
+  background: rgba(0, 0, 0, 0.3);
+}
+.edge-addr-lock { width: 14px; height: 14px; color: rgba(255, 255, 255, 0.5); flex-shrink: 0; }
+.edge-addr-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+}
+.edge-addr-input::placeholder { color: rgba(255, 255, 255, 0.4); }
+.edge-content {
+  flex: 1;
+  overflow: hidden;
+  background: #fff;
+}
+.edge-content iframe { width: 100%; height: 100%; border: none; }
+.edge-preview {
+  height: 100%;
+  overflow-y: auto;
+  background: #0d1117;
+  color: #c9d1d9;
+  padding: 40px;
+  box-sizing: border-box;
+}
+.edge-profile-header {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+  align-items: flex-start;
+}
+.edge-profile-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+.edge-profile-info h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #f0f6fc;
+  margin-bottom: 4px;
+}
+.edge-profile-info .username {
+  font-size: 16px;
+  color: #8b949e;
+  margin-bottom: 12px;
+}
+.edge-profile-info .bio {
+  font-size: 14px;
+  color: #c9d1d9;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.edge-profile-stats {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+.edge-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #8b949e;
+}
+.edge-stat strong { color: #f0f6fc; }
+.edge-profile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: #21262d;
+  border: 1px solid rgba(240, 246, 252, 0.1);
+  border-radius: 6px;
+  color: #f0f6fc;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 100ms;
+}
+.edge-profile-btn:hover { background: #30363d; border-color: rgba(240, 246, 252, 0.2); }
+.edge-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f0f6fc;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #21262d;
+}
+.edge-pinned {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.edge-repo-card {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.edge-repo-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #58a6ff;
+  text-decoration: none;
+}
+.edge-repo-name:hover { text-decoration: underline; }
+.edge-repo-desc { font-size: 12px; color: #8b949e; line-height: 1.5; flex: 1; }
+.edge-repo-meta { display: flex; align-items: center; gap: 12px; font-size: 11px; color: #8b949e; }
+.edge-lang-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+.edge-contributions {
+  background: #161b22;
+  border: 1px solid #21262d;
+  border-radius: 6px;
+  padding: 20px;
+}
+.edge-contrib-graph {
+  display: grid;
+  grid-template-columns: repeat(52, 3px);
+  grid-template-rows: repeat(7, 3px);
+  gap: 2px;
+  margin-top: 12px;
+  width: fit-content;
+}
+.edge-contrib-cell {
+  width: 3px;
+  height: 3px;
+  border-radius: 1px;
+  background: #21262d;
+}
+.edge-contrib-cell.l1 { background: #0e4429; }
+.edge-contrib-cell.l2 { background: #006d32; }
+.edge-contrib-cell.l3 { background: #26a641; }
+.edge-contrib-cell.l4 { background: #39d353; }
+.edge-open-real {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  background: rgba(0, 120, 212, 0.1);
+  border: 1px solid rgba(0, 120, 212, 0.3);
+  border-radius: 8px;
+  margin-top: 24px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+.edge-open-real a {
+  color: var(--win11-accent-light);
+  text-decoration: none;
+  font-weight: 500;
+}
+.edge-open-real a:hover { text-decoration: underline; }
+</style>
+
+<div class="edge-layout">
+  <div class="edge-topbar">
+    <div class="edge-tabs">
+      <div class="edge-tab active" data-url="https://github.com/Oke-Precious">
+        <div class="edge-tab-favicon" style="background:#24292e;display:flex;align-items:center;justify-content:center;">
+          <svg viewBox="0 0 16 16" width="12" height="12" fill="#fff"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        </div>
+        <span class="edge-tab-title">GitHub</span>
+        <span class="edge-tab-close">\\d7</span>
+      </div>
+      <div class="edge-tab" data-url="https://linkedin.com/in/oke-precious-581ba5402">
+        <div class="edge-tab-favicon" style="background:#0A66C2;">in</div>
+        <span class="edge-tab-title">LinkedIn</span>
+        <span class="edge-tab-close">\\d7</span>
+      </div>
+      <div class="edge-new-tab-btn" id="edge-new-tab">+</div>
+    </div>
+    <div class="edge-toolbar">
+      <div class="edge-nav-btn" id="edge-back" title="Back"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></div>
+      <div class="edge-nav-btn" id="edge-fwd" title="Forward"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></div>
+      <div class="edge-nav-btn" id="edge-refresh" title="Refresh"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></div>
+      <div class="edge-addr">
+        <span class="edge-addr-lock"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></span>
+        <input type="text" class="edge-addr-input" id="edge-url" value="https://github.com/Oke-Precious" />
+      </div>
+    </div>
   </div>
-  <button class="edge-nav-btn" title="Menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
-</div>
-<div class="edge-content">
-  <div class="edge-new-tab">
-    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.38 0 2.5 1.12 2.5 2.5 0 1.08-.69 2-1.64 2.34l-.01.01C12.34 10.5 12 11.22 12 12s.34 1.5.85 2.15l.01.01C13.31 14.5 14 15.42 14 16.5 14 17.88 12.88 19 12 19c-.88 0-2-1.12-2-2.5 0-.76.41-1.44 1.01-1.92l.02-.01C10.52 13.22 10 12.72 10 12c0-1.22.52-2.22 1.03-2.85l.01-.01C10.59 8.44 10 7.78 10 7c0-1.38 1.12-2 2-2h0z"/></svg>
-    <h3>Welcome to Edge</h3>
-    <div class="edge-new-tab-search">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="#999"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-      <input type="text" placeholder="Search the web" />
+  <div class="edge-content">
+    <div class="edge-preview" id="edge-preview">
+      <!-- GitHub profile preview -->
+      <div class="edge-profile-header">
+        <div class="edge-profile-avatar">OP</div> <!-- REPLACE: initials -->
+        <div class="edge-profile-info">
+          <h1>Oke Precious Abioye</h1> <!-- REPLACE: name -->
+          <div class="username">Oke-Precious</div> <!-- REPLACE: GitHub username -->
+          <div class="bio">// REPLACE: Short bio that appears on GitHub profile</div> <!-- REPLACE -->
+          <div class="edge-profile-stats">
+            <div class="edge-stat"><strong>// REPLACE: X</strong> followers</div> <!-- REPLACE -->
+            <div class="edge-stat"><strong>// REPLACE: Y</strong> following</div> <!-- REPLACE -->
+            <div class="edge-stat"><strong>// REPLACE: Z</strong> stars</div> <!-- REPLACE -->
+          </div>
+          <a class="edge-profile-btn" href="https://github.com/Oke-Precious" target="_blank">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub Profile
+          </a>
+        </div>
+      </div>
+
+      <div class="edge-section-title">Pinned</div>
+      <div class="edge-pinned">
+        <div class="edge-repo-card">
+          <a class="edge-repo-name" href="#">Portfolio Window</a> <!-- REPLACE: repo name -->
+          <div class="edge-repo-desc">// REPLACE: repo description — this interactive Windows 11 desktop experience</div> <!-- REPLACE -->
+          <div class="edge-repo-meta">
+            <span><span class="edge-lang-dot" style="background:#F7DF1E"></span>JavaScript</span>
+            <span>\\u2605 // REPLACE: stars</span> <!-- REPLACE -->
+          </div>
+        </div>
+        <div class="edge-repo-card">
+          <a class="edge-repo-name" href="#">// REPLACE: Repo 2 name</a> <!-- REPLACE -->
+          <div class="edge-repo-desc">// REPLACE: repo description</div> <!-- REPLACE -->
+          <div class="edge-repo-meta">
+            <span><span class="edge-lang-dot" style="background:#61DAFB"></span>React</span>
+            <span>\\u2605 // REPLACE</span> <!-- REPLACE -->
+          </div>
+        </div>
+        <div class="edge-repo-card">
+          <a class="edge-repo-name" href="#">// REPLACE: Repo 3 name</a> <!-- REPLACE -->
+          <div class="edge-repo-desc">// REPLACE</div>
+          <div class="edge-repo-meta">
+            <span><span class="edge-lang-dot" style="background:#68A063"></span>Node</span>
+            <span>\\u2605 // REPLACE</span>
+          </div>
+        </div>
+        <div class="edge-repo-card">
+          <a class="edge-repo-name" href="#">// REPLACE: Repo 4 name</a> <!-- REPLACE -->
+          <div class="edge-repo-desc">// REPLACE</div>
+          <div class="edge-repo-meta">
+            <span><span class="edge-lang-dot" style="background:#3776AB"></span>Python</span>
+            <span>\\u2605 // REPLACE</span>
+          </div>
+        </div>
+        <div class="edge-repo-card">
+          <a class="edge-repo-name" href="#">// REPLACE: Repo 5 name</a> <!-- REPLACE -->
+          <div class="edge-repo-desc">// REPLACE</div>
+          <div class="edge-repo-meta">
+            <span><span class="edge-lang-dot" style="background:#38B2AC"></span>CSS</span>
+            <span>\\u2605 // REPLACE</span>
+          </div>
+        </div>
+        <div class="edge-repo-card">
+          <a class="edge-repo-name" href="#">// REPLACE: Repo 6 name</a> <!-- REPLACE -->
+          <div class="edge-repo-desc">// REPLACE</div>
+          <div class="edge-repo-meta">
+            <span><span class="edge-lang-dot" style="background:#F7DF1E"></span>TypeScript</span>
+            <span>\\u2605 // REPLACE</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="edge-section-title">Contribution Activity</div>
+      <div class="edge-contributions">
+        <div style="font-size:13px;color:#8b949e;margin-bottom:4px">// REPLACE: X contributions in the last year</div> <!-- REPLACE -->
+        <div class="edge-contrib-graph" id="contrib-graph">
+          <!-- Generated by JS -->
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;font-size:11px;color:#8b949e;align-items:center">
+          <span>Less</span>
+          <div style="width:10px;height:10px;background:#21262d;border-radius:2px"></div>
+          <div style="width:10px;height:10px;background:#0e4429;border-radius:2px"></div>
+          <div style="width:10px;height:10px;background:#006d32;border-radius:2px"></div>
+          <div style="width:10px;height:10px;background:#26a641;border-radius:2px"></div>
+          <div style="width:10px;height:10px;background:#39d353;border-radius:2px"></div>
+          <span>More</span>
+        </div>
+      </div>
+
+      <div class="edge-open-real">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+        <span>This is a preview. <a href="https://github.com/Oke-Precious" target="_blank">Open real GitHub profile in browser</a></span>
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+(function() {
+  // Contribution graph generator
+  const graph = document.getElementById('contrib-graph');
+  if (graph) {
+    for (let i = 0; i < 364; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'edge-contrib-cell';
+      const rand = Math.random();
+      if (rand > 0.7) cell.classList.add('l4');
+      else if (rand > 0.5) cell.classList.add('l3');
+      else if (rand > 0.25) cell.classList.add('l2');
+      else if (rand > 0.1) cell.classList.add('l1');
+      graph.appendChild(cell);
+    }
+  }
+
+  // Tab switching
+  document.querySelectorAll('.edge-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.edge-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const url = tab.dataset.url;
+      if (url) {
+        document.getElementById('edge-url').value = url;
+      }
+    });
+  });
+
+  // URL bar enter
+  const urlInput = document.getElementById('edge-url');
+  if (urlInput) {
+    urlInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const url = urlInput.value;
+        try {
+          const a = document.createElement('a');
+          a.href = url;
+          a.target = '_blank';
+          window.open(url, '_blank');
+        } catch (err) {
+          console.warn('Could not open URL:', url);
+        }
+      }
+    });
+  }
+
+  document.getElementById('edge-refresh')?.addEventListener('click', () => {
+    const preview = document.getElementById('edge-preview');
+    if (preview) {
+      preview.style.opacity = '0';
+      setTimeout(() => { preview.style.opacity = '1'; }, 150);
+    }
+  });
+})();
+</script>

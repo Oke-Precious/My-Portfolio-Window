@@ -1,0 +1,290 @@
+<!-- Recycle Bin - Abandoned Projects -->
+<style>
+.rb-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  font-family: var(--win11-font);
+}
+.rb-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.rb-toolbar-title {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-right: 8px;
+}
+.rb-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  border: none;
+  transition: background 80ms;
+  font-family: inherit;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.06);
+}
+.rb-action-btn:hover { background: rgba(255, 255, 255, 0.1); }
+.rb-action-btn.danger { background: rgba(220, 53, 69, 0.15); color: #f1948a; }
+.rb-action-btn.danger:hover { background: rgba(220, 53, 69, 0.25); }
+.rb-action-btn svg { width: 14px; height: 14px; }
+.rb-body {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+.rb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+.rb-project {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 200ms ease;
+  position: relative;
+}
+.rb-project:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: scale(1.02);
+}
+.rb-project:hover .rb-ghost { opacity: 1; transform: translateY(-5px); }
+.rb-project.deleting {
+  animation: rbDelete 400ms ease forwards;
+}
+@keyframes rbDelete {
+  0% { transform: scale(1) rotate(0deg); opacity: 1; }
+  50% { transform: scale(1.1) rotate(5deg); opacity: 0.5; }
+  100% { transform: scale(0) rotate(15deg) translateY(-30px); opacity: 0; }
+}
+.rb-ghost {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 12px;
+  opacity: 0.7;
+  transition: all 200ms ease;
+  position: relative;
+}
+.rb-ghost::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+.rb-project-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  margin-bottom: 4px;
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 100, 100, 0.5);
+}
+.rb-project-reason {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+  font-style: italic;
+}
+.rb-empty-msg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 14px;
+  gap: 16px;
+}
+.rb-empty-msg svg { width: 64px; height: 64px; opacity: 0.3; }
+.rb-confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.rb-confirm-overlay.visible { display: flex; }
+.rb-confirm-box {
+  background: rgba(40, 40, 40, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 24px;
+  min-width: 300px;
+  text-align: center;
+  box-shadow: var(--win11-shadow);
+}
+.rb-confirm-box h3 { font-size: 16px; margin-bottom: 8px; }
+.rb-confirm-box p { font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 20px; }
+.rb-confirm-btns { display: flex; gap: 8px; justify-content: center; }
+.rb-confirm-btns button {
+  padding: 7px 20px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: background 80ms;
+}
+.rb-confirm-btns .rb-cancel {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+}
+.rb-confirm-btns .rb-cancel:hover { background: rgba(255, 255, 255, 0.12); }
+.rb-confirm-btns .rb-confirm-danger {
+  background: #dc3545;
+  color: #fff;
+}
+.rb-confirm-btns .rb-confirm-danger:hover { background: #c82333; }
+.rb-restore-msg {
+  display: none;
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  animation: rbFadeIn 300ms ease;
+}
+.rb-restore-msg.visible { display: block; }
+@keyframes rbFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+</style>
+
+<div class="rb-layout">
+  <div class="rb-toolbar">
+    <span class="rb-toolbar-title">Recycle Bin \\ Projects I Abandoned (RIP)</span>
+    <div style="flex:1"></div>
+    <button class="rb-action-btn" id="rb-restore">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42A6.92 6.92 0 0119 12c0-3.87-3.13-7-7-7a6.98 6.98 0 00-5.58 2.47l-1.42-1.42A8.96 8.96 0 0112 4c4.97 0 9 4.03 9 9s-4.03 9-9 9a8.96 8.96 0 01-6.83-3.33z"/></svg>
+      Restore All
+    </button>
+    <button class="rb-action-btn danger" id="rb-empty">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+      Empty Recycle Bin
+    </button>
+  </div>
+  <div class="rb-body">
+    <div class="rb-grid" id="rb-grid"></div>
+    <div class="rb-restore-msg" id="rb-restore-msg">
+      \\ud83d\\ude44 Trust me, you don't want these back.<br>
+      <span style="font-size:12px;opacity:0.5">They're abandoned for a reason.</span>
+    </div>
+  </div>
+</div>
+
+<div class="rb-confirm-overlay" id="rb-confirm">
+  <div class="rb-confirm-box">
+    <h3>Delete all items permanently?</h3>
+    <p>You cannot undo this action. All abandoned projects will be gone forever.</p>
+    <div class="rb-confirm-btns">
+      <button class="rb-cancel" id="rb-cancel-btn">Cancel</button>
+      <button class="rb-confirm-danger" id="rb-confirm-btn">Delete Everything</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const ghosts = ['\\ud83d\\udc7b', '\\ud83d\\udc80', '\\ud83d\\ude34', '\\ud83d\\udca9', '\\ud83d\\udc7d'];
+  const projects = [
+    { name: 'MegaSocial 3000', reason: 'Scope creep from dimension 7 killed me', emoji: 0 },
+    { name: 'PixelArt Pro', reason: 'I just stopped caring after Week 1', emoji: 1 },
+    { name: 'Django Blog v2', reason: 'CSS was impossible, I gave up', emoji: 2 },
+    { name: 'Crypto Tracker', reason: 'I lost money and will not speak of it', emoji: 3 },
+    { name: 'Flutter App', reason: 'Android Studio crashed my will to live', emoji: 4 },
+  ];
+
+  const grid = document.getElementById('rb-grid');
+
+  function renderProjects() {
+    grid.innerHTML = projects.map((p, i) => `
+      <div class="rb-project" data-index="${i}" title="${p.reason}">
+        <div class="rb-ghost">
+          <svg viewBox="0 0 64 64">
+            <defs><linearGradient id="rbg-${i}" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#607D8B"/>
+              <stop offset="100%" style="stop-color:#455A64"/>
+            </linearGradient></defs>
+            <circle cx="32" cy="32" r="28" fill="url(#rbg-${i})" opacity="0.4"/>
+            <text x="32" y="40" text-anchor="middle" font-size="24">${ghosts[p.emoji]}</text>
+          </svg>
+        </div>
+        <div class="rb-project-name">${p.name}</div>
+        <div class="rb-project-reason">${p.reason}</div>
+      </div>
+    `).join('');
+
+    document.querySelectorAll('.rb-project').forEach(card => {
+      card.addEventListener('click', () => {
+        const idx = parseInt(card.dataset.index);
+        card.classList.add('deleting');
+        setTimeout(() => {
+          projects.splice(idx, 1);
+          renderProjects();
+          if (projects.length === 0) showEmpty();
+        }, 400);
+      });
+    });
+  }
+
+  function showEmpty() {
+    grid.style.display = 'none';
+  }
+
+  document.getElementById('rb-restore').addEventListener('click', () => {
+    document.getElementById('rb-restore-msg').classList.add('visible');
+    setTimeout(() => {
+      document.getElementById('rb-restore-msg').classList.remove('visible');
+    }, 3000);
+  });
+
+  document.getElementById('rb-empty').addEventListener('click', () => {
+    document.getElementById('rb-confirm').classList.add('visible');
+  });
+
+  document.getElementById('rb-cancel-btn').addEventListener('click', () => {
+    document.getElementById('rb-confirm').classList.remove('visible');
+  });
+
+  document.getElementById('rb-confirm-btn').addEventListener('click', () => {
+    document.getElementById('rb-confirm').classList.remove('visible');
+    const cards = document.querySelectorAll('.rb-project');
+    cards.forEach((card, i) => {
+      setTimeout(() => {
+        card.classList.add('deleting');
+      }, i * 100);
+    });
+    setTimeout(() => {
+      projects.length = 0;
+      renderProjects();
+      grid.style.display = 'none';
+    }, cards.length * 100 + 400);
+  });
+
+  renderProjects();
+})();
+</script>

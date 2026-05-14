@@ -1,71 +1,407 @@
-<div class="fe-toolbar">
-  <button title="Back" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
-  <button title="Forward" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></button>
-  <button title="Up"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg></button>
-  <button title="Refresh"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
-  <div class="fe-path-bar"><span>This PC</span></div>
-  <button title="Menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></button>
+<!-- File Explorer - My Projects -->
+<style>
+.fe-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  font-family: var(--win11-font);
+}
+.fe-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.fe-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.6);
+  transition: background 100ms, color 100ms;
+}
+.fe-nav-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+.fe-nav-btn:disabled { opacity: 0.3; cursor: default; }
+.fe-nav-btn svg { width: 16px; height: 16px; }
+.fe-addr-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 0 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  gap: 4px;
+  margin: 0 4px;
+}
+.fe-addr-bar:focus-within {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--win11-accent);
+}
+.fe-addr-sep { color: rgba(255, 255, 255, 0.4); margin: 0 2px; }
+.fe-search {
+  width: 180px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 0 12px;
+  font-size: 12px;
+  color: var(--win11-text);
+  outline: none;
+}
+.fe-search::placeholder { color: rgba(255, 255, 255, 0.4); }
+.fe-search:focus {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--win11-accent);
+}
+.fe-body { display: flex; flex: 1; overflow: hidden; }
+.fe-sidebar {
+  width: 220px;
+  background: rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+  overflow-y: auto;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+.fe-sidebar-section { margin-bottom: 4px; }
+.fe-sidebar-head {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 8px 16px 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.fe-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 1px 6px;
+  transition: background 100ms;
+}
+.fe-sidebar-item:hover { background: rgba(255, 255, 255, 0.06); }
+.fe-sidebar-item.active {
+  background: rgba(0, 120, 212, 0.2);
+  color: #fff;
+}
+.fe-sidebar-item.active .fe-si-icon { color: var(--win11-accent-light); }
+.fe-si-icon { width: 16px; height: 16px; flex-shrink: 0; }
+.fe-si-icon svg { width: 16px; height: 16px; }
+.fe-main { flex: 1; display: flex; overflow: hidden; }
+.fe-grid {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 8px;
+  align-content: start;
+}
+.fe-project-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 100ms;
+}
+.fe-project-card:hover { background: rgba(255, 255, 255, 0.06); }
+.fe-project-card.selected {
+  background: rgba(0, 120, 212, 0.2);
+  outline: 1px solid rgba(0, 120, 212, 0.4);
+}
+.fe-project-icon { width: 64px; height: 64px; margin-bottom: 8px; }
+.fe-project-name {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  word-break: break-word;
+  max-width: 150px;
+}
+.fe-project-date {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 2px;
+}
+.fe-detail-pane {
+  width: 0;
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  transition: width 200ms ease;
+  flex-shrink: 0;
+}
+.fe-detail-pane.open { width: 280px; }
+.fe-detail-content {
+  width: 280px;
+  padding: 20px;
+  height: 100%;
+  overflow-y: auto;
+}
+.fe-detail-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.fe-detail-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.fe-detail-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 16px; }
+.fe-tag {
+  background: rgba(0, 120, 212, 0.2);
+  color: var(--win11-accent-light);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.fe-detail-btn {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 8px;
+  transition: background 100ms;
+  border: none;
+}
+.fe-btn-primary {
+  background: var(--win11-accent);
+  color: #fff;
+}
+.fe-btn-primary:hover { background: var(--win11-accent-hover); }
+.fe-btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.fe-btn-secondary:hover { background: rgba(255, 255, 255, 0.12); }
+.fe-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 13px;
+}
+</style>
+
+<div class="fe-layout">
+  <div class="fe-toolbar">
+    <div class="fe-nav-btn" id="fe-back" title="Back"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></div>
+    <div class="fe-nav-btn" id="fe-fwd" title="Forward" disabled><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></div>
+    <div class="fe-addr-bar">
+      <span>This PC</span><span class="fe-addr-sep">\</span><span>My Projects</span>
+    </div>
+    <input type="text" class="fe-search" placeholder="Search projects..." id="fe-search" />
+  </div>
+  <div class="fe-body">
+    <div class="fe-sidebar">
+      <div class="fe-sidebar-section">
+        <div class="fe-sidebar-head">Quick Access</div>
+        <div class="fe-sidebar-item active" data-target="my-projects">
+          <span class="fe-si-icon"><svg viewBox="0 0 24 24" fill="#FFD54F"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span>
+          My Projects
+        </div>
+        <div class="fe-sidebar-item" data-target="starred">
+          <span class="fe-si-icon"><svg viewBox="0 0 24 24" fill="#78909C"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span>
+          Starred
+        </div>
+        <div class="fe-sidebar-item" data-target="recent">
+          <span class="fe-si-icon"><svg viewBox="0 0 24 24" fill="#78909C"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></span>
+          Recent
+        </div>
+      </div>
+      <div class="fe-sidebar-section">
+        <div class="fe-sidebar-head">This PC</div>
+        <div class="fe-sidebar-item" data-folder="webdev">
+          <span class="fe-si-icon"><svg viewBox="0 0 24 24" fill="#FFD54F"><path d="M3 5a2 2 0 012-2h4l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"/></svg></span>
+          Web Dev
+        </div>
+        <div class="fe-sidebar-item" data-folder="mobile">
+          <span class="fe-si-icon"><svg viewBox="0 0 24 24" fill="#26A69A"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></span>
+          Mobile
+        </div>
+        <div class="fe-sidebar-item" data-folder="opensource">
+          <span class="fe-si-icon"><svg viewBox="0 0 24 24" fill="#42A5F5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></span>
+          Open Source
+        </div>
+        <div class="fe-sidebar-item" data-folder="experiments">
+          <span class="fe-si-icon"><svg viewBox="0 0 24 24" fill="#AB47BC"><path d="M7 2v2h1v14a4 4 0 0 0 8 0V4h1V2H7zm4 14c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm2-4c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1z"/></svg></span>
+          Experiments
+        </div>
+      </div>
+    </div>
+    <div class="fe-main">
+      <div class="fe-grid" id="fe-projects-grid">
+        <!-- Projects injected by JS -->
+      </div>
+      <div class="fe-detail-pane" id="fe-detail-pane">
+        <div class="fe-detail-content" id="fe-detail-content"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="fe-body">
-  <div class="fe-sidebar">
-    <div class="fe-sidebar-section">
-      <div class="fe-sidebar-title">Quick access</div>
-      <div class="fe-sidebar-item active"><svg viewBox="0 0 24 24"></svg> Desktop</div>
-      <div class="fe-sidebar-item"><svg viewBox="0 0 24 24"></svg> Downloads</div>
-      <div class="fe-sidebar-item"><svg viewBox="0 0 24 24"></svg> Documents</div>
-      <div class="fe-sidebar-item"><svg viewBox="0 0 24 24"></svg> Pictures</div>
-    </div>
-    <div class="fe-sidebar-section">
-      <div class="fe-sidebar-title">This PC</div>
-      <div class="fe-sidebar-item"><svg viewBox="0 0 24 24"></svg> Desktop</div>
-      <div class="fe-sidebar-item"><svg viewBox="0 0 24 24"></svg> Documents</div>
-      <div class="fe-sidebar-item"><svg viewBox="0 0 24 24"></svg> Downloads</div>
-      <div class="fe-sidebar-item"><svg viewBox="0 0 24 24"></svg> Music</div>
-      <div class="fe-sidebar-item"><svg viewBox="0 0 24 24"></svg> Pictures</div>
-      <div class="fe-sidebar-item"><svg viewBox="0 0 24 24"></svg> Videos</div>
-    </div>
-  </div>
-  <div class="fe-files">
-    <div class="fe-file-item">
-      <svg viewBox="0 0 24 24" fill="#FFB900"><path d="M3 5a2 2 0 012-2h4l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"/></svg>
-      <span>Desktop</span>
-    </div>
-    <div class="fe-file-item">
-      <svg viewBox="0 0 24 24" fill="#FFB900"><path d="M3 5a2 2 0 012-2h4l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"/></svg>
-      <span>Documents</span>
-    </div>
-    <div class="fe-file-item">
-      <svg viewBox="0 0 24 24" fill="#FFB900"><path d="M3 5a2 2 0 012-2h4l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"/></svg>
-      <span>Downloads</span>
-    </div>
-    <div class="fe-file-item">
-      <svg viewBox="0 0 24 24" fill="#FFB900"><path d="M3 5a2 2 0 012-2h4l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"/></svg>
-      <span>Music</span>
-    </div>
-    <div class="fe-file-item">
-      <svg viewBox="0 0 24 24" fill="#FFB900"><path d="M3 5a2 2 0 012-2h4l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"/></svg>
-      <span>Pictures</span>
-    </div>
-    <div class="fe-file-item">
-      <svg viewBox="0 0 24 24" fill="#FFB900"><path d="M3 5a2 2 0 012-2h4l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"/></svg>
-      <span>Videos</span>
-    </div>
-    <div class="fe-file-item">
-      <svg viewBox="0 0 24 24" fill="#43A3F5"><path d="M7 3a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V7l-4-4H7zm0 2h6v4l4-4 6 6v10a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"/><path d="M9 7h6v2H9V7z"/></svg>
-      <span>readme.txt</span>
-    </div>
-    <div class="fe-file-item">
-      <svg viewBox="0 0 24 24" fill="#43A3F5"><path d="M7 3a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V7l-4-4H7zm0 2h6v4l4-4 6 6v10a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"/><path d="M9 7h6v2H9V7z"/></svg>
-      <span>notes.md</span>
-    </div>
-    <div class="fe-file-item">
-      <svg viewBox="0 0 24 24" fill="#1DB954"><path d="M5 3a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h14v14H5V5z"/></svg>
-      <span>sunset.jpg</span>
-    </div>
-    <div class="fe-file-item">
-      <svg viewBox="0 0 24 24" fill="#00B0FF"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
-      <span>app.js</span>
-    </div>
-  </div>
-</div>
+<script>
+(function() {
+  const projects = [
+    {
+      id: 'proj-1',
+      name: 'E-Commerce Platform', // REPLACE: project name
+      icon: '#4CAF50',
+      desc: 'A full-featured online shopping platform with cart, payments, and admin dashboard.', // REPLACE: description
+      tags: ['React', 'Node.js', 'MongoDB'], // REPLACE: tech stack
+      date: '2 days ago',
+      github: 'https://github.com/oke-precious', // REPLACE: GitHub URL
+      demo: 'https://demo.example.com' // REPLACE: live demo URL
+    },
+    {
+      id: 'proj-2',
+      name: 'Task Management App',
+      icon: '#2196F3',
+      desc: 'Collaborative project management tool with real-time updates and team workspaces.',
+      tags: ['TypeScript', 'Next.js', 'PostgreSQL'],
+      date: '1 week ago',
+      github: 'https://github.com/oke-precious',
+      demo: 'https://demo.example.com'
+    },
+    {
+      id: 'proj-3',
+      name: 'Portfolio Window',
+      icon: '#9C27B0',
+      desc: 'This interactive Windows 11 desktop experience built with vanilla JavaScript.',
+      tags: ['JavaScript', 'CSS', 'HTML'],
+      date: 'Today',
+      github: 'https://github.com/oke-precious/portfolio-window',
+      demo: '#'
+    },
+    {
+      id: 'proj-4',
+      name: 'Weather Dashboard',
+      icon: '#FF9800',
+      desc: 'Real-time weather tracking app with interactive charts and location search.',
+      tags: ['React', 'Chart.js', 'OpenWeather API'],
+      date: '3 weeks ago',
+      github: 'https://github.com/oke-precious',
+      demo: '#'
+    },
+    {
+      id: 'proj-5',
+      name: 'Chat Messenger',
+      icon: '#E91E63',
+      desc: 'Real-time messaging app with WebSocket, rooms, and file sharing capabilities.',
+      tags: ['Node.js', 'Socket.io', 'React'],
+      date: '1 month ago',
+      github: 'https://github.com/oke-precious',
+      demo: '#'
+    },
+    {
+      id: 'proj-6',
+      name: 'Recipe Finder',
+      icon: '#009688',
+      desc: 'Recipe search and meal planning app with nutritional information and shopping lists.',
+      tags: ['JavaScript', 'Spoonacular API', 'CSS'],
+      date: '2 months ago',
+      github: 'https://github.com/oke-precious',
+      demo: '#'
+    }
+  ];
+
+  let selectedProject = null;
+
+  function renderProjects(filter) {
+    const grid = document.getElementById('fe-projects-grid');
+    const filtered = projects.filter(p =>
+      p.name.toLowerCase().includes(filter.toLowerCase()) ||
+      p.tags.some(t => t.toLowerCase().includes(filter.toLowerCase()))
+    );
+
+    grid.innerHTML = filtered.map(p => `
+      <div class="fe-project-card${selectedProject === p.id ? ' selected' : ''}" data-id="${p.id}">
+        <div class="fe-project-icon">
+          <svg viewBox="0 0 64 64">
+            <defs>
+              <linearGradient id="pg-${p.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:${p.icon}"/>
+                <stop offset="100%" style="stop-color:${p.icon}99"/>
+              </linearGradient>
+            </defs>
+            <circle cx="32" cy="32" r="28" fill="url(#pg-${p.id})" opacity="0.9"/>
+            <path d="M20 24h24v4H20zm0 8h20v4H20zm0 8h16v4H20z" fill="rgba(255,255,255,0.4)"/>
+          </svg>
+        </div>
+        <div class="fe-project-name">${p.name}</div>
+        <div class="fe-project-date">${p.date}</div>
+      </div>
+    `).join('');
+
+    grid.querySelectorAll('.fe-project-card').forEach(card => {
+      card.addEventListener('click', () => selectProject(card.dataset.id));
+      card.addEventListener('dblclick', () => selectProject(card.dataset.id));
+    });
+  }
+
+  function selectProject(id) {
+    selectedProject = id;
+    const proj = projects.find(p => p.id === id);
+    if (!proj) return;
+
+    document.querySelectorAll('.fe-project-card').forEach(c => {
+      c.classList.toggle('selected', c.dataset.id === id);
+    });
+
+    const pane = document.getElementById('fe-detail-pane');
+    const content = document.getElementById('fe-detail-content');
+    pane.classList.add('open');
+    content.innerHTML = `
+      <div class="fe-detail-name">${proj.name}</div>
+      <div class="fe-detail-desc">${proj.desc}</div>
+      <div class="fe-detail-tags">
+        ${proj.tags.map(t => `<span class="fe-tag">${t}</span>`).join('')}
+      </div>
+      <a class="fe-detail-btn fe-btn-primary" href="${proj.demo}" target="_blank" onclick="event.stopPropagation()">Open Demo</a>
+      <a class="fe-detail-btn fe-btn-secondary" href="${proj.github}" target="_blank" onclick="event.stopPropagation()">View on GitHub</a>
+    `;
+  }
+
+  const search = document.getElementById('fe-search');
+  search.addEventListener('input', e => renderProjects(e.target.value));
+  renderProjects('');
+
+  document.getElementById('fe-back').addEventListener('click', () => {
+    document.querySelector('.fe-sidebar-item.active')?.classList.remove('active');
+    document.querySelector('.fe-sidebar-item[data-target="my-projects"]')?.classList.add('active');
+    renderProjects('');
+    search.value = '';
+    selectedProject = null;
+    document.getElementById('fe-detail-pane').classList.remove('open');
+  });
+})();
+</script>

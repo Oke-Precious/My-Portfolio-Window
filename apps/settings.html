@@ -1,123 +1,543 @@
-<div class="settings-layout">
-  <div class="settings-sidebar">
-    <div class="settings-nav-item active">
-      <svg viewBox="0 0 24 24"></svg>
-      System
+<!-- Settings - About Me & Skills -->
+<style>
+.sett-layout {
+  display: flex;
+  height: 100%;
+  font-family: var(--win11-font);
+  background: rgba(0, 0, 0, 0.15);
+}
+.sett-sidebar {
+  width: 280px;
+  background: rgba(255, 255, 255, 0.03);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.sett-search-wrap {
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.sett-search {
+  width: 100%;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 0 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  outline: none;
+}
+.sett-search:focus {
+  border-color: var(--win11-accent);
+  background: rgba(255, 255, 255, 0.06);
+}
+.sett-search::placeholder { color: rgba(255, 255, 255, 0.4); }
+.sett-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+.sett-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: background 100ms;
+  margin-bottom: 2px;
+}
+.sett-nav-item:hover { background: rgba(255, 255, 255, 0.06); }
+.sett-nav-item.active {
+  background: rgba(0, 120, 212, 0.2);
+  color: #fff;
+}
+.sett-nav-item .sni-icon { width: 20px; height: 20px; }
+.sett-nav-item .sni-icon svg { width: 20px; height: 20px; }
+.sett-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 32px;
+  animation: settFadeIn 150ms ease;
+}
+@keyframes settFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.sett-section { display: none; }
+.sett-section.active { display: block; }
+.sett-page-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: rgba(255, 255, 255, 0.95);
+}
+.sett-hero-card {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.sett-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.sett-hero-info h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.sett-hero-info .sett-role {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+}
+.sett-hero-info .sett-location {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.sett-links { display: flex; gap: 8px; margin-top: 12px; }
+.sett-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 12px;
+  background: var(--win11-accent);
+  color: #fff;
+  text-decoration: none;
+  transition: background 100ms;
+}
+.sett-link-btn:hover { background: var(--win11-accent-hover); }
+.sett-link-btn.outline {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.sett-link-btn.outline:hover { background: rgba(255, 255, 255, 0.1); }
+.sett-subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 11px;
+}
+.sett-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.sett-info-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  padding: 14px;
+}
+.sett-info-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.sett-info-value {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+}
+.sett-bio {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  padding: 20px;
+  line-height: 1.7;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 24px;
+}
+.sett-bio p { margin-bottom: 12px; }
+.sett-bio p:last-child { margin-bottom: 0; }
+.sett-avail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(76, 175, 80, 0.15);
+  color: #81c784;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+.sett-avail::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #81c784;
+  border-radius: 50%;
+}
+.sett-app-list { display: flex; flex-direction: column; gap: 4px; }
+.sett-app-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  transition: background 100ms;
+}
+.sett-app-item:hover { background: rgba(255, 255, 255, 0.04); }
+.sett-app-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: #fff;
+}
+.sett-app-name { font-size: 13px; color: rgba(255, 255, 255, 0.9); flex: 1; }
+.sett-app-version { font-size: 12px; color: rgba(255, 255, 255, 0.4); }
+.sett-app-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+}
+.sett-timeline { display: flex; flex-direction: column; gap: 0; }
+.sett-tl-item {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 24px;
+  position: relative;
+}
+.sett-tl-item:last-child { padding-bottom: 0; }
+.sett-tl-item::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 20px;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.sett-tl-item:last-child::before { display: none; }
+.sett-tl-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--win11-accent);
+  flex-shrink: 0;
+  margin-top: 2px;
+  z-index: 1;
+}
+.sett-tl-content { flex: 1; }
+.sett-tl-title { font-size: 13px; font-weight: 600; color: rgba(255, 255, 255, 0.9); }
+.sett-tl-company { font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-bottom: 4px; }
+.sett-tl-desc { font-size: 12px; color: rgba(255, 255, 255, 0.6); line-height: 1.5; }
+.sett-skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.sett-skill-bar {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  padding: 10px 14px;
+}
+.sett-skill-name { font-size: 12px; color: rgba(255, 255, 255, 0.8); margin-bottom: 6px; }
+.sett-skill-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.sett-skill-fill { height: 100%; border-radius: 2px; }
+.sett-contact-form { display: flex; flex-direction: column; gap: 12px; max-width: 400px; }
+.sett-input {
+  width: 100%;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 0 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.sett-input:focus { border-color: var(--win11-accent); background: rgba(255, 255, 255, 0.07); }
+.sett-textarea {
+  width: 100%;
+  min-height: 100px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  outline: none;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+}
+.sett-textarea:focus { border-color: var(--win11-accent); background: rgba(255, 255, 255, 0.07); }
+.sett-submit-btn {
+  width: fit-content;
+  padding: 8px 24px;
+  background: var(--win11-accent);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 100ms;
+}
+.sett-submit-btn:hover { background: var(--win11-accent-hover); }
+</style>
+
+<div class="sett-layout">
+  <div class="sett-sidebar">
+    <div class="sett-search-wrap">
+      <input type="text" class="sett-search" placeholder="Find a setting" />
     </div>
-    <div class="settings-nav-item">
-      <svg viewBox="0 0 24 24"></svg>
-      Bluetooth &amp; devices
-    </div>
-    <div class="settings-nav-item">
-      <svg viewBox="0 0 24 24"></svg>
-      Network &amp; internet
-    </div>
-    <div class="settings-nav-item">
-      <svg viewBox="0 0 24 24"></svg>
-      Personalization
-    </div>
-    <div class="settings-nav-item">
-      <svg viewBox="0 0 24 24"></svg>
-      Apps
-    </div>
-    <div class="settings-nav-item">
-      <svg viewBox="0 0 24 24"></svg>
-      Accounts
-    </div>
-    <div class="settings-nav-item">
-      <svg viewBox="0 0 24 24"></svg>
-      Time &amp; language
-    </div>
-    <div class="settings-nav-item">
-      <svg viewBox="0 0 24 24"></svg>
-      Gaming
-    </div>
-    <div class="settings-nav-item">
-      <svg viewBox="0 0 24 24"></svg>
-      Accessibility
-    </div>
-    <div class="settings-nav-item">
-      <svg viewBox="0 0 24 24"></svg>
-      Privacy &amp; security
-    </div>
-    <div class="settings-nav-item">
-      <svg viewBox="0 0 24 24"></svg>
-      Windows Update
+    <div class="sett-nav">
+      <div class="sett-nav-item active" data-section="system">
+        <span class="sni-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg></span>
+        About Me
+      </div>
+      <div class="sett-nav-item" data-section="installed">
+        <span class="sni-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg></span>
+        Tech Stack
+      </div>
+      <div class="sett-nav-item" data-section="experience">
+        <span class="sni-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg></span>
+        Experience
+      </div>
+      <div class="sett-nav-item" data-section="skills">
+        <span class="sni-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span>
+        Skills
+      </div>
+      <div class="sett-nav-item" data-section="contact">
+        <span class="sni-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></span>
+        Contact
+      </div>
     </div>
   </div>
-  <div class="settings-content">
-    <h2>System</h2>
-    <div class="settings-section">
-      <div class="settings-section-title">Display</div>
-      <div class="settings-card">
-        <div>
-          <div class="settings-card-label">Brightness</div>
-          <div class="text-sm text-secondary">Adjust brightness for your display</div>
+
+  <div class="sett-content">
+    <!-- System / About Me -->
+    <div class="sett-section active" id="sec-system">
+      <div class="sett-page-title">About Me</div>
+      <div class="sett-hero-card">
+        <div class="sett-avatar">OP</div> <!-- REPLACE: initials -->
+        <div class="sett-hero-info">
+          <h2>Oke Precious Abioye</h2> <!-- REPLACE: full name -->
+          <div class="sett-role">FullStack Developer</div> <!-- REPLACE: role -->
+          <div class="sett-location">Ogbomoso, Nigeria</div> <!-- REPLACE: location -->
+          <div class="sett-links">
+            <span class="sett-avail">Available for work</span>
+            <a class="sett-link-btn outline" href="https://github.com/Oke-Precious" target="_blank">GitHub</a> <!-- REPLACE -->
+            <a class="sett-link-btn outline" href="https://linkedin.com/in/oke-precious-581ba5402" target="_blank">LinkedIn</a> <!-- REPLACE -->
+          </div>
         </div>
-        <input type="range" style="width:120px;" />
       </div>
-      <div class="settings-card">
-        <div class="settings-card-label">Night light</div>
-        <div class="toggle-switch" onclick="this.classList.toggle('active')"></div>
+      <div class="sett-subtitle">Device Info</div>
+      <div class="sett-info-grid">
+        <div class="sett-info-card">
+          <div class="sett-info-label">Name</div>
+          <div class="sett-info-value">Oke Precious Abioye</div> <!-- REPLACE -->
+        </div>
+        <div class="sett-info-card">
+          <div class="sett-info-label">Role</div>
+          <div class="sett-info-value">FullStack Developer</div> <!-- REPLACE -->
+        </div>
+        <div class="sett-info-card">
+          <div class="sett-info-label">Location</div>
+          <div class="sett-info-value">Ogbomoso, Nigeria</div> <!-- REPLACE -->
+        </div>
+        <div class="sett-info-card">
+          <div class="sett-info-label">Status</div>
+          <div class="sett-info-value">Open to opportunities</div> <!-- REPLACE -->
+        </div>
+      </div>
+      <div class="sett-subtitle">A Bit About Me</div>
+      <div class="sett-bio">
+        <p>// REPLACE: Write your bio paragraph 1 here. Talk about your passion for development, what drives you, and your journey so far.</p>
+        <p>// REPLACE: Bio paragraph 2 — mention specific technologies you love working with, projects you're proud of, or areas of development you specialize in.</p>
+        <p>// REPLACE: Bio paragraph 3 — talk about what you're looking for next, collaborations, or what you hope to achieve with your work.</p>
       </div>
     </div>
-    <div class="settings-section">
-      <div class="settings-section-title">Sound</div>
-      <div class="settings-card">
-        <div>
-          <div class="settings-card-label">Volume</div>
-          <input type="range" style="width:200px; margin-top:8px;" />
+
+    <!-- Tech Stack / Installed Apps -->
+    <div class="sett-section" id="sec-installed">
+      <div class="sett-page-title">Tech Stack</div>
+      <div class="sett-app-list" id="tech-list">
+        <!-- JS -->
+        <div class="sett-app-item" style="margin-bottom:8px">
+          <div class="sett-app-icon" style="background:#F7DF1E;color:#000;font-size:12px">JS</div>
+          <span class="sett-app-name">JavaScript</span>
+          <span class="sett-app-version">ES6+</span>
+          <span class="sett-app-tag">Language</span>
         </div>
-      </div>
-      <div class="settings-card">
-        <div class="settings-card-label">Output device</div>
-        <div class="text-sm text-secondary">Speakers (Realtek High Definition Audio)</div>
+        <div class="sett-app-item" style="margin-bottom:8px">
+          <div class="sett-app-icon" style="background:#3178C6;color:#fff;font-size:11px">TS</div>
+          <span class="sett-app-name">TypeScript</span>
+          <span class="sett-app-version">4.x</span>
+          <span class="sett-app-tag">Language</span>
+        </div>
+        <div class="sett-app-item" style="margin-bottom:8px">
+          <div class="sett-app-icon" style="background:#61DAFB;color:#000">R</div>
+          <span class="sett-app-name">React / React Native</span>
+          <span class="sett-app-version">Hooks</span>
+          <span class="sett-app-tag">Framework</span>
+        </div>
+        <div class="sett-app-item" style="margin-bottom:8px">
+          <div class="sett-app-icon" style="background:#68A063;color:#fff">N</div>
+          <span class="sett-app-name">Node.js / Express</span>
+          <span class="sett-app-version">18.x</span>
+          <span class="sett-app-tag">Backend</span>
+        </div>
+        <div class="sett-app-item" style="margin-bottom:8px">
+          <div class="sett-app-icon" style="background:#3776AB;color:#fff">Py</div>
+          <span class="sett-app-name">Python</span>
+          <span class="sett-app-version">3.11</span>
+          <span class="sett-app-tag">Language</span>
+        </div>
+        <div class="sett-app-item" style="margin-bottom:8px">
+          <div class="sett-app-icon" style="background:#38B2AC;color:#fff">T</div>
+          <span class="sett-app-name">Tailwind CSS</span>
+          <span class="sett-app-version">3.x</span>
+          <span class="sett-app-tag">Styling</span>
+        </div>
+        <div class="sett-app-item" style="margin-bottom:8px">
+          <div class="sett-app-icon" style="background:#F05032;color:#fff">G</div>
+          <span class="sett-app-name">Git / GitHub</span>
+          <span class="sett-app-version">CLI</span>
+          <span class="sett-app-tag">Tools</span>
+        </div>
+        <div class="sett-app-item" style="margin-bottom:8px">
+          <div class="sett-app-icon" style="background:#FFCA28;color:#000">M</div>
+          <span class="sett-app-name">MongoDB / Mongoose</span>
+          <span class="sett-app-version">6.x</span>
+          <span class="sett-app-tag">Database</span>
+        </div>
+        <div class="sett-app-item">
+          <div class="sett-app-icon" style="background:#336791;color:#fff">P</div>
+          <span class="sett-app-name">PostgreSQL</span>
+          <span class="sett-app-version">15.x</span>
+          <span class="sett-app-tag">Database</span>
+        </div>
       </div>
     </div>
-    <div class="settings-section">
-      <div class="settings-section-title">Notifications</div>
-      <div class="settings-card">
-        <div class="settings-card-label">Notification sounds</div>
-        <div class="toggle-switch active"></div>
-      </div>
-      <div class="settings-card">
-        <div class="settings-card-label">Do not disturb</div>
-        <div class="toggle-switch"></div>
+
+    <!-- Experience -->
+    <div class="sett-section" id="sec-experience">
+      <div class="sett-page-title">Experience</div>
+      <div class="sett-timeline">
+        <div class="sett-tl-item">
+          <div class="sett-tl-dot"></div>
+          <div class="sett-tl-content">
+            <div class="sett-tl-title">FullStack Developer</div> <!-- REPLACE: job title -->
+            <div class="sett-tl-company">Self-taught / Freelance</div> <!-- REPLACE: company -->
+            <div class="sett-tl-desc">Building full-stack web applications using modern JavaScript frameworks, Node.js backends, and cloud deployment. Focused on responsive UIs and RESTful API design.</div> <!-- REPLACE: description -->
+          </div>
+        </div>
+        <div class="sett-tl-item">
+          <div class="sett-tl-dot"></div>
+          <div class="sett-tl-content">
+            <div class="sett-tl-title">Frontend Developer (Internship)</div>
+            <div class="sett-tl-company">// REPLACE: company name</div>
+            <div class="sett-tl-desc">// REPLACE: description of internship or early work</div>
+          </div>
+        </div>
+        <div class="sett-tl-item">
+          <div class="sett-tl-dot"></div>
+          <div class="sett-tl-content">
+            <div class="sett-tl-title">Computer Science Student</div>
+            <div class="sett-tl-company">// REPLACE: institution</div>
+            <div class="sett-tl-desc">// REPLACE: relevant coursework, projects, achievements</div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="settings-section">
-      <div class="settings-section-title">Power</div>
-      <div class="settings-card">
-        <div>
-          <div class="settings-card-label">Power mode</div>
-          <div class="text-sm text-secondary">Balanced</div>
+
+    <!-- Skills -->
+    <div class="sett-section" id="sec-skills">
+      <div class="sett-page-title">Skills</div>
+      <div class="sett-skills-grid">
+        <div class="sett-skill-bar">
+          <div class="sett-skill-name">JavaScript / TypeScript</div>
+          <div class="sett-skill-track"><div class="sett-skill-fill" style="width:90%;background:#F7DF1E"></div></div>
         </div>
-      </div>
-      <div class="settings-card">
-        <div class="settings-card-label">Battery saver</div>
-        <div class="toggle-switch"></div>
+        <div class="sett-skill-bar">
+          <div class="sett-skill-name">React / Next.js</div>
+          <div class="sett-skill-track"><div class="sett-skill-fill" style="width:85%;background:#61DAFB"></div></div>
+        </div>
+        <div class="sett-skill-bar">
+          <div class="sett-skill-name">Node.js / Express</div>
+          <div class="sett-skill-track"><div class="sett-skill-fill" style="width:80%;background:#68A063"></div></div>
+        </div>
+        <div class="sett-skill-bar">
+          <div class="sett-skill-name">Python</div>
+          <div class="sett-skill-track"><div class="sett-skill-fill" style="width:70%;background:#3776AB"></div></div>
+        </div>
+        <div class="sett-skill-bar">
+          <div class="sett-skill-name">CSS / Tailwind</div>
+          <div class="sett-skill-track"><div class="sett-skill-fill" style="width:88%;background:#38B2AC"></div></div>
+        </div>
+        <div class="sett-skill-bar">
+          <div class="sett-skill-name">Git / GitHub</div>
+          <div class="sett-skill-track"><div class="sett-skill-fill" style="width:85%;background:#F05032"></div></div>
+        </div>
       </div>
     </div>
-    <div class="settings-section">
-      <div class="settings-section-title">About</div>
-      <div class="settings-card">
-        <div>
-          <div class="settings-card-label">Device name</div>
-          <div class="text-sm text-secondary">DESKTOP-PORTFOLIO</div>
-        </div>
-      </div>
-      <div class="settings-card">
-        <div>
-          <div class="settings-card-label">Edition</div>
-          <div class="text-sm text-secondary">Windows 11 Pro</div>
-        </div>
-      </div>
-      <div class="settings-card">
-        <div>
-          <div class="settings-card-label">Version</div>
-          <div class="text-sm text-secondary">24H2</div>
-        </div>
+
+    <!-- Contact -->
+    <div class="sett-section" id="sec-contact">
+      <div class="sett-page-title">Get In Touch</div>
+      <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:24px;line-height:1.6">
+        Interested in working together? Feel free to reach out via the form below or through my social links.
+      </p>
+      <form class="sett-contact-form" onsubmit="event.preventDefault(); alert('Message sent! (Demo)')">
+        <input type="text" class="sett-input" placeholder="Your Name" />
+        <input type="email" class="sett-input" placeholder="your@email.com" />
+        <input type="text" class="sett-input" placeholder="Subject" />
+        <textarea class="sett-textarea" placeholder="Your message..."></textarea>
+        <button type="submit" class="sett-submit-btn">Send Message</button>
+      </form>
+      <div style="margin-top:32px;display:flex;gap:12px">
+        <a class="sett-link-btn outline" href="mailto:oke.precious@email.com">Email</a> <!-- REPLACE -->
+        <a class="sett-link-btn outline" href="https://github.com/Oke-Precious" target="_blank">GitHub</a> <!-- REPLACE -->
+        <a class="sett-link-btn outline" href="https://linkedin.com/in/oke-precious-581ba5402" target="_blank">LinkedIn</a> <!-- REPLACE -->
       </div>
     </div>
   </div>
 </div>
+
+<script>
+(function() {
+  document.querySelectorAll('.sett-nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.sett-nav-item').forEach(i => i.classList.remove('active'));
+      document.querySelectorAll('.sett-section').forEach(s => s.classList.remove('active'));
+      item.classList.add('active');
+      const sec = document.getElementById('sec-' + item.dataset.section);
+      if (sec) sec.classList.add('active');
+    });
+  });
+})();
+</script>

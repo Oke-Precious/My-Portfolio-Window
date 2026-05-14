@@ -1,8 +1,214 @@
-<div class="notepad-menubar">
-  <span>File</span>
-  <span>Edit</span>
-  <span>Format</span>
-  <span>View</span>
-  <span>Help</span>
+<!-- Notepad - Resume -->
+<style>
+.note-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
+}
+.note-menubar {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.2);
+  gap: 2px;
+  flex-shrink: 0;
+}
+.note-menu {
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: background 80ms;
+}
+.note-menu:hover { background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.95); }
+.note-tabs {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px 0;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.note-tab {
+  padding: 4px 14px;
+  border-radius: 4px 4px 0 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.note-tab.active { background: rgba(0, 0, 0, 0.25); color: rgba(255, 255, 255, 0.95); }
+.note-tab-close {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  opacity: 0.5;
+}
+.note-tab-close:hover { background: rgba(255, 255, 255, 0.15); opacity: 1; }
+.note-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+.note-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  font-family: 'Cascadia Mono', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.note-statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+.note-statusbar span {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+}
+.note-dl-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: var(--win11-accent);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 100ms;
+  font-family: inherit;
+}
+.note-dl-btn:hover { background: var(--win11-accent-hover); }
+</style>
+
+<div class="note-layout">
+  <div class="note-menubar">
+    <span class="note-menu">File</span>
+    <span class="note-menu">Edit</span>
+    <span class="note-menu">View</span>
+    <span class="note-menu">Format</span>
+    <span class="note-menu">Help</span>
+  </div>
+  <div class="note-tabs">
+    <div class="note-tab active">
+      <span>Resume.txt</span>
+      <span class="note-tab-close">\d7</span>
+    </div>
+  </div>
+  <div class="note-body">
+    <div class="note-content" id="note-content">
+# // REPLACE: Your Name
+
+## Contact
+- Email: // REPLACE: your@email.com
+- GitHub: https://github.com/Oke-Precious
+- LinkedIn: https://linkedin.com/in/oke-precious-581ba5402
+- Location: // REPLACE: City, Country
+
+---
+
+## Summary
+// REPLACE: Write 2-3 sentences summarizing your experience, skills, and what you bring to the table as a developer.
+
+---
+
+## Experience
+
+### FullStack Developer | Self-taught / Freelance
+*// REPLACE: Start Date - Present*
+- Built and deployed multiple full-stack web applications using React, Node.js, and MongoDB
+- Developed RESTful APIs and real-time features with Socket.io
+- Collaborated with clients to translate requirements into functional software
+// REPLACE: Add more experience entries
+
+### // REPLACE: Job Title | Company Name
+*// REPLACE: Date Range*
+- // REPLACE: Key responsibilities and achievements
+
+---
+
+## Education
+
+### // REPLACE: Degree | Institution Name
+*// REPLACE: Year - Year*
+
+---
+
+## Skills
+
+### Languages
+JavaScript, TypeScript, Python, HTML5, CSS3, SQL
+
+### Frameworks
+React, Next.js, Node.js, Express, Tailwind CSS
+
+### Tools
+Git, GitHub, VS Code, MongoDB, PostgreSQL, Figma
+
+### Concepts
+RESTful API Design, Responsive Design, Agile, Problem Solving
+
+---
+
+## Projects
+
+### Portfolio Window
+Windows 11 desktop simulator built with vanilla JavaScript featuring draggable windows, snap layouts, and a Mica/Acrylic design system. | GitHub
+
+### // REPLACE: Project Name
+// REPLACE: Description and tech stack | GitHub
+
+---
+
+## Certifications
+// REPLACE: Any relevant certifications (freeCodeCamp, Coursera, etc.)
+
+    </div>
+  </div>
+  <div class="note-statusbar">
+    <span>Ln 1, Col 1  |  UTF-8  |  Segoe UI Variable, 12pt</span>
+    <span>100%</span>
+    <button class="note-dl-btn" id="note-dl">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+      Download Resume
+    </button>
+  </div>
 </div>
-<textarea class="notepad-textarea" placeholder="Start typing..."></textarea>
+
+<script>
+(function() {
+  const content = document.getElementById('note-content').textContent;
+  document.getElementById('note-dl').addEventListener('click', () => {
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Resume_Oke_Precious.txt'; // REPLACE: filename
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+})();
+</script>
