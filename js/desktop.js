@@ -80,6 +80,16 @@
         <path d="M4 14L24 26L44 14" stroke="#2E5C9E" stroke-width="2" fill="none"/>
         <path d="M6 36L24 24L42 36" stroke="rgba(0,0,0,0.15)" stroke-width="2" fill="none"/>
       </svg>`
+    },
+    {
+      id: 'expertise',
+      label: 'Expertise',
+      tooltip: 'Expertise',
+      svg: `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="expGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#26A69A"/><stop offset="100%" style="stop-color:#00897B"/></linearGradient></defs>
+        <circle cx="24" cy="24" r="20" fill="url(#expGrad)"/>
+        <path d="M24 8l5.5 11.2L41 20.4l-8.5 8.3 2 12L24 35.5 13.5 40.7l2-12-8.5-8.3 11.5-1.2L24 8z" fill="white" opacity="0.9"/>
+      </svg>`
     }
   ];
 
@@ -127,8 +137,8 @@
   }
 
   function openDesktopItem(id) {
-    const appId = (window.__DESKTOP_LAUNCH_MAP && window.__DESKTOP_LAUNCH_MAP[id]) || null;
-    if (appId && typeof launchApp === 'function') {
+    const appId = (window.__DESKTOP_LAUNCH_MAP && window.__DESKTOP_LAUNCH_MAP[id]) || id;
+    if (typeof launchApp === 'function') {
       launchApp(appId);
     }
   }

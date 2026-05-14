@@ -23,40 +23,29 @@
     { id: 'notepad', name: 'Resume', icon: ic('note'), section: 'Resume' },
     { id: 'edge', name: 'GitHub', icon: ic('edge'), section: 'GitHub' },
     { id: 'settings', name: 'Settings', icon: ic('sett'), section: 'Settings' },
-    { id: 'edge-2', name: 'Edge', icon: ic('edge'), section: 'Microsoft Edge' },
-    { id: 'vscode', name: 'VS Code', icon: ic('code'), section: 'VS Code' },
-    { id: 'file-explorer', name: 'File Explorer', icon: ic('fe'), section: 'File Explorer' },
-    { id: 'react', name: 'React', icon: ic('react'), section: 'React' },
-    { id: 'python', name: 'Python', icon: ic('python'), section: 'Python' },
-    { id: 'figma', name: 'Figma', icon: ic('figma'), section: 'Figma' },
-    { id: 'terminal', name: 'Terminal', icon: ic('term'), section: 'Terminal' },
-    { id: 'contact', name: 'Mail', icon: ic('mail'), section: 'Mail' },
+    { id: 'calculator', name: 'Calculator', icon: ic('calc'), section: 'Calculator' },
+    { id: 'game', name: 'Snake Game', icon: ic('game'), section: 'Snake Game' },
+    { id: 'expertise', name: 'Expertise', icon: ic('exp'), section: 'Expertise' },
+    { id: 'services', name: 'Services', icon: ic('srv'), section: 'Services' },
+    { id: 'portfolio-viewer', name: 'Portfolio', icon: ic('pv'), section: 'Portfolio' },
+    { id: 'contact', name: 'Contact', icon: ic('mail'), section: 'Contact' },
     { id: 'recycle-bin', name: 'Recycle Bin', icon: ic('bin'), section: 'Recycle Bin' },
-    { id: 'typescript', name: 'TypeScript', icon: ic('ts'), section: 'TypeScript' },
-    { id: 'nodejs', name: 'Node.js', icon: ic('node'), section: 'Node.js' },
-    { id: 'docker', name: 'Docker', icon: ic('docker'), section: 'Docker' },
-    { id: 'linkedin', name: 'LinkedIn', icon: ic('li'), section: 'LinkedIn' },
-    { id: 'about', name: 'Portfolio', icon: ic('about'), section: 'About Me' },
+    { id: 'about', name: 'About', icon: ic('about'), section: 'About Me' },
   ];
 
   const ALL_APPS = [
     { id: 'file-explorer', name: 'File Explorer', icon: ic('fe') },
     { id: 'notepad', name: 'Resume', icon: ic('note') },
-    { id: 'edge', name: 'Microsoft Edge', icon: ic('edge') },
+    { id: 'edge', name: 'GitHub', icon: ic('edge') },
     { id: 'settings', name: 'Settings', icon: ic('sett') },
-    { id: 'vscode', name: 'VS Code', icon: ic('code') },
-    { id: 'react', name: 'React', icon: ic('react') },
-    { id: 'python', name: 'Python', icon: ic('python') },
-    { id: 'figma', name: 'Figma', icon: ic('figma') },
-    { id: 'terminal', name: 'Terminal', icon: ic('term') },
-    { id: 'contact', name: 'Mail', icon: ic('mail') },
+    { id: 'calculator', name: 'Calculator', icon: ic('calc') },
+    { id: 'game', name: 'Snake Game', icon: ic('game') },
+    { id: 'expertise', name: 'Expertise', icon: ic('exp') },
+    { id: 'services', name: 'Services', icon: ic('srv') },
+    { id: 'portfolio-viewer', name: 'Portfolio', icon: ic('pv') },
     { id: 'recycle-bin', name: 'Recycle Bin', icon: ic('bin') },
-    { id: 'typescript', name: 'TypeScript', icon: ic('ts') },
-    { id: 'nodejs', name: 'Node.js', icon: ic('node') },
-    { id: 'docker', name: 'Docker', icon: ic('docker') },
-    { id: 'linkedin', name: 'LinkedIn', icon: ic('li') },
-    { id: 'about', name: 'About Me', icon: ic('about') },
-    { id: 'about-portfolio', name: 'About Portfolio', icon: ic('about') },
+    { id: 'contact', name: 'Contact', icon: ic('mail') },
+    { id: 'about', name: 'About', icon: ic('about') },
   ].sort((a, b) => a.name.localeCompare(b.name));
 
   const RECOMMENDED = [
@@ -71,21 +60,21 @@
   const SEARCH_DATASET = [
     { name: 'File Explorer', type: 'App', action: 'file-explorer' },
     { name: 'Resume', type: 'App', action: 'notepad' },
-    { name: 'Microsoft Edge', type: 'App', action: 'edge' },
-    { name: 'Settings', type: 'App', action: 'settings' },
-    { name: 'About Me', type: 'App', action: 'settings' },
-    { name: 'Contact', type: 'App', action: 'contact' },
-    { name: 'My Projects', type: 'Folder', action: 'file-explorer' },
     { name: 'GitHub', type: 'App', action: 'edge' },
+    { name: 'Settings', type: 'App', action: 'settings' },
+    { name: 'Calculator', type: 'App', action: 'calculator' },
+    { name: 'Snake Game', type: 'App', action: 'game' },
+    { name: 'Expertise', type: 'App', action: 'expertise' },
+    { name: 'Services', type: 'App', action: 'services' },
+    { name: 'Portfolio', type: 'App', action: 'portfolio-viewer' },
+    { name: 'Contact', type: 'App', action: 'contact' },
+    { name: 'About Me', type: 'App', action: 'settings' },
     { name: 'Recycle Bin', type: 'App', action: 'recycle-bin' },
     { name: 'JavaScript', type: 'Skill', badge: 'Projects', action: 'file-explorer' },
     { name: 'React', type: 'Skill', badge: 'Projects', action: 'file-explorer' },
     { name: 'Node.js', type: 'Skill', badge: 'Projects', action: 'file-explorer' },
     { name: 'Python', type: 'Skill', badge: 'Projects', action: 'file-explorer' },
-    { name: 'CSS / Tailwind', type: 'Skill', badge: 'Projects', action: 'file-explorer' },
-    { name: 'TypeScript', type: 'Skill', badge: 'Projects', action: 'file-explorer' },
     { name: 'Oke Precious Abioye', type: 'Person', badge: 'About', action: 'settings' },
-    { name: 'Portfolio Window', type: 'Project', action: 'file-explorer' },
     { name: 'E-Commerce Platform', type: 'Project', action: 'file-explorer' },
     { name: 'Task Management App', type: 'Project', action: 'file-explorer' },
     { name: 'Weather Dashboard', type: 'Project', action: 'file-explorer' },
@@ -112,6 +101,11 @@
       node: `<svg viewBox="0 0 36 36"><rect width="36" height="36" rx="4" fill="#339933"/><text x="18" y="23" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">Node</text></svg>`,
       docker: `<svg viewBox="0 0 36 36"><rect width="36" height="36" rx="4" fill="#2496ED"/><path d="M10 10h4v4h-4zM16 10h4v4h-4zM22 10h4v4h-4zM10 16h4v4h-4zM16 16h4v4h-4zM22 16h4v4h-4zM10 22h4v4h-4zM16 22h4v4h-4z" fill="rgba(255,255,255,0.6)"/></svg>`,
       li: `<svg viewBox="0 0 36 36"><rect width="36" height="36" rx="4" fill="#0A66C2"/><text x="18" y="23" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">in</text></svg>`,
+      calc: `<svg viewBox="0 0 36 36"><defs><linearGradient id="sclc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" style="stop-color:#4FC3F7"/><stop offset="100%" style="stop-color:#0288D1"/></linearGradient></defs><rect x="4" y="2" width="28" height="32" rx="3" fill="url(#sclc)"/><rect x="8" y="6" width="20" height="7" rx="1.5" fill="rgba(255,255,255,0.3)"/><circle cx="12" cy="18" r="2" fill="rgba(255,255,255,0.8)"/><circle cx="18" cy="18" r="2" fill="rgba(255,255,255,0.8)"/><circle cx="24" cy="18" r="2" fill="rgba(255,255,255,0.8)"/><circle cx="12" cy="25" r="2" fill="rgba(255,255,255,0.8)"/><circle cx="18" cy="25" r="2" fill="rgba(255,255,255,0.8)"/><circle cx="24" cy="25" r="2" fill="rgba(255,255,255,0.8)"/><circle cx="12" cy="32" r="2" fill="rgba(255,255,255,0.8)"/><circle cx="18" cy="32" r="2" fill="#FFD54F"/><circle cx="24" cy="32" r="2" fill="rgba(255,255,255,0.8)"/></svg>`,
+      game: `<svg viewBox="0 0 36 36"><defs><linearGradient id="sgm" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" style="stop-color:#7C4DFF"/><stop offset="100%" style="stop-color:#651FFF"/></linearGradient></defs><path d="M4 10H32C33.1 10 34 10.9 34 12V24C34 25.1 33.1 26 32 26H4C2.9 26 2 25.1 2 24V12C2 10.9 2.9 10 4 10Z" fill="url(#sgm)"/><circle cx="11" cy="18" r="3" fill="white" opacity="0.8"/><rect x="26" y="15" width="5" height="5" rx="1" fill="white" opacity="0.5"/><path d="M6 13h3M9 11v2" stroke="white" stroke-width="1.5" opacity="0.5"/></svg>`,
+      exp: `<svg viewBox="0 0 36 36"><defs><linearGradient id="sexp" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" style="stop-color:#26A69A"/><stop offset="100%" style="stop-color:#00897B"/></linearGradient></defs><path d="M18 3L30 12L18 21L6 12L18 3Z" fill="url(#sexp)"/><path d="M6 21L18 30L30 21V24L18 33L6 24V21Z" fill="url(#sexp)" opacity="0.6"/><path d="M6 21V27L18 36V30L6 21Z" fill="url(#sexp)" opacity="0.8"/><path d="M30 21V27L18 36V30L30 21Z" fill="url(#sexp)" opacity="0.8"/></svg>`,
+      srv: `<svg viewBox="0 0 36 36"><defs><linearGradient id="ssrv" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" style="stop-color:#FF7043"/><stop offset="100%" style="stop-color:#E64A19"/></linearGradient></defs><path d="M22 4H10C8.9 4 8 4.9 8 6V30C8 31.1 8.9 32 10 32H26C27.1 32 28 31.1 28 30V12L22 4Z" fill="url(#ssrv)"/><path d="M22 4V12H28" fill="#D84315"/><path d="M10 16H26M10 22H20" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/></svg>`,
+      pv: `<svg viewBox="0 0 36 36"><defs><linearGradient id="spv" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" style="stop-color:#EC407A"/><stop offset="100%" style="stop-color:#C2185B"/></linearGradient></defs><rect x="3" y="5" width="30" height="22" rx="3" fill="url(#spv)"/><path d="M12 33H24M18 27V33" stroke="url(#spv)" stroke-width="2.5" stroke-linecap="round"/><rect x="6" y="9" width="8" height="6" rx="1" fill="rgba(255,255,255,0.3)"/><rect x="16" y="9" width="12" height="3" rx="1" fill="rgba(255,255,255,0.3)"/><rect x="16" y="14" width="9" height="3" rx="1" fill="rgba(255,255,255,0.2)"/></svg>`,
       about: `<svg viewBox="0 0 36 36"><defs><linearGradient id="sab" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" style="stop-color:#26A69A"/><stop offset="100%" style="stop-color:#00897B"/></linearGradient></defs><circle cx="18" cy="18" r="16" fill="url(#sab)"/><circle cx="18" cy="12" r="2.5" fill="white"/><rect x="16" y="17" width="4" height="10" rx="2" fill="white"/></svg>`,
     };
     return icons[type] || icons.fe;
@@ -134,12 +128,8 @@
     grid.querySelectorAll('.sm-app-pin').forEach(el => {
       el.addEventListener('click', () => {
         const id = el.dataset.id;
-        const action = el.dataset.action;
         closeStartMenu();
-        if (id === 'contact') launchApp('settings');
-        else if (id === 'about') launchApp('settings');
-        else if (id === 'linkedin') { launchApp('edge'); }
-        else launchApp(id);
+        setTimeout(() => launchApp(id), 160);
       });
     });
   }

@@ -134,8 +134,8 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       title: 'Settings',
       icon: ICONS.settings,
       htmlFile: 'apps/settings.html',
-      width: 900,
-      height: 650
+      width: 960,
+      height: 700
     },
     'notepad': {
       id: 'notepad',
@@ -161,6 +161,46 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       width: 780,
       height: 560
     },
+    'calculator': {
+      id: 'calculator',
+      title: 'Calculator',
+      icon: ICONS.calculator,
+      htmlFile: 'apps/calculator.html',
+      width: 340,
+      height: 520
+    },
+    'game': {
+      id: 'game',
+      title: 'Snake Game',
+      icon: ICONS.game,
+      htmlFile: 'apps/game.html',
+      width: 500,
+      height: 620
+    },
+    'expertise': {
+      id: 'expertise',
+      title: 'Expertise',
+      icon: ICONS.expertise,
+      htmlFile: 'apps/expertise.html',
+      width: 800,
+      height: 600
+    },
+    'services': {
+      id: 'services',
+      title: 'Services',
+      icon: ICONS.services,
+      htmlFile: 'apps/services.html',
+      width: 900,
+      height: 640
+    },
+    'portfolio-viewer': {
+      id: 'portfolio-viewer',
+      title: 'Portfolio',
+      icon: ICONS.portfolioViewer,
+      htmlFile: 'apps/portfolio-viewer.html',
+      width: 900,
+      height: 650
+    },
     'about': {
       id: 'about',
       title: 'About this Portfolio',
@@ -183,7 +223,7 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <li>Start menu with app grid</li>
               <li>Desktop icons & context menus</li>
               <li>Taskbar with system tray</li>
-              <li>5 fully functional apps</li>
+              <li>10 fully functional apps</li>
             </ul>
           </div>
           <p style="font-size:11px;color:rgba(255,255,255,0.35);">Version 2.0 &mdash; Built with vanilla JS</p>
