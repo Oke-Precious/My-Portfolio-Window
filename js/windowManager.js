@@ -792,5 +792,7 @@
   window.__win11.minimizeApp = minimizeApp;
   window.__win11.focusApp = focusApp;
   window.__win11._getStore = () => _store;
+  window.__win11.activateOverlay = activateOverlay;
+  window.__win11.deactivateOverlay = deactivateOverlay;
 
 })();

@@ -52,6 +52,60 @@
       <path d="M8 8h8M8 12h8" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
     </svg>`,
 
+calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="calc-g" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:#4FC3F7"/><stop offset="100%" style="stop-color:#0288D1"/>
+      </linearGradient></defs>
+      <rect x="4" y="2" width="16" height="20" rx="2" fill="url(#calc-g)"/>
+      <rect x="6" y="4" width="12" height="4" rx="1" fill="rgba(255,255,255,0.3)"/>
+      <circle cx="8" cy="11" r="1.5" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="12" cy="11" r="1.5" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="16" cy="11" r="1.5" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="8" cy="15" r="1.5" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="12" cy="15" r="1.5" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="16" cy="15" r="1.5" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="8" cy="19" r="1.5" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="12" cy="19" r="1.5" fill="#FFD54F"/>
+      <circle cx="16" cy="19" r="1.5" fill="rgba(255,255,255,0.8)"/>
+    </svg>`,
+
+    game: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="gm-g" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:#7C4DFF"/><stop offset="100%" style="stop-color:#651FFF"/>
+      </linearGradient></defs>
+      <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z" fill="url(#gm-g)"/>
+      <circle cx="7" cy="13" r="2" fill="white" opacity="0.8"/>
+      <rect x="17" y="11" width="4" height="4" rx="1" fill="white" opacity="0.5"/>
+      <path d="M5 9h2M7 7v2" stroke="white" stroke-width="1.5" opacity="0.5"/>
+    </svg>`,
+
+    expertise: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="exp-g" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:#26A69A"/><stop offset="100%" style="stop-color:#00897B"/>
+      </linearGradient></defs>
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#exp-g)"/>
+    </svg>`,
+
+    services: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="srv-g" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:#FF7043"/><stop offset="100%" style="stop-color:#E64A19"/>
+      </linearGradient></defs>
+      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" fill="url(#srv-g)"/>
+      <path d="M14 2v6h6" fill="#D84315"/>
+      <path d="M8 13h8M8 17h5" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
+    </svg>`,
+
+    portfolioViewer: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="pv-g" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:#EC407A"/><stop offset="100%" style="stop-color:#C2185B"/>
+      </linearGradient></defs>
+      <rect x="2" y="3" width="20" height="14" rx="2" fill="url(#pv-g)"/>
+      <path d="M8 21h8M12 17v4" stroke="url(#pv-g)" stroke-width="2"/>
+      <rect x="4" y="6" width="6" height="4" rx="1" fill="rgba(255,255,255,0.3)"/>
+      <rect x="12" y="6" width="8" height="2" rx="1" fill="rgba(255,255,255,0.3)"/>
+      <rect x="12" y="10" width="6" height="2" rx="1" fill="rgba(255,255,255,0.2)"/>
+    </svg>`,
+
     about: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <defs><linearGradient id="ab-g" x1="0%" y1="0%" x2="0%" y2="100%">
         <stop offset="0%" style="stop-color:#26A69A"/><stop offset="100%" style="stop-color:#00897B"/>
@@ -174,8 +228,13 @@
     { id: 'edge', name: 'Edge', icon: ICONS.edge },
     { id: 'notepad', name: 'Notepad', icon: ICONS.notepad },
     { id: 'settings', name: 'Settings', icon: ICONS.settings },
-    { id: 'recycle-bin', name: 'Recycle Bin', icon: ICONS.recycleBin },
-    { id: 'about', name: 'About', icon: ICONS.about }
+    { id: 'calculator', name: 'Calculator', icon: ICONS.calculator },
+    { id: 'game', name: 'Snake Game', icon: ICONS.game },
+    { id: 'expertise', name: 'Expertise', icon: ICONS.expertise },
+    { id: 'services', name: 'Services', icon: ICONS.services },
+    { id: 'portfolio-viewer', name: 'Portfolio', icon: ICONS.portfolioViewer },
+    { id: 'about', name: 'About', icon: ICONS.about },
+    { id: 'recycle-bin', name: 'Recycle Bin', icon: ICONS.recycleBin }
   ];
 
   /* ============================================================
@@ -208,20 +267,44 @@
 
     if (app.content) {
       contentEl.innerHTML = app.content;
+      if (typeof app.onLoad === 'function') {
+        setTimeout(() => app.onLoad(contentEl), 0);
+      }
+      return;
+    }
+
+    if (app.onLoad && typeof app.onLoad === 'function') {
+      setTimeout(() => app.onLoad(contentEl), 0);
       return;
     }
 
     if (app.htmlFile) {
+      // Use fetch with proper error handling for file:// protocol
       fetch(app.htmlFile)
-        .then(res => {
-          if (!res.ok) throw new Error('Failed to load');
-          return res.text();
+        .then(response => {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.text();
         })
-        .then(html => { contentEl.innerHTML = html; })
-        .catch(() => {
+        .then(html => {
+          contentEl.innerHTML = html;
+          
+          // Execute any <script> tags in the loaded HTML
+          const scripts = contentEl.querySelectorAll('script');
+          scripts.forEach(oldScript => {
+            const newScript = document.createElement('script');
+            newScript.textContent = oldScript.textContent;
+            oldScript.parentNode.replaceChild(newScript, oldScript);
+          });
+          
+          if (typeof app.onLoad === 'function') {
+            setTimeout(() => app.onLoad(contentEl), 0);
+          }
+        })
+        .catch(error => {
+          // Fallback: show error message
           contentEl.innerHTML = `<div style="padding:32px;color:rgba(255,255,255,0.4);font-size:13px;">
             Could not load ${app.title || appId}<br><br>
-            <span style="font-size:12px;opacity:0.5">Make sure all app HTML files exist in the apps/ folder.</span>
+            <span style="font-size:12px;opacity:0.5">Network error. Make sure all app HTML files exist in the apps/ folder.</span>
           </div>`;
         });
     }

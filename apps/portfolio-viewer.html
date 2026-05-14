@@ -1,0 +1,433 @@
+<!-- Portfolio Case Study Viewer -->
+<style>
+.pv-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: var(--win11-font);
+  background: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.pv-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.pv-sidebar {
+  width: 220px;
+  background: rgba(0, 0, 0, 0.3);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.pv-sidebar-header {
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pv-sidebar-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 4px;
+}
+
+.pv-sidebar-search {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  outline: none;
+  font-family: var(--win11-font);
+}
+
+.pv-sidebar-search:focus { border-color: rgba(102, 126, 234, 0.4); }
+.pv-sidebar-search::placeholder { color: rgba(255, 255, 255, 0.3); }
+
+.pv-project-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.pv-project-item {
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 2px;
+  transition: all 100ms;
+  border: 1px solid transparent;
+}
+
+.pv-project-item:hover { background: rgba(255, 255, 255, 0.05); }
+.pv-project-item.active { background: rgba(102, 126, 234, 0.15); border-color: rgba(102, 126, 234, 0.2); }
+
+.pv-proj-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 3px;
+}
+
+.pv-proj-stack {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pv-proj-tag {
+  padding: 1px 6px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 3px;
+  color: #a5b4fc;
+  font-size: 10px;
+}
+
+.pv-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.pv-preview {
+  height: 220px;
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pv-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+.pv-preview:hover .pv-preview-img { transform: scale(1.03); }
+
+.pv-preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%);
+}
+
+.pv-preview-label {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.pv-preview-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.pv-preview-badge {
+  font-size: 10px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: rgba(102, 126, 234, 0.3);
+  color: #a5b4fc;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+.pv-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.pv-block {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.pv-block-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #667eea;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pv-block-title::before {
+  content: '';
+  width: 10px;
+  height: 2px;
+  background: #667eea;
+  border-radius: 1px;
+}
+
+.pv-block p {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.7;
+}
+
+.pv-stack-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pv-stack-tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 100ms;
+}
+
+.pv-stack-tag:hover { background: rgba(102, 126, 234, 0.15); border-color: rgba(102, 126, 234, 0.3); color: #a5b4fc; }
+.pv-stack-tag .tag-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+.pv-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.pv-btn {
+  flex: 1;
+  padding: 9px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: var(--win11-font);
+  cursor: pointer;
+  transition: all 150ms;
+  text-align: center;
+  text-decoration: none;
+}
+
+.pv-btn-primary {
+  background: var(--win11-accent);
+  color: #fff;
+  border: none;
+}
+.pv-btn-primary:hover { background: var(--win11-accent-hover); transform: translateY(-1px); }
+
+.pv-btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.7);
+}
+.pv-btn-outline:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
+
+.pv-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 14px;
+}
+
+.pv-empty svg { width: 48px; height: 48px; opacity: 0.3; }
+
+.pv-sidebar::-webkit-scrollbar { width: 4px; }
+.pv-sidebar::-webkit-scrollbar-track { background: transparent; }
+.pv-sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+.pv-content::-webkit-scrollbar { width: 5px; }
+.pv-content::-webkit-scrollbar-track { background: transparent; }
+.pv-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+</style>
+
+<div class="pv-root">
+  <div class="pv-layout">
+    <div class="pv-sidebar">
+      <div class="pv-sidebar-header">
+        <div class="pv-sidebar-title">Projects</div>
+        <input type="text" class="pv-sidebar-search" id="pv-search" placeholder="Search projects..." />
+      </div>
+      <div class="pv-project-list" id="pv-list"></div>
+    </div>
+
+    <div class="pv-main">
+      <div id="pv-detail">
+        <div class="pv-empty">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+          Select a project to view case study
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const projects = [
+    {
+      id: 'special-bank',
+      name: 'Special Bank',
+      category: 'Fintech Application',
+      stack: ['JavaScript', 'React', 'Node.js'],
+      stackColors: ['#F7DF1E', '#61DAFB', '#68A063'],
+      desc: 'A sleek, high-performance fintech interface designed to redefine the modern banking experience through seamless navigation and elegant, Windows-inspired aesthetics.',
+      challenge: 'Users needed a banking platform that felt premium, fast, and intuitive — one that could handle account management, transfers, and transaction history without the clunkiness of traditional banking UIs.',
+      solution: 'Built with React on the front-end and Node.js REST APIs on the back-end. Implemented localStorage for state persistence, real-time balance updates via polling, and a minimalist dark UI with gradient accents that mimics a professional fintech aesthetic. Responsive design ensures it works on mobile as well.',
+      image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=70',
+      github: 'https://github.com/Oke-Precious',
+      demo: 'https://special-bank.vercel.app'
+    },
+    {
+      id: 'portfolio-window',
+      name: 'Portfolio Window',
+      category: 'Interactive Portfolio',
+      stack: ['JavaScript', 'CSS', 'HTML'],
+      stackColors: ['#F7DF1E', '#264de4', '#e34c26'],
+      desc: 'An interactive Windows 11 desktop portfolio built entirely with vanilla JavaScript — featuring draggable windows, snap layouts, Mica/Acrylic design, and a full boot sequence.',
+      challenge: 'Traditional portfolios all look the same — scrolling cards, a hero section, contact form. I wanted something that showed off my JavaScript skills directly through the medium of the portfolio itself.',
+      solution: 'Built a complete window manager from scratch with drag, resize, minimize/maximize/close, and snap layouts. Added a boot sequence, Start menu, Action Center, Task View, wallpaper picker, dark/light mode, and even a Snake game — all vanilla JS.',
+      image: 'https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=800&q=70',
+      github: 'https://github.com/Oke-Precious/portfolio-window',
+      demo: '#'
+    },
+    {
+      id: 'e-commerce',
+      name: 'E-Commerce Platform',
+      category: 'Full-Stack Application',
+      stack: ['JavaScript', 'Node.js', 'MongoDB'],
+      stackColors: ['#F7DF1E', '#68A063', '#3F8686'],
+      desc: 'A complete online store with product listing, search & filter, shopping cart, quantity management, and checkout flow.',
+      challenge: 'Building a shopping cart that actually persists across sessions, handles edge cases (empty cart, quantity=0, etc.), and renders products dynamically without page reloads.',
+      solution: 'JavaScript-driven state management with localStorage persistence. Built a custom event system for cart updates across components. Used Node.js + MongoDB for the back-end with RESTful API endpoints. Fully responsive with mobile-first CSS.',
+      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=70',
+      github: 'https://github.com/Oke-Precious',
+      demo: '#'
+    },
+    {
+      id: 'grading-calc',
+      name: 'Grading System Calculator',
+      category: 'Academic Tool',
+      stack: ['JavaScript', 'HTML', 'CSS'],
+      stackColors: ['#F7DF1E', '#e34c26', '#264de4'],
+      desc: 'Academic grading tool that calculates CGPA/GPA from entered scores, maps grades based on Nigerian university grading standards, and displays detailed grade reports.',
+      challenge: 'Most online GPA calculators use US or UK grading scales. Nigerian universities have specific grade boundaries that needed to be accurately represented in the algorithm.',
+      solution: 'Implemented configurable grade thresholds that match LAUTECH\'s grading policy (A=70-100, B=60-69, C=50-59, D=45-49, E=40-44, F=0-39). Built a dynamic grade report with per-course analysis and cumulative CGPA tracking across semesters.',
+      image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=70',
+      github: 'https://github.com/Oke-Precious',
+      demo: '#'
+    },
+    {
+      id: 'weather-dash',
+      name: 'Weather Dashboard',
+      category: 'API Integration',
+      stack: ['JavaScript', 'Chart.js', 'CSS'],
+      stackColors: ['#F7DF1E', '#FF6384', '#264de4'],
+      desc: 'Real-time weather tracking app with interactive charts, location search, and 7-day forecast visualization.',
+      challenge: 'Weather APIs return raw data that\'s not user-friendly. The challenge was transforming JSON responses into meaningful visualizations that users could understand at a glance.',
+      solution: 'Integrated OpenWeatherMap API for real-time data. Used Chart.js for temperature trend visualization. Built a custom search autocomplete with geolocation fallback. Implemented unit conversion (C/F) with localStorage preference.',
+      image: 'https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800&q=70',
+      github: 'https://github.com/Oke-Precious',
+      demo: '#'
+    }
+  ];
+
+  const listEl = document.getElementById('pv-list');
+  const detailEl = document.getElementById('pv-detail');
+  const searchEl = document.getElementById('pv-search');
+
+  function renderList(filter = '') {
+    const filtered = projects.filter(p =>
+      p.name.toLowerCase().includes(filter.toLowerCase()) ||
+      p.stack.some(s => s.toLowerCase().includes(filter.toLowerCase()))
+    );
+    listEl.innerHTML = filtered.map(p => `
+      <div class="pv-project-item" data-id="${p.id}">
+        <div class="pv-proj-name">${p.name}</div>
+        <div class="pv-proj-stack">
+          ${p.stack.map(s => `<span class="pv-proj-tag">${s}</span>`).join('')}
+        </div>
+      </div>
+    `).join('');
+
+    listEl.querySelectorAll('.pv-project-item').forEach(item => {
+      item.addEventListener('click', () => showProject(item.dataset.id));
+    });
+  }
+
+  function showProject(id) {
+    const p = projects.find(x => x.id === id);
+    if (!p) return;
+
+    listEl.querySelectorAll('.pv-project-item').forEach(i => {
+      i.classList.toggle('active', i.dataset.id === id);
+    });
+
+    detailEl.innerHTML = `
+      <div class="pv-preview">
+        <img class="pv-preview-img" src="${p.image}" alt="${p.name}" loading="lazy" />
+        <div class="pv-preview-overlay"></div>
+        <div class="pv-preview-label">
+          <div class="pv-preview-name">${p.name}</div>
+          <div class="pv-preview-badge">${p.category}</div>
+        </div>
+      </div>
+      <div class="pv-content">
+        <div class="pv-block">
+          <div class="pv-block-title">About This Project</div>
+          <p>${p.desc}</p>
+          <div class="pv-btns">
+            <a class="pv-btn pv-btn-primary" href="${p.demo}" target="_blank">Live Preview</a>
+            <a class="pv-btn pv-btn-outline" href="${p.github}" target="_blank">View Code</a>
+          </div>
+        </div>
+        <div class="pv-block">
+          <div class="pv-block-title">Tech Stack</div>
+          <div class="pv-stack-tags">
+            ${p.stack.map((s, i) => `<div class="pv-stack-tag"><span class="tag-dot" style="background:${p.stackColors[i]}"></span>${s}</div>`).join('')}
+          </div>
+        </div>
+        <div class="pv-block" style="grid-column: 1/-1">
+          <div class="pv-block-title">The Challenge</div>
+          <p>${p.challenge}</p>
+        </div>
+        <div class="pv-block" style="grid-column: 1/-1">
+          <div class="pv-block-title">The Solution</div>
+          <p>${p.solution}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  searchEl.addEventListener('input', e => renderList(e.target.value));
+  renderList();
+  showProject(projects[0].id);
+})();
+</script>

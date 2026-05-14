@@ -102,7 +102,14 @@
 
     const trayClock = document.getElementById('tray-clock');
     if (trayClock) {
-      trayClock.addEventListener('click', openActionCenter);
+      trayClock.style.cursor = 'pointer';
+      trayClock.addEventListener('click', () => {
+        if (typeof window.__win11.toggleWidgetPanel === 'function') {
+          window.__win11.toggleWidgetPanel();
+        } else if (typeof window.__win11.openActionCenter === 'function') {
+          window.__win11.openActionCenter();
+        }
+      });
     }
 
     updateClock();

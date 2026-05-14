@@ -1,0 +1,168 @@
+<!-- Snake Game -->
+<style>
+.snake-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #0a0a0f;
+  font-family: var(--win11-font);
+  overflow: hidden;
+}
+
+.snake-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.snake-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.snake-stat strong {
+  font-size: 16px;
+  color: #fff;
+  min-width: 28px;
+}
+
+.snake-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #667eea;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.snake-game-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+#snake-canvas {
+  background: #111;
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: 4px;
+  display: block;
+  box-shadow: 0 0 30px rgba(102, 126, 234, 0.08);
+  image-rendering: pixelated;
+}
+
+.snake-controls {
+  display: flex;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.3);
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.snake-ctrl-btn {
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: var(--win11-font);
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 100ms;
+}
+
+.snake-ctrl-btn:hover { background: rgba(255, 255, 255, 0.12); }
+.snake-ctrl-btn.start { background: rgba(102, 126, 234, 0.3); border-color: rgba(102, 126, 234, 0.4); color: #a5b4fc; }
+.snake-ctrl-btn.start:hover { background: rgba(102, 126, 234, 0.5); }
+
+.snake-mobile-dpad {
+  display: none;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(3, 48px);
+  gap: 4px;
+  padding: 8px;
+}
+
+.snake-dpad-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background 80ms;
+}
+
+.snake-dpad-btn:active { background: rgba(102, 126, 234, 0.3); }
+.snake-dpad-center { background: transparent; border: none; pointer-events: none; }
+
+@media (max-width: 600px) {
+  .snake-mobile-dpad { display: grid; }
+}
+
+.snake-gameover-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 10;
+  border-radius: 8px;
+}
+
+.snake-gameover-overlay.visible { display: flex; }
+.snake-go-title { font-size: 28px; font-weight: 700; color: #667eea; }
+.snake-go-score { font-size: 16px; color: rgba(255,255,255,0.6); }
+</style>
+
+<div class="snake-root">
+  <div class="snake-hud">
+    <div class="snake-stat">Score <strong id="snake-score">0</strong></div>
+    <div class="snake-title">Snake</div>
+    <div class="snake-stat">High <strong id="snake-high">0</strong></div>
+  </div>
+  <div class="snake-game-wrap" style="position:relative">
+    <canvas id="snake-canvas" width="400" height="400"></canvas>
+    <div class="snake-gameover-overlay" id="snake-gameover">
+      <div class="snake-go-title">Game Over</div>
+      <div class="snake-go-score">Score: <span id="snake-final">0</span></div>
+    </div>
+  </div>
+  <div class="snake-controls">
+    <button class="snake-ctrl-btn start" id="snake-start">Start Game</button>
+    <button class="snake-ctrl-btn" id="snake-pause">Pause</button>
+    <div class="snake-mobile-dpad">
+      <div></div>
+      <div class="snake-dpad-btn" data-dir="up">▲</div>
+      <div></div>
+      <div class="snake-dpad-btn" data-dir="left">◀</div>
+      <div class="snake-dpad-center"></div>
+      <div class="snake-dpad-btn" data-dir="right">▶</div>
+      <div></div>
+      <div class="snake-dpad-btn" data-dir="down">▼</div>
+      <div></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/game.js"></script>

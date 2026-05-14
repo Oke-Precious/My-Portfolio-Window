@@ -1,0 +1,363 @@
+<!-- Expertise - Skill Ranges App -->
+<style>
+.exp-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: var(--win11-font);
+  background: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.exp-header {
+  padding: 20px 24px 16px;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.exp-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 4px;
+}
+
+.exp-header p {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.exp-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.exp-category-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #667eea;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(102, 126, 234, 0.15);
+}
+
+.exp-category-title::before {
+  content: '';
+  width: 12px;
+  height: 2px;
+  background: #667eea;
+  border-radius: 1px;
+}
+
+.exp-skill {
+  margin-bottom: 14px;
+}
+
+.exp-skill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.exp-skill-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.exp-skill-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.exp-skill-pct {
+  font-size: 12px;
+  font-weight: 600;
+  color: #667eea;
+}
+
+.exp-level {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.exp-level.expert { background: rgba(102, 187, 106, 0.15); color: #81c784; }
+.exp-level.senior { background: rgba(102, 126, 234, 0.15); color: #a5b4fc; }
+.exp-level.intermediate { background: rgba(255, 186, 0, 0.12); color: #ffd166; }
+.exp-level.junior { background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.45); }
+
+.exp-track {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.exp-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 60%, #a78bfa 100%);
+  width: 0;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+
+.exp-fill.animated { width: var(--skill-pct); }
+
+.exp-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6), 0 0 16px rgba(102, 126, 234, 0.5);
+  animation: glowPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(255, 255, 255, 0.4), 0 0 12px rgba(102, 126, 234, 0.3); }
+  50% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(102, 126, 234, 0.5); }
+}
+
+.exp-body::-webkit-scrollbar { width: 5px; }
+.exp-body::-webkit-scrollbar-track { background: transparent; }
+.exp-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+.exp-body::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
+</style>
+
+<div class="exp-root">
+  <div class="exp-header">
+    <h1>My Expertise</h1>
+    <p>Full-Stack Development · JavaScript · React · Node.js</p>
+  </div>
+  <div class="exp-body" id="exp-body">
+
+    <div class="exp-category">
+      <div class="exp-category-title">Frontend Development</div>
+
+      <div class="exp-skill" data-pct="95">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">JavaScript (ES6+)</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">95%</span>
+            <span class="exp-level expert">Expert</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 95%"></div></div>
+      </div>
+
+      <div class="exp-skill" data-pct="88">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">React / React Native</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">88%</span>
+            <span class="exp-level senior">Senior</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 88%"></div></div>
+      </div>
+
+      <div class="exp-skill" data-pct="92">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">HTML5 &amp; CSS3</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">92%</span>
+            <span class="exp-level expert">Expert</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 92%"></div></div>
+      </div>
+
+      <div class="exp-skill" data-pct="78">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">TypeScript</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">78%</span>
+            <span class="exp-level senior">Senior</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 78%"></div></div>
+      </div>
+
+      <div class="exp-skill" data-pct="72">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">Tailwind CSS</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">72%</span>
+            <span class="exp-level intermediate">Intermediate</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 72%"></div></div>
+      </div>
+    </div>
+
+    <div class="exp-category">
+      <div class="exp-category-title">Backend &amp; Tools</div>
+
+      <div class="exp-skill" data-pct="75">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">Node.js / Express</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">75%</span>
+            <span class="exp-level senior">Senior</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 75%"></div></div>
+      </div>
+
+      <div class="exp-skill" data-pct="70">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">Python</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">70%</span>
+            <span class="exp-level intermediate">Intermediate</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 70%"></div></div>
+      </div>
+
+      <div class="exp-skill" data-pct="85">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">Git &amp; GitHub</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">85%</span>
+            <span class="exp-level senior">Senior</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 85%"></div></div>
+      </div>
+
+      <div class="exp-skill" data-pct="65">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">MongoDB / PostgreSQL</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">65%</span>
+            <span class="exp-level intermediate">Intermediate</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 65%"></div></div>
+      </div>
+
+      <div class="exp-skill" data-pct="55">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">Firebase</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">55%</span>
+            <span class="exp-level junior">Learning</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 55%"></div></div>
+      </div>
+    </div>
+
+    <div class="exp-category">
+      <div class="exp-category-title">Concepts &amp; Practices</div>
+
+      <div class="exp-skill" data-pct="82">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">REST APIs &amp; Fetch</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">82%</span>
+            <span class="exp-level senior">Senior</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 82%"></div></div>
+      </div>
+
+      <div class="exp-skill" data-pct="80">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">Responsive Design</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">80%</span>
+            <span class="exp-level senior">Senior</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 80%"></div></div>
+      </div>
+
+      <div class="exp-skill" data-pct="78">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">OOP &amp; Clean Code</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">78%</span>
+            <span class="exp-level senior">Senior</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 78%"></div></div>
+      </div>
+
+      <div class="exp-skill" data-pct="74">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">Async / Await &amp; Promises</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">74%</span>
+            <span class="exp-level senior">Senior</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 74%"></div></div>
+      </div>
+
+      <div class="exp-skill" data-pct="60">
+        <div class="exp-skill-header">
+          <span class="exp-skill-name">Agile / Scrum</span>
+          <div class="exp-skill-meta">
+            <span class="exp-skill-pct">60%</span>
+            <span class="exp-level intermediate">Intermediate</span>
+          </div>
+        </div>
+        <div class="exp-track"><div class="exp-fill" style="--skill-pct: 60%"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const body = document.getElementById('exp-body');
+  let animated = false;
+
+  function animateSkills() {
+    if (animated) return;
+    const fills = body.querySelectorAll('.exp-fill:not(.animated)');
+    if (fills.length === 0) return;
+    animated = true;
+    fills.forEach((f, i) => {
+      setTimeout(() => f.classList.add('animated'), i * 80);
+    });
+  }
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) animateSkills();
+    });
+  }, { threshold: 0.1 });
+
+  obs.observe(body);
+
+  document.querySelectorAll('.exp-skill').forEach(skill => {
+    const pct = parseInt(skill.dataset.pct);
+    const track = skill.querySelector('.exp-track');
+    if (!track) return;
+    obs.observe(track);
+  });
+})();
+</script>
