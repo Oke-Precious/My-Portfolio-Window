@@ -1,379 +1,727 @@
 /* ============================================================
-   Window Manager - Handles open/close/minimize/maximize/drag/resize
+   Window Manager - Complete Windows 11 Window System
    ============================================================ */
 
-/* ============================================================
-   Window Creation
-   ============================================================ */
+(function () {
+  'use strict';
 
-function createWindow(app) {
-  const existing = window.__win11.openWindows.find(w => w.app === app.id);
-  if (existing) {
-    if (existing.minimized) {
-      restoreWindow(existing.id);
-    } else {
-      bringToFront(existing.id);
-      focusWindow(existing.id);
-    }
-    return existing.id;
-  }
+  const Z_BASE = 1000;
+  let zCounter = Z_BASE;
+  let windowIdCounter = 0;
+  let dragState = null;
+  let resizeState = null;
 
-  const windowId = 'win-' + app.id + '-' + Date.now();
-  const zIndex = getNextZIndex();
+  /* ============================================================
+     Core API
+     ============================================================ */
 
-  const winEl = document.createElement('div');
-  winEl.className = 'window';
-  winEl.id = windowId;
-  winEl.style.cssText = `
-    left: ${app.defaultX || 150}px;
-    top: ${app.defaultY || 80}px;
-    width: ${app.defaultWidth || 800}px;
-    height: ${app.defaultHeight || 600}px;
-    z-index: ${zIndex};
-  `;
+  function createWindow(config) {
+    const id = 'win-' + (++windowIdCounter);
+    const appId = config.id || config.appId || 'unknown';
+    const title = config.title || 'Window';
+    const icon = config.icon || '';
+    const content = config.content || '';
+    const width = Math.min(config.width || 800, window.innerWidth * 0.9);
+    const height = Math.min(config.height || 540, (window.innerHeight - 48) * 0.85);
+    const x = config.x !== undefined ? config.x : (window.innerWidth - width) / 2 + (Math.random() * 80 - 40);
+    const y = config.y !== undefined ? config.y : Math.max(0, (window.innerHeight - 48 - height) / 2) + (Math.random() * 80 - 40);
 
-  winEl.innerHTML = `
-    <div class="window-titlebar" data-window-id="${windowId}">
-      <img class="window-titlebar-icon" src="${app.icon}" alt="${app.name}" />
-      <span class="window-titlebar-title">${app.name}</span>
-      <div class="window-titlebar-controls">
-        <button class="window-control minimize" data-action="minimize" title="Minimize">
-          <svg viewBox="0 0 10 10"><line x1="0" y1="5" x2="10" y2="5" stroke="currentColor" stroke-width="1"/></svg>
-        </button>
-        <button class="window-control maximize" data-action="maximize" title="Maximize">
-          <svg viewBox="0 0 10 10"><rect x="0" y="0" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1"/></svg>
-        </button>
-        <button class="window-control close" data-action="close" title="Close">
-          <svg viewBox="0 0 10 10"><line x1="0" y1="0" x2="10" y2="10" stroke="currentColor" stroke-width="1"/><line x1="10" y1="0" x2="0" y2="10" stroke="currentColor" stroke-width="1"/></svg>
-        </button>
+    const win = document.createElement('div');
+    win.className = 'win11-window';
+    win.id = id;
+    win.dataset.app = appId;
+
+    win.innerHTML = `
+      <div class="win-titlebar">
+        <div class="win-icon">${icon}</div>
+        <span class="win-title">${title}</span>
+        <div class="win-controls">
+          <button class="win-btn win-minimize" title="Minimize" data-action="minimize">─</button>
+          <button class="win-btn win-maximize" title="Maximize" data-action="maximize">
+            <span class="maximize-icon">□</span>
+            <div class="snap-hint">
+              <div class="snap-zones-grid">
+                <div class="snap-zone snap-full" data-snap="full" title="Full">
+                  <div class="snap-zone-fill"></div>
+                </div>
+                <div class="snap-zone snap-left" data-snap="left" title="Left Half">
+                  <div class="snap-zone-fill"></div>
+                </div>
+                <div class="snap-zone snap-right" data-snap="right" title="Right Half">
+                  <div class="snap-zone-fill"></div>
+                </div>
+                <div class="snap-zone snap-tl" data-snap="tl" title="Top Left">
+                  <div class="snap-zone-fill"></div>
+                </div>
+                <div class="snap-zone snap-tr" data-snap="tr" title="Top Right">
+                  <div class="snap-zone-fill"></div>
+                </div>
+                <div class="snap-zone snap-bottom" data-snap="bottom" title="Bottom Half">
+                  <div class="snap-zone-fill"></div>
+                </div>
+              </div>
+            </div>
+          </button>
+          <button class="win-btn win-close" title="Close" data-action="close">✕</button>
+        </div>
       </div>
-    </div>
-    <div class="window-content" data-window-id="${windowId}"></div>
-  `;
+      <div class="win-content">${content}</div>
+      <div class="win-resize-handle win-resize-n"></div>
+      <div class="win-resize-handle win-resize-ne"></div>
+      <div class="win-resize-handle win-resize-e"></div>
+      <div class="win-resize-handle win-resize-se"></div>
+      <div class="win-resize-handle win-resize-s"></div>
+      <div class="win-resize-handle win-resize-sw"></div>
+      <div class="win-resize-handle win-resize-w"></div>
+      <div class="win-resize-handle win-resize-nw"></div>
+    `;
 
-  document.getElementById('windows-container').appendChild(winEl);
+    document.getElementById('windows-container').appendChild(win);
 
-  window.__win11.openWindows.push({
-    id: windowId,
-    app: app.id,
-    title: app.name,
-    icon: app.icon,
-    minimized: false,
-    maximized: false,
-    zIndex: zIndex,
-    bounds: {
-      x: app.defaultX || 150,
-      y: app.defaultY || 80,
-      width: app.defaultWidth || 800,
-      height: app.defaultHeight || 600
+    const winData = {
+      id,
+      appId,
+      title,
+      icon,
+      x,
+      y,
+      width,
+      height,
+      zIndex: ++zCounter,
+      minimized: false,
+      maximized: false,
+      focused: true,
+      preMax: null
+    };
+
+    win.style.cssText = `left:${x}px;top:${y}px;width:${width}px;height:${height}px;z-index:${zCounter}`;
+
+    _store[id] = winData;
+    _order.push(id);
+    _updateFocusState(id);
+    _setupWindowEvents(id);
+    _addTaskbarButton(appId, id, icon, title);
+
+    const contentEl = win.querySelector('.win-content');
+    if (typeof window.__loadAppContent === 'function') {
+      window.__loadAppContent(appId, contentEl);
+    } else if (content && typeof content === 'string') {
+      contentEl.innerHTML = content;
     }
-  });
 
-  winEl.classList.add('open');
-  window.__win11.activeWindow = windowId;
-  updateTaskbarFocus();
-
-  loadAppContent(windowId, app);
-
-  setupWindowEvents(windowId);
-
-  return windowId;
-}
-
-/* ============================================================
-   Load App Content
-   ============================================================ */
-
-function loadAppContent(windowId, app) {
-  const contentEl = document.querySelector(`#${windowId} .window-content`);
-  if (contentEl && app.htmlFile) {
-    fetch(app.htmlFile)
-      .then(res => res.text())
-      .then(html => {
-        contentEl.innerHTML = html;
-        if (app.onLoad) app.onLoad(windowId, contentEl);
-      })
-      .catch(() => {
-        contentEl.innerHTML = `<div class="window-content-inner" style="padding: 20px; color: white;">
-          <p>Could not load ${app.name}</p>
-        </div>`;
-      });
-  } else if (app.onLoad) {
-    app.onLoad(windowId, contentEl);
+    return id;
   }
-}
 
-/* ============================================================
-   Window Events Setup
-   ============================================================ */
+  /* ============================================================
+     Window Events
+     ============================================================ */
 
-function setupWindowEvents(windowId) {
-  const winEl = document.getElementById(windowId);
-  if (!winEl) return;
+  function _setupWindowEvents(id) {
+    const win = document.getElementById(id);
+    if (!win) return;
 
-  winEl.addEventListener('mousedown', () => bringToFront(windowId));
+    win.addEventListener('mousedown', () => focusWindow(id));
 
-  const titlebar = winEl.querySelector('.window-titlebar');
-  titlebar.addEventListener('mousedown', e => {
-    if (e.target.closest('.window-control')) return;
-    startDrag(windowId, e);
-  });
+    const titlebar = win.querySelector('.win-titlebar');
+    titlebar.addEventListener('mousedown', e => _onTitlebarMousedown(id, e));
+    titlebar.addEventListener('dblclick', () => toggleMaximize(id));
 
-  const controls = winEl.querySelectorAll('.window-control');
-  controls.forEach(ctrl => {
-    ctrl.addEventListener('click', e => {
-      e.stopPropagation();
-      const action = ctrl.dataset.action;
-      if (action === 'minimize') minimizeWindow(windowId);
-      else if (action === 'maximize') toggleMaximize(windowId);
-      else if (action === 'close') closeWindow(windowId);
+    const controls = win.querySelectorAll('.win-btn');
+    controls.forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const action = btn.dataset.action;
+        if (action === 'minimize') minimizeWindow(id);
+        else if (action === 'maximize') { /* handled by mouseup */ }
+        else if (action === 'close') closeWindow(id);
+      });
     });
-  });
-}
 
-/* ============================================================
-   Drag & Drop
-   ============================================================ */
+    const snapZones = win.querySelectorAll('.snap-zone');
+    snapZones.forEach(zone => {
+      zone.addEventListener('click', e => {
+        e.stopPropagation();
+        const snap = zone.dataset.snap;
+        applySnap(id, snap);
+        hideSnapHint(id);
+      });
+    });
 
-function startDrag(windowId, e) {
-  e.preventDefault();
-  const winEl = document.getElementById(windowId);
-  const state = window.__win11.openWindows.find(w => w.id === windowId);
-  if (!winEl || !state) return;
+    const maximizeBtn = win.querySelector('.win-maximize');
+    if (maximizeBtn) {
+      maximizeBtn.addEventListener('mouseenter', () => showSnapHint(id));
+      maximizeBtn.addEventListener('mouseleave', () => {
+        if (!win.matches(':hover')) hideSnapHint(id);
+      });
+    }
 
-  if (state.maximized) return;
+    _setupResizeHandles(id);
+  }
 
-  window.__win11.isDragging = true;
-  window.__win11.dragTarget = windowId;
+  function _setupResizeHandles(id) {
+    const win = document.getElementById(id);
+    if (!win) return;
 
-  const rect = winEl.getBoundingClientRect();
-  window.__win11.dragOffset = {
-    x: e.clientX - rect.left,
-    y: e.clientY - rect.top
+    const handles = win.querySelectorAll('.win-resize-handle');
+    handles.forEach(h => {
+      const dir = Array.from(h.classList).find(c => c.startsWith('win-resize-') && c !== 'win-resize-handle');
+      h.addEventListener('mousedown', e => _onResizeMousedown(id, e, dir));
+    });
+  }
+
+  /* ============================================================
+     Dragging
+     ============================================================ */
+
+  function _onTitlebarMousedown(id, e) {
+    if (e.target.closest('.win-controls')) return;
+    const win = document.getElementById(id);
+    if (!win) return;
+    const d = _store[id];
+    if (d.maximized) return;
+
+    dragState = {
+      id,
+      offsetX: e.clientX - win.offsetLeft,
+      offsetY: e.clientY - win.offsetTop
+    };
+
+    document.addEventListener('mousemove', _onDrag);
+    document.addEventListener('mouseup', _onDragEnd);
+    e.preventDefault();
+  }
+
+  function _onDrag(e) {
+    if (!dragState) return;
+    const { id, offsetX, offsetY } = dragState;
+    const win = document.getElementById(id);
+    if (!win) return;
+
+    let nx = e.clientX - offsetX;
+    let ny = e.clientY - offsetY;
+
+    const minY = -(win.offsetHeight - 32);
+    const maxX = window.innerWidth - 200;
+    const maxY = window.innerHeight - 48;
+
+    nx = Math.max(-(win.offsetWidth - 200), Math.min(maxX, nx));
+    ny = Math.max(minY, Math.min(maxY, ny));
+
+    win.style.left = nx + 'px';
+    win.style.top = ny + 'px';
+    _store[id].x = nx;
+    _store[id].y = ny;
+  }
+
+  function _onDragEnd() {
+    dragState = null;
+    document.removeEventListener('mousemove', _onDrag);
+    document.removeEventListener('mouseup', _onDragEnd);
+  }
+
+  /* ============================================================
+     Resizing
+     ============================================================ */
+
+  const RESIZE_HANDLERS = {
+    n: _resizeN, ne: _resizeNE, e: _resizeE, se: _resizeSE,
+    s: _resizeS, sw: _resizeSW, w: _resizeW, nw: _resizeNW
   };
 
-  document.addEventListener('mousemove', onDrag);
-  document.addEventListener('mouseup', stopDrag);
-}
+  function _onResizeMousedown(id, e, dir) {
+    e.preventDefault();
+    e.stopPropagation();
+    const win = document.getElementById(id);
+    if (!win) return;
+    const d = _store[id];
+    if (d.maximized) return;
 
-function onDrag(e) {
-  if (!window.__win11.isDragging) return;
-  const windowId = window.__win11.dragTarget;
-  const winEl = document.getElementById(windowId);
-  if (!winEl) return;
-
-  const x = e.clientX - window.__win11.dragOffset.x;
-  const y = e.clientY - window.__win11.dragOffset.y;
-
-  winEl.style.left = Math.max(0, x) + 'px';
-  winEl.style.top = Math.max(0, y) + 'px';
-}
-
-function stopDrag() {
-  window.__win11.isDragging = false;
-  window.__win11.dragTarget = null;
-  document.removeEventListener('mousemove', onDrag);
-  document.removeEventListener('mouseup', stopDrag);
-}
-
-/* ============================================================
-   Focus
-   ============================================================ */
-
-function focusWindow(windowId) {
-  const winEl = document.getElementById(windowId);
-  if (winEl) {
-    winEl.classList.add('focused');
-    winEl.style.zIndex = getNextZIndex();
-  }
-}
-
-/* ============================================================
-   Minimize
-   ============================================================ */
-
-function minimizeWindow(windowId) {
-  const winEl = document.getElementById(windowId);
-  const state = window.__win11.openWindows.find(w => w.id === windowId);
-  if (!winEl || !state) return;
-
-  winEl.classList.add('minimizing');
-  setTimeout(() => {
-    winEl.classList.remove('minimizing');
-    winEl.classList.add('minimized');
-    state.minimized = true;
-
-    const otherOpen = window.__win11.openWindows.filter(w => !w.minimized);
-    if (otherOpen.length > 0) {
-      bringToFront(otherOpen[otherOpen.length - 1].id);
-    } else {
-      window.__win11.activeWindow = null;
-    }
-    updateTaskbarFocus();
-  }, 200);
-}
-
-/* ============================================================
-   Restore
-   ============================================================ */
-
-function restoreWindow(windowId) {
-  const winEl = document.getElementById(windowId);
-  const state = window.__win11.openWindows.find(w => w.id === windowId);
-  if (!winEl || !state) return;
-
-  state.minimized = false;
-  winEl.classList.remove('minimized');
-  winEl.style.left = state.bounds.x + 'px';
-  winEl.style.top = state.bounds.y + 'px';
-  winEl.style.width = state.bounds.width + 'px';
-  winEl.style.height = state.bounds.height + 'px';
-
-  bringToFront(windowId);
-  focusWindow(windowId);
-}
-
-/* ============================================================
-   Maximize / Restore Toggle
-   ============================================================ */
-
-function toggleMaximize(windowId) {
-  const winEl = document.getElementById(windowId);
-  const state = window.__win11.openWindows.find(w => w.id === windowId);
-  if (!winEl || !state) return;
-
-  if (state.maximized) {
-    winEl.classList.remove('maximized');
-    winEl.style.left = state.bounds.x + 'px';
-    winEl.style.top = state.bounds.y + 'px';
-    winEl.style.width = state.bounds.width + 'px';
-    winEl.style.height = state.bounds.height + 'px';
-    state.maximized = false;
-  } else {
-    state.bounds = {
-      x: winEl.offsetLeft,
-      y: winEl.offsetTop,
-      width: winEl.offsetWidth,
-      height: winEl.offsetHeight
+    resizeState = {
+      id,
+      dir,
+      mouseX: e.clientX,
+      mouseY: e.clientY,
+      x: win.offsetLeft,
+      y: win.offsetTop,
+      w: win.offsetWidth,
+      h: win.offsetHeight
     };
-    winEl.classList.add('maximized');
-    state.maximized = true;
+
+    document.addEventListener('mousemove', _onResize);
+    document.addEventListener('mouseup', _onResizeEnd);
   }
-}
 
-/* ============================================================
-   Close
-   ============================================================ */
+  function _onResize(e) {
+    if (!resizeState) return;
+    const fn = RESIZE_HANDLERS[resizeState.dir];
+    if (fn) fn(e);
+  }
 
-function closeWindow(windowId) {
-  const winEl = document.getElementById(windowId);
-  const idx = window.__win11.openWindows.findIndex(w => w.id === windowId);
-  if (idx === -1) return;
+  function _onResizeEnd() {
+    resizeState = null;
+    document.removeEventListener('mousemove', _onResize);
+    document.removeEventListener('mouseup', _onResizeEnd);
+  }
 
-  winEl.classList.add('closing');
-  setTimeout(() => {
-    winEl.remove();
-    window.__win11.openWindows.splice(idx, 1);
-
-    if (window.__win11.activeWindow === windowId) {
-      const otherOpen = window.__win11.openWindows.filter(w => !w.minimized);
-      window.__win11.activeWindow = otherOpen.length > 0 ? otherOpen[otherOpen.length - 1].id : null;
+  function _resizeN(e) {
+    const { id, mouseX, mouseY, x, y, w, h } = resizeState;
+    const win = document.getElementById(id);
+    const dy = e.clientY - mouseY;
+    const newH = h - dy;
+    if (newH >= 200 && e.clientY > 0) {
+      win.style.height = newH + 'px';
+      win.style.top = (y + dy) + 'px';
+      _store[id].height = newH;
+      _store[id].y = y + dy;
+      resizeState.mouseY = e.clientY;
+      resizeState.y = y + dy;
+      resizeState.h = newH;
     }
-    updateTaskbarFocus();
-  }, 150);
-}
+  }
 
-/* ============================================================
-   Context Menu
-   ============================================================ */
+  function _resizeS(e) {
+    const { id, mouseY, y, h } = resizeState;
+    const win = document.getElementById(id);
+    const dy = e.clientY - mouseY;
+    const newH = h + dy;
+    if (newH >= 200) {
+      win.style.height = newH + 'px';
+      _store[id].height = newH;
+      resizeState.mouseY = e.clientY;
+      resizeState.h = newH;
+    }
+  }
 
-function showContextMenu(x, y, items, onClose) {
-  closeContextMenu();
+  function _resizeE(e) {
+    const { id, mouseX, x, w } = resizeState;
+    const win = document.getElementById(id);
+    const dx = e.clientX - mouseX;
+    const newW = w + dx;
+    if (newW >= 320) {
+      win.style.width = newW + 'px';
+      _store[id].width = newW;
+      resizeState.mouseX = e.clientX;
+      resizeState.w = newW;
+    }
+  }
 
-  const menu = document.createElement('div');
-  menu.className = 'context-menu';
-  menu.style.left = x + 'px';
-  menu.style.top = y + 'px';
+  function _resizeW(e) {
+    const { id, mouseX, x, w } = resizeState;
+    const win = document.getElementById(id);
+    const dx = e.clientX - mouseX;
+    const newW = w - dx;
+    if (newW >= 320 && e.clientX > 0) {
+      win.style.width = newW + 'px';
+      win.style.left = (x + dx) + 'px';
+      _store[id].width = newW;
+      _store[id].x = x + dx;
+      resizeState.mouseX = e.clientX;
+      resizeState.x = x + dx;
+      resizeState.w = newW;
+    }
+  }
 
-  items.forEach(item => {
-    if (item.divider) {
-      menu.innerHTML += '<div class="context-menu-divider"></div>';
+  function _resizeNE(e) {
+    _resizeN(e);
+    _resizeE(e);
+  }
+
+  function _resizeNW(e) {
+    _resizeN(e);
+    _resizeW(e);
+  }
+
+  function _resizeSE(e) {
+    _resizeS(e);
+    _resizeE(e);
+  }
+
+  function _resizeSW(e) {
+    _resizeS(e);
+    _resizeW(e);
+  }
+
+  /* ============================================================
+     Snap Layout
+     ============================================================ */
+
+  function showSnapHint(id) {
+    const win = document.getElementById(id);
+    if (!win) return;
+    const hint = win.querySelector('.snap-hint');
+    if (hint) hint.style.display = 'flex';
+  }
+
+  function hideSnapHint(id) {
+    const win = document.getElementById(id);
+    if (!win) return;
+    const hint = win.querySelector('.snap-hint');
+    if (hint) hint.style.display = 'none';
+  }
+
+  function applySnap(id, snap) {
+    const win = document.getElementById(id);
+    if (!win) return;
+    const d = _store[id];
+    const taskbarH = 48;
+    const screenW = window.innerWidth;
+    const screenH = window.innerHeight - taskbarH;
+
+    let x, y, w, h;
+
+    switch (snap) {
+      case 'full':
+        x = 0; y = 0; w = screenW; h = screenH;
+        break;
+      case 'left':
+        x = 0; y = 0; w = screenW / 2; h = screenH;
+        break;
+      case 'right':
+        x = screenW / 2; y = 0; w = screenW / 2; h = screenH;
+        break;
+      case 'tl':
+        x = 0; y = 0; w = screenW / 2; h = screenH / 2;
+        break;
+      case 'tr':
+        x = screenW / 2; y = 0; w = screenW / 2; h = screenH / 2;
+        break;
+      case 'bottom':
+        x = 0; y = screenH / 2; w = screenW; h = screenH / 2;
+        break;
+      default:
+        return;
+    }
+
+    d.preMax = { x: d.x, y: d.y, width: d.width, height: d.height };
+    d.maximized = true;
+    win.classList.add('maximized');
+    win.style.left = x + 'px';
+    win.style.top = y + 'px';
+    win.style.width = w + 'px';
+    win.style.height = h + 'px';
+    _updateMaximizeIcon(win, true);
+  }
+
+  /* ============================================================
+     Minimize / Maximize / Close
+     ============================================================ */
+
+  function minimizeWindow(id) {
+    const win = document.getElementById(id);
+    const d = _store[id];
+    if (!win || !d) return;
+
+    win.classList.add('minimizing');
+    setTimeout(() => {
+      win.style.visibility = 'hidden';
+      win.classList.remove('minimizing');
+      win.classList.add('minimized');
+      d.minimized = true;
+      _removeFocusFromAll();
+      _updateTaskbarButton(d.appId, id, 'minimized');
+    }, 200);
+  }
+
+  function restoreWindow(id) {
+    const win = document.getElementById(id);
+    const d = _store[id];
+    if (!win || !d) return;
+
+    win.style.visibility = 'visible';
+    win.classList.remove('minimized');
+    d.minimized = false;
+    focusWindow(id);
+    _updateTaskbarButton(d.appId, id, 'active');
+  }
+
+  function toggleMaximize(id) {
+    const win = document.getElementById(id);
+    const d = _store[id];
+    if (!win || !d) return;
+
+    if (d.maximized) {
+      if (d.preMax) {
+        win.classList.remove('maximized');
+        win.style.left = d.preMax.x + 'px';
+        win.style.top = d.preMax.y + 'px';
+        win.style.width = d.preMax.width + 'px';
+        win.style.height = d.preMax.height + 'px';
+        d.x = d.preMax.x;
+        d.y = d.preMax.y;
+        d.width = d.preMax.width;
+        d.height = d.preMax.height;
+        d.maximized = false;
+      }
+      _updateMaximizeIcon(win, false);
     } else {
-      const el = document.createElement('div');
-      el.className = 'context-menu-item';
-      el.innerHTML = (item.icon ? `<span>${item.icon}</span>` : '') + `<span>${item.label}</span>`;
-      if (item.disabled) el.style.opacity = '0.4';
-      if (item.click) el.addEventListener('click', () => {
-        if (!item.disabled) item.click();
-      });
-      menu.appendChild(el);
+      d.preMax = { x: d.x, y: d.y, width: d.width, height: d.height };
+      const taskbarH = 48;
+      win.classList.add('maximized');
+      win.style.left = '0px';
+      win.style.top = '0px';
+      win.style.width = window.innerWidth + 'px';
+      win.style.height = (window.innerHeight - taskbarH) + 'px';
+      d.maximized = true;
+      _updateMaximizeIcon(win, true);
+    }
+  }
+
+  function _updateMaximizeIcon(win, maximized) {
+    const icon = win.querySelector('.maximize-icon');
+    if (icon) {
+      icon.textContent = maximized ? '❐' : '□';
+    }
+  }
+
+  function closeWindow(id) {
+    const win = document.getElementById(id);
+    const d = _store[id];
+    if (!win) return;
+
+    win.classList.add('closing');
+    setTimeout(() => {
+      win.remove();
+      delete _store[id];
+      const idx = _order.indexOf(id);
+      if (idx !== -1) _order.splice(idx, 1);
+      _removeTaskbarButton(id);
+      _updateFocusToTop();
+    }, 150);
+  }
+
+  /* ============================================================
+     Focus / Z-Index
+     ============================================================ */
+
+  function focusWindow(id) {
+    const win = document.getElementById(id);
+    const d = _store[id];
+    if (!win || !d) return;
+
+    if (d.minimized) {
+      restoreWindow(id);
+      return;
+    }
+
+    _removeFocusFromAll();
+    d.zIndex = ++zCounter;
+    d.focused = true;
+    win.style.zIndex = d.zIndex;
+    win.classList.add('focused');
+    win.classList.remove('unfocused');
+
+    const btn = document.querySelector(`.taskbar-app-btn[data-window="${id}"]`);
+    if (btn) btn.classList.add('active');
+
+    _updateTaskbarButton(d.appId, id, 'active');
+
+    if (d.maximized) {
+      _updateMaximizeIcon(win, true);
+    }
+  }
+
+  function _removeFocusFromAll() {
+    Object.keys(_store).forEach(wid => {
+      const w = document.getElementById(wid);
+      if (w) {
+        w.classList.remove('focused');
+        w.classList.add('unfocused');
+        _store[wid].focused = false;
+      }
+      const btn = document.querySelector(`.taskbar-app-btn[data-window="${wid}"]`);
+      if (btn) btn.classList.remove('active');
+    });
+  }
+
+  function _updateFocusToTop() {
+    if (_order.length === 0) return;
+    const topId = _order[_order.length - 1];
+    focusWindow(topId);
+  }
+
+  function _updateFocusState(id) {
+    _removeFocusFromAll();
+    const win = document.getElementById(id);
+    if (win) {
+      win.classList.add('focused');
+      win.classList.remove('unfocused');
+    }
+    _store[id].focused = true;
+    _store[id].zIndex = ++zCounter;
+    if (win) win.style.zIndex = _store[id].zIndex;
+  }
+
+  /* ============================================================
+     Taskbar Integration
+     ============================================================ */
+
+  function _addTaskbarButton(appId, windowId, icon, title) {
+    const center = document.getElementById('taskbar-center');
+    if (!center) return;
+
+    let existing = center.querySelector(`.taskbar-app-btn[data-app="${appId}"]`);
+    if (existing) {
+      existing.dataset.window = windowId;
+      existing.title = title;
+      return;
+    }
+
+    const btn = document.createElement('div');
+    btn.className = 'taskbar-app-btn active';
+    btn.dataset.app = appId;
+    btn.dataset.window = windowId;
+    btn.title = title;
+    btn.innerHTML = `<span class="tbi-icon">${icon}</span>`;
+
+    btn.addEventListener('click', () => {
+      const d = _store[windowId];
+      if (!d) return;
+
+      if (d.minimized) {
+        restoreWindow(windowId);
+      } else if (d.focused) {
+        minimizeWindow(windowId);
+      } else {
+        focusWindow(windowId);
+      }
+    });
+
+    btn.addEventListener('mouseenter', e => _showTaskbarTooltip(e.target, title));
+    btn.addEventListener('mouseleave', _hideTaskbarTooltip);
+
+    center.appendChild(btn);
+  }
+
+  function _removeTaskbarButton(windowId) {
+    const btn = document.querySelector(`.taskbar-app-btn[data-window="${windowId}"]`);
+    if (btn) {
+      const appId = btn.dataset.app;
+      btn.remove();
+      const stillOpen = Object.values(_store).some(d => d.appId === appId);
+      if (stillOpen) {
+        const firstWin = Object.values(_store).find(d => d.appId === appId);
+        if (firstWin) {
+          _addTaskbarButton(appId, firstWin.id, firstWin.icon, firstWin.title);
+        }
+      }
+    }
+  }
+
+  function _updateTaskbarButton(appId, windowId, state) {
+    const btn = document.querySelector(`.taskbar-app-btn[data-app="${appId}"]`);
+    if (btn) {
+      btn.classList.toggle('active', state === 'active');
+      btn.classList.toggle('minimized', state === 'minimized');
+    }
+  }
+
+  function _showTaskbarTooltip(target, text) {
+    _hideTaskbarTooltip();
+    const tip = document.createElement('div');
+    tip.id = 'win11-taskbar-tip';
+    tip.className = 'taskbar-tooltip';
+    tip.textContent = text;
+    document.body.appendChild(tip);
+
+    const rect = target.getBoundingClientRect();
+    tip.style.left = (rect.left + (rect.width / 2) - (tip.offsetWidth / 2)) + 'px';
+    tip.style.bottom = '54px';
+    requestAnimationFrame(() => tip.classList.add('visible'));
+  }
+
+  function _hideTaskbarTooltip() {
+    const tip = document.getElementById('win11-taskbar-tip');
+    if (tip) {
+      tip.classList.remove('visible');
+      setTimeout(() => tip.remove(), 80);
+    }
+  }
+
+  /* ============================================================
+     Public API
+     ============================================================ */
+
+  function openApp(appId, config) {
+    const win = Object.values(_store).find(d => d.appId === appId);
+    if (win) {
+      focusWindow(win.id);
+      if (win.minimized) restoreWindow(win.id);
+      return win.id;
+    }
+
+    config = config || {};
+    config.id = appId;
+    return createWindow(config);
+  }
+
+  function closeApp(appId) {
+    const wins = Object.values(_store).filter(d => d.appId === appId);
+    wins.forEach(w => closeWindow(w.id));
+  }
+
+  function minimizeApp(appId) {
+    const win = Object.values(_store).find(d => d.appId === appId);
+    if (win) minimizeWindow(win.id);
+  }
+
+  function focusApp(appId) {
+    const win = Object.values(_store).find(d => d.appId === appId);
+    if (win) focusWindow(win.id);
+  }
+
+  /* ============================================================
+     Window State Store
+     ============================================================ */
+
+  const _store = {};
+  const _order = [];
+
+  /* ============================================================
+     Global Click - Close context menus / deselect
+     ============================================================ */
+
+  document.addEventListener('mousedown', e => {
+    if (!e.target.closest('.win11-window')) {
+      if (!e.target.closest('.snap-hint')) {
+        _order.forEach(id => {
+          if (_store[id]) {
+            const win = document.getElementById(id);
+            if (win && win.querySelector('.snap-hint')) {
+              hideSnapHint(id);
+            }
+          }
+        });
+      }
     }
   });
 
-  document.body.appendChild(menu);
-  menu.classList.add('visible');
-  window.__win11.contextMenuOpen = true;
-
-  setTimeout(() => {
-    const rect = menu.getBoundingClientRect();
-    if (rect.right > window.innerWidth) {
-      menu.style.left = (x - rect.width) + 'px';
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      _order.forEach(id => {
+        const win = document.getElementById(id);
+        if (win) {
+          const hint = win.querySelector('.snap-hint');
+          if (hint) hint.style.display = 'none';
+        }
+      });
     }
-    if (rect.bottom > window.innerHeight - 48) {
-      menu.style.top = (y - rect.height) + 'px';
-    }
-  }, 0);
+  });
 
-  window.__win11._contextMenu = menu;
-  window.__win11._contextMenuClose = onClose || closeContextMenu;
-}
+  /* ============================================================
+     Expose to Global
+     ============================================================ */
 
-function closeContextMenu() {
-  if (window.__win11._contextMenu) {
-    window.__win11._contextMenu.remove();
-    window.__win11._contextMenu = null;
-  }
-  window.__win11.contextMenuOpen = false;
-  if (window.__win11._contextMenuClose) {
-    window.__win11._contextMenuClose();
-    window.__win11._contextMenuClose = null;
-  }
-}
+  window.__win11 = window.__win11 || {};
+  window.__win11.createWindow = createWindow;
+  window.__win11.focusWindow = focusWindow;
+  window.__win11.minimizeWindow = minimizeWindow;
+  window.__win11.restoreWindow = restoreWindow;
+  window.__win11.toggleMaximize = toggleMaximize;
+  window.__win11.closeWindow = closeWindow;
+  window.__win11.openApp = openApp;
+  window.__win11.closeApp = closeApp;
+  window.__win11.minimizeApp = minimizeApp;
+  window.__win11.focusApp = focusApp;
+  window.__win11._getStore = () => _store;
 
-/* ============================================================
-   Window State Persistence (optional localStorage)
-   ============================================================ */
-
-function saveWindowStates() {
-  const data = window.__win11.openWindows.map(w => ({
-    app: w.app,
-    bounds: w.bounds,
-    minimized: w.minimized,
-    maximized: w.maximized
-  }));
-  try {
-    localStorage.setItem('win11_windows', JSON.stringify(data));
-  } catch (e) {}
-}
-
-function restoreWindowStates() {
-  // Could be used to restore windows on page reload
-}
-
-/* ============================================================
-   Global Event Listeners
-   ============================================================ */
-
-document.addEventListener('click', e => {
-  if (!e.target.closest('.context-menu')) {
-    closeContextMenu();
-  }
-});
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    closeContextMenu();
-  }
-});
-
-window.addEventListener('beforeunload', saveWindowStates);
+})();

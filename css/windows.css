@@ -1,0 +1,367 @@
+/* ============================================================
+   Windows 11 Window Styles
+   ============================================================ */
+
+.win11-window {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  min-width: 320px;
+  min-height: 200px;
+  background: var(--win11-bg-glass);
+  backdrop-filter: blur(60px) saturate(150%);
+  -webkit-backdrop-filter: blur(60px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  box-shadow: var(--win11-shadow);
+  overflow: hidden;
+  animation: win11-scaleIn 200ms cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+}
+
+.win11-window.closing {
+  animation: win11-scaleOut 150ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.win11-window.minimizing {
+  animation: win11-minimizeDown 200ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.win11-window.maximized {
+  border-radius: 0 !important;
+}
+
+.win11-window.focused {
+  border-top: 1px solid rgba(0, 120, 212, 0.7);
+  box-shadow: var(--win11-shadow), 0 0 0 1px rgba(0, 120, 212, 0.2);
+}
+
+.win11-window.unfocused .win-titlebar {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.win11-window.unfocused .win-title {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ============================================================
+   Title Bar
+   ============================================================ */
+
+.win-titlebar {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 8px;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  flex-shrink: 0;
+  cursor: move;
+  user-select: none;
+  -webkit-app-region: drag;
+}
+
+.win-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.win-icon svg,
+.win-icon img {
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.win-title {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+
+.win-controls {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  margin-right: -8px;
+  -webkit-app-region: no-drag;
+}
+
+.win-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 10px;
+  cursor: pointer;
+  transition: background 80ms ease;
+  position: relative;
+}
+
+.win-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.win-btn:active {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.win-btn.win-close:hover {
+  background: #C42B1C;
+  color: #fff;
+}
+
+.win-btn.win-maximize:hover .snap-hint {
+  display: flex;
+}
+
+/* ============================================================
+   Snap Layout Popup
+   ============================================================ */
+
+.snap-hint {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: rgba(30, 30, 30, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  gap: 6px;
+  box-shadow: var(--win11-shadow);
+  z-index: 10000;
+  flex-wrap: wrap;
+  width: 200px;
+}
+
+.snap-zone {
+  width: 58px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 100ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.snap-zone:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--win11-accent);
+}
+
+.snap-zone-fill {
+  position: absolute;
+  background: rgba(0, 120, 212, 0.3);
+  border: 1px solid rgba(0, 120, 212, 0.5);
+}
+
+.snap-zone-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  margin-top: 4px;
+  width: 58px;
+}
+
+.snap-zone-label span {
+  display: block;
+}
+
+/* ============================================================
+   Window Content
+   ============================================================ */
+
+.win-content {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+  min-height: 0;
+}
+
+/* ============================================================
+   Resize Handles
+   ============================================================ */
+
+.win-resize-handle {
+  position: absolute;
+  z-index: 10;
+}
+
+.win-resize-n {
+  top: 0;
+  left: 8px;
+  right: 8px;
+  height: 6px;
+  cursor: n-resize;
+}
+
+.win-resize-s {
+  bottom: 0;
+  left: 8px;
+  right: 8px;
+  height: 6px;
+  cursor: s-resize;
+}
+
+.win-resize-e {
+  top: 8px;
+  right: 0;
+  bottom: 8px;
+  width: 6px;
+  cursor: e-resize;
+}
+
+.win-resize-w {
+  top: 8px;
+  left: 0;
+  bottom: 8px;
+  width: 6px;
+  cursor: w-resize;
+}
+
+.win-resize-ne {
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  cursor: ne-resize;
+}
+
+.win-resize-nw {
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  cursor: nw-resize;
+}
+
+.win-resize-se {
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  cursor: se-resize;
+}
+
+.win-resize-sw {
+  bottom: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  cursor: sw-resize;
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+
+@keyframes win11-scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes win11-scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes win11-minimizeDown {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9) translateY(100px);
+  }
+}
+
+/* ============================================================
+   Snap layout zone fills
+   ============================================================ */
+
+.snap-full .snap-zone-fill {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.snap-left .snap-zone-fill {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 50%;
+  border-right: none;
+}
+
+.snap-right .snap-zone-fill {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 50%;
+  border-left: none;
+}
+
+.snap-tl .snap-zone-fill {
+  top: 0;
+  left: 0;
+  right: 50%;
+  bottom: 50%;
+  border-right: none;
+  border-bottom: none;
+}
+
+.snap-tr .snap-zone-fill {
+  top: 0;
+  right: 0;
+  left: 50%;
+  bottom: 50%;
+  border-left: none;
+  border-bottom: none;
+}
+
+.snap-bottom .snap-zone-fill {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: none;
+}
+
+/* ============================================================
+   Snap zones grid layout
+   ============================================================ */
+
+.snap-zones-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 58px);
+  grid-template-rows: repeat(2, 40px);
+  gap: 4px;
+}
