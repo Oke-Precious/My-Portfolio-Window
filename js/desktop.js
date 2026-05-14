@@ -158,8 +158,9 @@
   }
 
   function openDesktopItem(id) {
-    if (typeof window.__win11 !== 'undefined' && window.__win11.openApp) {
-      window.__win11.openApp(id);
+    const appId = DESKTOP_LAUNCH_MAP[id];
+    if (appId && typeof launchApp === 'function') {
+      launchApp(appId);
     }
   }
 
@@ -239,7 +240,7 @@
           if (item.action === 'refresh') {
             window.location.reload();
           } else if (item.action === 'personalize') {
-            if (window.__win11.openApp) window.__win11.openApp('settings');
+            if (typeof launchApp === 'function') launchApp('settings');
           } else if (item.action === 'about') {
             showAboutDialog();
           } else if (item.hasArrow && item.submenu) {
@@ -317,8 +318,8 @@
   }
 
   function showAboutDialog() {
-    if (window.__win11.openApp) {
-      window.__win11.openApp('about');
+    if (typeof launchApp === 'function') {
+      launchApp('about');
     }
   }
 

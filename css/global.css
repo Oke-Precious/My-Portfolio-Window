@@ -25,6 +25,17 @@ body {
   user-select: none;
 }
 
+#desktop {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+body.desktop-ready #desktop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 /* ---- Scrollbars (Windows 11 style) ---- */
 ::-webkit-scrollbar {
   width: 8px;

@@ -64,7 +64,7 @@ function performLogin(skipPassword) {
     loginScreen.classList.add('logging-in');
     setTimeout(() => {
       loginScreen.style.display = 'none';
-      document.body.classList.add('desktop-revealed');
+      document.body.classList.add('desktop-revealed', 'desktop-ready');
 
       setTimeout(() => {
         document.body.classList.remove('desktop-revealed');
