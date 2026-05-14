@@ -69,6 +69,12 @@ function performLogin(skipPassword) {
       setTimeout(() => {
         document.body.classList.remove('desktop-revealed');
       }, 600);
+
+      setTimeout(() => {
+        if (typeof showToast === 'function') {
+          showToast('👋 Welcome to Oke Precious\'s Windows 11 Portfolio!', 'info', '👋');
+        }
+      }, 1600);
     }, 300);
   }
 }

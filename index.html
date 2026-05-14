@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="css/taskbar.css" />
   <link rel="stylesheet" href="css/windows.css" />
   <link rel="stylesheet" href="css/startmenu.css" />
+  <link rel="stylesheet" href="css/actioncenter.css" />
 </head>
 <body>
 
@@ -70,17 +71,14 @@
     </div>
 
     <div class="sm-body">
-      <!-- Search Results -->
       <div class="sm-search-results" id="smSearchResults"></div>
 
-      <!-- Pinned Apps -->
       <div class="sm-pinned-hdr sm-section-header">
         <span class="sm-section-label">Pinned</span>
         <span class="sm-section-btn" id="smAllAppsBtn">All apps &gt;</span>
       </div>
       <div class="sm-pinned-grid" id="smPinned"></div>
 
-      <!-- All Apps View -->
       <div class="sm-all-apps" id="smAllApps">
         <div class="sm-all-apps-header">
           <div class="sm-back-btn" id="smBackBtn">
@@ -93,7 +91,6 @@
       </div>
     </div>
 
-    <!-- Recommended -->
     <div class="sm-recommended">
       <div class="sm-section-header" style="padding: 0 4px;">
         <span class="sm-section-label">Recommended</span>
@@ -102,7 +99,6 @@
       <div class="sm-rec-list" id="smRecList"></div>
     </div>
 
-    <!-- Footer -->
     <div class="sm-footer">
       <div class="sm-user">
         <div class="sm-user-avatar">A</div>
@@ -112,7 +108,7 @@
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42A6.92 6.92 0 0119 12c0-3.87-3.13-7-7-7a6.98 6.98 0 00-5.58 2.47l-1.42-1.42A8.96 8.96 0 0112 4c4.97 0 9 4.03 9 9s-4.03 9-9 9a8.96 8.96 0 01-6.83-3.33z"/></svg>
         <div class="sm-power-menu" id="smPowerMenu">
           <div class="sm-power-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg> Sleep</div>
-          <div class="sm-power-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v9l4-2.5V5.5L12 3z"/><path d="M12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10z" fill="none" stroke="currentColor" stroke-width="2"/></svg> Restart</div>
+          <div class="sm-power-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v9l4-2.5V5.5L12 3z"/></svg> Restart</div>
           <div class="sm-power-item danger" data-action="shutdown"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42A6.92 6.92 0 0119 12c0-3.87-3.13-7-7-7a6.98 6.98 0 00-5.58 2.47l-1.42-1.42A8.96 8.96 0 0112 4c4.97 0 9 4.03 9 9s-4.03 9-9 9a8.96 8.96 0 01-6.83-3.33z"/></svg> Shut down</div>
         </div>
       </div>
@@ -130,6 +126,74 @@
   <!-- Shutdown Screen -->
   <div id="shutdownScreen"></div>
 
+  <!-- Action Center -->
+  <div id="actionCenter">
+    <div class="ac-tabs">
+      <div class="ac-tab active" data-tab="notifications">Notifications</div>
+      <div class="ac-tab" data-tab="calendar">Calendar</div>
+      <div class="ac-tab" data-tab="focus">Focus</div>
+    </div>
+
+    <div class="ac-content">
+      <!-- Notifications Tab -->
+      <div id="ac-notifications" class="active">
+        <!-- Quick Settings -->
+        <div class="ac-quick-settings" id="acQuickTiles"></div>
+
+        <!-- Sliders -->
+        <div class="ac-sliders">
+          <div class="ac-slider-row">
+            <span class="ac-slider-icon"><svg viewBox="0 0 18 18" fill="currentColor"><path d="M9 1a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z"/><path d="M9 3a6 6 0 100 12A6 6 0 009 3z"/><circle cx="9" cy="9" r="2"/></svg></span>
+            <input type="range" class="ac-slider" id="brightnessSlider" min="0" max="100" value="75" />
+          </div>
+          <div class="ac-slider-row">
+            <span class="ac-slider-icon"><svg viewBox="0 0 18 18" fill="currentColor"><path d="M3 7v4h3l4 4V3L6 7H3zm10.5 1.5c.9-.9.9-2.4 0-3.3-.9-.9-2.4-.9-3.3 0-.4.4-.6.9-.6 1.4s.2 1 .6 1.4c.9.9 2.4.9 3.3 0zm.5 2c.7-.7.7-1.9 0-2.6-.7-.7-1.9-.7-2.6 0-.3.3-.4.6-.4 1s.1.7.4 1c.7.7 1.9.7 2.6 0z"/></svg></span>
+            <input type="range" class="ac-slider" id="volumeSlider" min="0" max="100" value="65" />
+          </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="ac-section-header">
+          <span class="ac-section-title">Notifications</span>
+          <span class="ac-clear-btn" id="acClearAll">Clear all</span>
+        </div>
+        <div class="ac-notif-list" id="acNotifList"></div>
+      </div>
+
+      <!-- Calendar Tab -->
+      <div id="ac-calendar">
+        <div class="ac-cal-header">
+          <span class="ac-cal-month" id="acCalMonth"></span>
+          <div class="ac-cal-nav">
+            <div class="ac-cal-nav-btn" id="acCalPrev">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+            </div>
+            <div class="ac-cal-nav-btn" id="acCalNext">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="ac-cal-grid" id="acCalGrid"></div>
+        <div class="ac-events-list" id="acCalEvents"></div>
+      </div>
+
+      <!-- Focus Tab -->
+      <div id="ac-focus">
+        <div class="ac-focus-content">
+          <div class="ac-focus-icon">🎯</div>
+          <div class="ac-focus-status" id="acFocusStatus">Focus mode off</div>
+          <div class="ac-focus-desc">Silence notifications and stay productive.<br>Great for deep work sessions.</div>
+          <div class="ac-focus-toggle" id="acFocusToggle">
+            Start focus session
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer"></div>
+
   <!-- Taskbar -->
   <div id="taskbar"></div>
 
@@ -140,5 +204,6 @@
   <script src="js/desktop.js"></script>
   <script src="js/taskbar.js"></script>
   <script src="js/startmenu.js"></script>
+  <script src="js/actioncenter.js"></script>
 </body>
 </html>
