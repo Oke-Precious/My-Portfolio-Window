@@ -8,8 +8,43 @@
   <link rel="stylesheet" href="css/global.css" />
   <link rel="stylesheet" href="css/mica.css" />
   <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/lockscreen.css" />
 </head>
 <body>
+
+  <!-- Lock Screen -->
+  <div id="lockScreen">
+    <div id="lockScreen-content">
+      <div id="lockClock"></div>
+      <div id="lockDate"></div>
+    </div>
+    <div id="lockHint">Click anywhere or press any key to unlock</div>
+  </div>
+
+  <!-- Login Screen -->
+  <div id="loginScreen">
+    <div id="loginCard">
+      <div id="loginAvatar">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+      </div>
+      <div id="loginUsername">Alex</div>
+      <form id="loginForm" autocomplete="off">
+        <div id="loginInput-wrap">
+          <input type="password" id="loginPassword" placeholder="guest" />
+          <button type="button" id="loginSubmit" title="Sign in">
+            <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+          </button>
+        </div>
+      </form>
+      <div id="loginGuest">Sign in as Guest</div>
+      <div id="loginOptions">
+        <span class="login-option-link">Other user</span>
+        <span class="login-option-link">Sign-in options</span>
+      </div>
+    </div>
+  </div>
 
   <!-- Desktop Area -->
   <div id="desktop">
@@ -95,9 +130,10 @@
     </div>
   </div>
 
-  <!-- Scripts (order matters: state first, then windowManager, then apps) -->
+  <!-- Scripts (order matters: state first, then windowManager, then apps, then lockscreen) -->
   <script src="js/state.js"></script>
   <script src="js/windowManager.js"></script>
   <script src="js/apps.js"></script>
+  <script src="js/lockscreen.js"></script>
 </body>
 </html>
