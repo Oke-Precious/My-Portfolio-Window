@@ -1,0 +1,358 @@
+/* ============================================================
+   Windows 11 Animations - @keyframes and Transitions
+   ============================================================ */
+
+/* ============================================================
+   Fade Animations
+   ============================================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   Slide Animations
+   ============================================================ */
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* ============================================================
+   Scale Animations
+   ============================================================ */
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+@keyframes minimizeDown {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.6) translateY(80px);
+  }
+}
+
+@keyframes maximizeUp {
+  from {
+    opacity: 0;
+    transform: scale(0.6) translateY(80px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ============================================================
+   Spring / Bounce Animations
+   ============================================================ */
+
+@keyframes springBounce {
+  0% {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes elasticPop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  85% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   Spin / Rotate Animations
+   ============================================================ */
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinReverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+/* ============================================================
+   Pulse / Glow Animations
+   ============================================================ */
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(96, 205, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(96, 205, 255, 0.6);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* ============================================================
+   Flip Animations
+   ============================================================ */
+
+@keyframes flipIn {
+  from {
+    transform: perspective(400px) rotateY(90deg);
+    opacity: 0;
+  }
+  to {
+    transform: perspective(400px) rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes flipOut {
+  from {
+    transform: perspective(400px) rotateY(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: perspective(400px) rotateY(-90deg);
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   Reveal Animations (Start Menu, menus)
+   ============================================================ */
+
+@keyframes revealDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   Window Shimmer (loading state)
+   ============================================================ */
+
+@keyframes windowLoading {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+/* ============================================================
+   Animation Utility Classes
+   ============================================================ */
+
+.animate-fadeIn {
+  animation: fadeIn var(--win11-transition-slow) ease forwards;
+}
+
+.animate-fadeOut {
+  animation: fadeOut var(--win11-transition-base) ease forwards;
+}
+
+.animate-slideUp {
+  animation: slideUp var(--win11-transition-slow) ease forwards;
+}
+
+.animate-slideDown {
+  animation: slideDown var(--win11-transition-slow) ease forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 200ms var(--win11-spring) forwards;
+}
+
+.animate-scaleOut {
+  animation: scaleOut 150ms ease forwards;
+}
+
+.animate-spring {
+  animation: springBounce 400ms var(--win11-spring) forwards;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* ============================================================
+   Transition Utility Classes
+   ============================================================ */
+
+.transition-fast {
+  transition: all var(--win11-transition-fast);
+}
+
+.transition-base {
+  transition: all var(--win11-transition-base);
+}
+
+.transition-slow {
+  transition: all var(--win11-transition-slow);
+}
+
+.transition-spring {
+  transition: all 400ms var(--win11-spring);
+}
+
+/* ============================================================
+   Hover Transform Utilities
+   ============================================================ */
+
+.hover-scale {
+  transition: transform var(--win11-transition-fast);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-scale:active {
+  transform: scale(0.95);
+}
+
+.hover-lift {
+  transition: transform var(--win11-transition-fast), box-shadow var(--win11-transition-fast);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--win11-shadow-hover);
+}
+
+/* ============================================================
+   Loading Skeleton
+   ============================================================ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}

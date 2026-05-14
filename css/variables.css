@@ -1,0 +1,81 @@
+/* ============================================================
+   Windows 11 Design System - CSS Custom Properties
+   ============================================================ */
+
+:root {
+  /* ---- Corner Radii ---- */
+  --win11-radius: 8px;
+  --win11-radius-lg: 12px;
+
+  /* ---- Windows Accent Colors ---- */
+  --win11-accent: #0078D4;
+  --win11-accent-light: #60CDFF;
+  --win11-accent-hover: #106EBE;
+  --win11-accent-active: #005A9E;
+
+  /* ---- Layout Dimensions ---- */
+  --win11-taskbar-height: 48px;
+  --win11-titlebar-height: 32px;
+
+  /* ---- Shadows ---- */
+  --win11-shadow: 0 8px 32px rgba(0, 0, 0, 0.28), 0 2px 8px rgba(0, 0, 0, 0.18);
+  --win11-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.14);
+  --win11-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.32), 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  /* ---- Borders ---- */
+  --win11-border: 1px solid rgba(255, 255, 255, 0.12);
+  --win11-border-solid: 1px solid rgba(0, 0, 0, 0.08);
+
+  /* ---- Glass / Mica Backgrounds ---- */
+  --win11-bg-glass: rgba(32, 32, 32, 0.75);
+  --win11-bg-glass-light: rgba(243, 243, 243, 0.85);
+  --win11-bg-taskbar: rgba(32, 32, 32, 0.82);
+  --win11-bg-window: rgba(32, 32, 32, 0.78);
+  --win11-bg-elevated: rgba(45, 45, 45, 0.85);
+
+  /* ---- Typography ---- */
+  --win11-font: 'Segoe UI Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --win11-font-size-xs: 11px;
+  --win11-font-size-sm: 12px;
+  --win11-font-size-base: 14px;
+  --win11-font-size-lg: 16px;
+  --win11-font-size-xl: 18px;
+  --win11-font-size-2xl: 20px;
+
+  /* ---- Text Colors ---- */
+  --win11-text: #ffffff;
+  --win11-text-secondary: rgba(255, 255, 255, 0.6);
+  --win11-text-tertiary: rgba(255, 255, 255, 0.38);
+  --win11-text-disabled: rgba(255, 255, 255, 0.28);
+
+  /* ---- Icon Sizes ---- */
+  --win11-icon-sm: 16px;
+  --win11-icon-md: 20px;
+  --win11-icon-lg: 24px;
+  --win11-icon-xl: 32px;
+  --win11-icon-taskbar: 24px;
+
+  /* ---- Spacing ---- */
+  --win11-space-1: 4px;
+  --win11-space-2: 8px;
+  --win11-space-3: 12px;
+  --win11-space-4: 16px;
+  --win11-space-5: 20px;
+  --win11-space-6: 24px;
+  --win11-space-8: 32px;
+
+  /* ---- Transitions ---- */
+  --win11-transition-fast: 100ms ease;
+  --win11-transition-base: 150ms ease;
+  --win11-transition-slow: 250ms ease;
+  --win11-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ---- Z-Index Scale ---- */
+  --win11-z-desktop: 0;
+  --win11-z-icons: 10;
+  --win11-z-windows: 100;
+  --win11-z-taskbar: 500;
+  --win11-z-start-menu: 600;
+  --win11-z-notifications: 700;
+  --win11-z-tooltip: 800;
+}
