@@ -279,6 +279,8 @@
     requestAnimationFrame(() => {
       if (search) search.focus();
     });
+    const overlay = document.getElementById('globalOverlay');
+    if (overlay) overlay.classList.add('active');
   }
 
   function closeStartMenu() {
@@ -289,6 +291,8 @@
       startMenu.classList.remove('visible', 'closing');
       currentView = 'pinned';
     }, 150);
+    const overlay = document.getElementById('globalOverlay');
+    if (overlay) overlay.classList.remove('active');
   }
 
   window.toggleStartMenu = openStartMenu;
@@ -462,8 +466,20 @@
 
     // Search input in start menu
     const smSearch = document.getElementById('smSearch');
-    if (smSearch) {
-      smSearch.addEventListener('input', e => performSearch(e.target.value));
+    const smSearchContainer = document.querySelector('.sm-search-container');
+    if (smSearch && smSearchContainer) {
+      let searchTimer = null;
+      smSearch.addEventListener('input', e => {
+        const val = e.target.value.trim();
+        if (val.length > 0) {
+          smSearchContainer.classList.add('searching');
+          clearTimeout(searchTimer);
+          searchTimer = setTimeout(() => smSearchContainer.classList.remove('searching'), 400);
+        } else {
+          smSearchContainer.classList.remove('searching');
+        }
+        performSearch(val);
+      });
       smSearch.addEventListener('keydown', e => {
         if (e.key === 'Escape') closeStartMenu();
       });

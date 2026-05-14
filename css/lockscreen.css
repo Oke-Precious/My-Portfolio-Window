@@ -1,6 +1,136 @@
 /* ============================================================
-   Lock Screen & Login Screen Styles
+   Boot Screen
    ============================================================ */
+
+#bootScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #000;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  overflow: hidden;
+}
+
+/* Subtle scan-line effect */
+#bootScreen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.01) 2px,
+    rgba(255, 255, 255, 0.01) 4px
+  );
+  pointer-events: none;
+}
+
+.os-logo {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 600ms ease, transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.os-logo.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Four-pane Windows-style logo, geometric & glowing */
+.os-logo svg {
+  width: 80px;
+  height: 80px;
+  filter: drop-shadow(0 0 20px rgba(0, 180, 255, 0.4));
+}
+
+.os-logo .logo-pane {
+  transition: fill 200ms ease;
+}
+
+/* Breathing pulse on each pane */
+.os-logo .pane-tl {
+  animation: panePulse 2s ease-in-out infinite;
+  transform-origin: center;
+}
+.os-logo .pane-tr {
+  animation: panePulse 2s ease-in-out 0.2s infinite;
+  transform-origin: center;
+}
+.os-logo .pane-bl {
+  animation: panePulse 2s ease-in-out 0.4s infinite;
+  transform-origin: center;
+}
+.os-logo .pane-br {
+  animation: panePulse 2s ease-in-out 0.6s infinite;
+  transform-origin: center;
+}
+
+@keyframes panePulse {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 4px currentColor);
+  }
+  50% {
+    filter: brightness(1.3) drop-shadow(0 0 12px currentColor);
+  }
+}
+
+/* Global glow ring that breathes */
+.logo-glow {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 180, 255, 0.15) 0%, transparent 70%);
+  animation: glowBreathe 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes glowBreathe {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.15); opacity: 0.9; }
+}
+
+/* Windows-style spinning ring */
+.boot-ring-wrap {
+  position: relative;
+  width: 32px;
+  height: 32px;
+}
+
+.boot-ring {
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-top-color: rgba(0, 180, 255, 0.8);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.boot-ring.spinning {
+  opacity: 1;
+  animation: ringSpin 0.8s linear infinite;
+}
+
+@keyframes ringSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Boot screen fade-out */
+#bootScreen.booting-out {
+  animation: bootFadeOut 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes bootFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
 
 /* ============================================================
    Lock Screen
@@ -268,21 +398,50 @@
   color: var(--win11-text);
 }
 
-/* Login screen fade-out */
+/* Login screen fade-out with shatter */
 #loginScreen.logging-in {
-  animation: loginFadeOut 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: loginShatter 450ms cubic-bezier(0.36, 0, 0.66, 1) forwards;
   pointer-events: none;
 }
 
-@keyframes loginFadeOut {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(1.04);
-  }
+#loginScreen.logging-in #loginCard {
+  animation: cardPulse 200ms ease forwards;
+}
+
+@keyframes loginShatter {
+  0% { opacity: 1; transform: scale(1); }
+  30% { opacity: 1; transform: scale(1.02); }
+  100% { opacity: 0; transform: scale(1.06); backdrop-filter: blur(20px) saturate(200%); }
+}
+
+@keyframes cardPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); box-shadow: 0 0 30px rgba(0, 180, 255, 0.4); }
+  100% { transform: scale(1.04); }
+}
+
+/* Login avatar scale on submit */
+#loginAvatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  margin: 0 auto var(--win11-space-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+#loginAvatar.login-pulse {
+  animation: avatarLogin 200ms ease forwards;
+}
+
+@keyframes avatarLogin {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); box-shadow: 0 0 40px rgba(102, 126, 234, 0.6); }
+  100% { transform: scale(1.08); }
 }
 
 /* ============================================================

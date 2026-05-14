@@ -1,0 +1,128 @@
+/* ============================================================
+   Responsive / Mobile & Tablet Mode
+   ============================================================ */
+
+/* Desktop: hide mobile elements */
+@media (min-width: 769px) {
+  #mobileBanner,
+  #mobileBottomNav,
+  #mobileDrawer {
+    display: none !important;
+  }
+
+  /* Desktop icons hidden on touch/no-pointer devices - they still exist but smaller */
+  #desktop-icons {
+    display: flex;
+  }
+}
+
+/* ============================================================
+   Tablet / Mobile: 768px and below
+   ============================================================ */
+
+@media (max-width: 768px) {
+  :root {
+    --win11-taskbar-height: 0px;
+  }
+
+  /* Disable normal taskbar */
+  #taskbar {
+    display: none;
+  }
+
+  /* Hide desktop icons grid on mobile */
+  #desktop-icons {
+    display: none;
+  }
+
+  /* Force all windows full-screen on mobile */
+  .win11-window {
+    left: 0 !important;
+    top: 0 !important;
+    width: 100vw !important;
+    height: calc(100vh - 56px) !important;
+    max-width: 100vw !important;
+    max-height: none !important;
+    border-radius: 0 !important;
+    z-index: calc(var(--win11-z-taskbar) + 1) !important;
+  }
+
+  /* Disable window dragging on mobile */
+  .win11-window:not(.minimized) {
+    position: fixed !important;
+  }
+
+  /* No resize handles on mobile */
+  .win-resize-handle {
+    display: none !important;
+  }
+
+  /* No snap layout on mobile */
+  #snapLayout {
+    display: none !important;
+  }
+
+  /* Start Menu hidden on mobile (use drawer instead) */
+  #startMenu {
+    display: none !important;
+  }
+
+  /* Action Center hidden on mobile */
+  #actionCenter {
+    display: none !important;
+  }
+
+  /* Search overlay full screen on mobile */
+  #searchOverlay {
+    top: 0;
+    border-radius: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+  }
+
+  /* Hide system tray on mobile */
+  #taskbar-right {
+    display: none !important;
+  }
+
+  /* Start button zone smaller */
+  #taskbar-left {
+    width: 60px;
+  }
+
+  /* Task view button smaller */
+  #taskbar-center {
+    width: 60px;
+  }
+}
+
+/* ============================================================
+   Mobile-only styles
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .mobile-drawer-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .win11-window {
+    height: calc(100vh - 52px) !important;
+  }
+}
+
+/* ============================================================
+   Hybrid: tablet has wider windows
+   ============================================================ */
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .win11-window {
+    width: 92vw !important;
+    height: calc(100vh - 72px) !important;
+    left: 4vw !important;
+    top: 8px !important;
+  }
+}

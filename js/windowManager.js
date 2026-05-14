@@ -12,6 +12,69 @@
   let resizeState = null;
 
   /* ============================================================
+     Audio System (Web Audio API - no external files)
+     ============================================================ */
+
+  let audioCtx = null;
+
+  function getAudioCtx() {
+    if (!audioCtx) {
+      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { /* no audio */ }
+    }
+    return audioCtx;
+  }
+
+  function playWindowOpenSound() {
+    try {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const now = ctx.currentTime;
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.05);
+      gain.gain.setValueAtTime(0.05, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+      osc.start(now);
+      osc.stop(now + 0.12);
+    } catch (e) { /* silent fail */ }
+  }
+
+  function playKonamiSound() {
+    try {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const notes = [262, 330, 392, 523, 659, 784, 1047];
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'square';
+        const start = ctx.currentTime + i * 0.08;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.04, start);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.15);
+        osc.start(start);
+        osc.stop(start + 0.15);
+      });
+    } catch (e) { /* silent fail */ }
+  }
+
+  function activateOverlay() {
+    const overlay = document.getElementById('globalOverlay');
+    if (overlay) overlay.classList.add('active');
+  }
+
+  function deactivateOverlay() {
+    const overlay = document.getElementById('globalOverlay');
+    if (overlay) overlay.classList.remove('active');
+  }
+
+  /* ============================================================
      Core API
      ============================================================ */
 
@@ -101,6 +164,8 @@
     _updateFocusState(id);
     _setupWindowEvents(id);
     _addTaskbarButton(appId, id, icon, title);
+
+    playWindowOpenSound();
 
     const contentEl = win.querySelector('.win-content');
     if (typeof window.__loadAppContent === 'function') {
@@ -509,6 +574,10 @@
     win.style.zIndex = d.zIndex;
     win.classList.add('focused');
     win.classList.remove('unfocused');
+
+    win.classList.remove('focus-pulse');
+    void win.offsetWidth; // reflow to restart animation
+    win.classList.add('focus-pulse');
 
     const btn = document.querySelector(`.taskbar-app-btn[data-window="${id}"]`);
     if (btn) btn.classList.add('active');

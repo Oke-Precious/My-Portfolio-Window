@@ -81,6 +81,18 @@
       document.getElementById('taskbar-center').appendChild(btn);
     });
 
+    const taskViewBtn = document.createElement('div');
+    taskViewBtn.className = 'taskbar-btn';
+    taskViewBtn.dataset.action = 'taskview';
+    taskViewBtn.title = 'Task View';
+    taskViewBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z"/></svg>`;
+    taskViewBtn.addEventListener('click', () => {
+      if (window.__win11.openTaskView) window.__win11.openTaskView();
+    });
+    taskViewBtn.addEventListener('mouseenter', e => showTip(e, 'Task View'));
+    taskViewBtn.addEventListener('mouseleave', hideTip);
+    document.getElementById('taskbar-center').appendChild(taskViewBtn);
+
     const startBtn = document.getElementById('start-btn');
     if (startBtn) {
       startBtn.addEventListener('click', toggleStartMenu);
@@ -106,8 +118,8 @@
   window.closeStartMenu = toggleStartMenu;
 
   function openActionCenter() {
-    if (typeof window.__win11.openApp === 'function') {
-      window.__win11.openApp('settings');
+    if (typeof window.__win11.openActionCenter === 'function') {
+      window.__win11.openActionCenter();
     }
   }
 

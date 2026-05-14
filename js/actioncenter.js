@@ -67,6 +67,8 @@
     actionCenter.classList.add('visible');
     renderNotificationTab();
     renderCalendarTab();
+    const overlay = document.getElementById('globalOverlay');
+    if (overlay) overlay.classList.add('active');
   }
 
   function closeActionCenter() {
@@ -76,10 +78,22 @@
     setTimeout(() => {
       actionCenter.classList.remove('visible', 'closing');
     }, 150);
+    const overlay = document.getElementById('globalOverlay');
+    if (overlay) overlay.classList.remove('active');
   }
 
   window.openActionCenter = openActionCenter;
   window.closeActionCenter = closeActionCenter;
+
+  window.__win11 = window.__win11 || {};
+  window.__win11.openActionCenter = function () { if (!isOpen) openActionCenter(); };
+  window.__win11.closeActionCenter = closeActionCenter;
+
+  document.addEventListener('mousedown', e => {
+    if (isOpen && !e.target.closest('#actionCenter') && !e.target.closest('#tray-clock')) {
+      closeActionCenter();
+    }
+  });
 
   /* ============================================================
      Tab Navigation
@@ -370,112 +384,10 @@
     }, 4000);
   }
 
-  window.showToast = showToast;
+window.showToast = showToast;
 
-  /* ============================================================
-     Contact Window
-   ============================================================ */
-
-  function openContactWindow() {
-    if (typeof window.__win11 !== 'undefined' && window.__win11.openApp) {
-      const config = {
-        id: 'contact-window',
-        title: 'Send Message — Contact Oke Precious',
-        icon: `<svg viewBox="0 0 24 24"><defs><linearGradient id="cm-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" style="stop-color:#5C9CE6"/><stop offset="100%" style="stop-color:#4078C0"/></linearGradient></defs><rect x="2" y="5" width="20" height="14" rx="2" fill="url(#cm-g)"/><path d="M2 8L12 14L22 8" stroke="#2E5C9E" stroke-width="1.5" fill="none"/></svg>`,
-        content: `
-          <div class="contact-window">
-            <div class="contact-header">
-              <h2>Get In Touch</h2>
-              <p>// REPLACE: Add your preferred contact email or leave as is</p>
-            </div>
-            <form class="contact-form" id="contactForm" onsubmit="event.preventDefault(); handleContactSubmit()">
-              <input type="text" class="contact-input" placeholder="Your Name" required />
-              <input type="email" class="contact-input" placeholder="your@email.com" required />
-              <select class="contact-select">
-                <option value="">Select a subject...</option>
-                <option>Job opportunity</option>
-                <option>Freelance project</option>
-                <option>Collaboration</option>
-                <option>Just saying hi!</option>
-              </select>
-              <textarea class="contact-textarea" placeholder="Your message..." required></textarea>
-              <button type="submit" class="contact-submit">Send Message</button>
-            </form>
-            <div class="contact-socials">
-              <a class="contact-social" href="https://github.com/Oke-Precious" target="_blank" title="GitHub">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-              </a>
-              <a class="contact-social" href="https://linkedin.com/in/oke-precious-581ba5402" target="_blank" title="LinkedIn">
-                <svg viewBox="0 0 24 24" fill="#0A66C2"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5V5c0-2.762-2.238-5-5-5zm-11 19H3v-11h11v11zm-1-12c-.828 0-1.5-.672-1.5-1.5S9.172 5 10 5s1.5.672 1.5 1.5S10.828 7 10 7zm9 12H7v-5.5c0-1.654 1.346-3 3-3s3 1.346 3 3V19z"/></svg>
-              </a>
-              <a class="contact-social" href="#" title="Twitter/X">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-              </a>
-            </div>
-          </div>
-        `,
-        width: 420,
-        height: 540
-      };
-      window.__win11.openApp('contact-window', config);
-    }
-  }
-
-  window.openContactWindow = openContactWindow;
-
-  window.handleContactSubmit = function () {
-    showToast('Message sent! I\'ll get back to you soon.', 'success', '✅');
-    setTimeout(() => {
-      const win = document.getElementById('win-' + window.__win11._lastWindowId);
-      if (win) window.__win11.closeWindow('win-' + window.__win11._lastWindowId);
-    }, 1500);
-  };
-
-  /* ============================================================
-     Sliders (Brightness & Volume)
-   ============================================================ */
-
-  function initSliders() {
-    const brightnessSlider = document.getElementById('brightnessSlider');
-    const volumeSlider = document.getElementById('volumeSlider');
-    if (brightnessSlider) brightnessSlider.value = 75;
-    if (volumeSlider) volumeSlider.value = 65;
-  }
-
-  /* ============================================================
-     Init
-   ============================================================ */
-
-  function init() {
-    renderQuickTiles();
-    initSliders();
-
-    document.querySelectorAll('.ac-tab').forEach(tab => {
-      tab.addEventListener('click', () => switchTab(tab.dataset.tab));
-    });
-
-    document.getElementById('acClearAll')?.addEventListener('click', clearAllNotifs);
-
-    document.getElementById('acCalPrev')?.addEventListener('click', calPrev);
-    document.getElementById('acCalNext')?.addEventListener('click', calNext);
-
-    document.getElementById('acFocusToggle')?.addEventListener('click', toggleFocus);
-
-    document.addEventListener('mousedown', e => {
-      if (isOpen && !actionCenter.contains(e.target) && !e.target.closest('#tray-clock')) {
-        closeActionCenter();
-      }
-    });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && isOpen) closeActionCenter();
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  window.__win11 = window.__win11 || {};
+  window.__win11.showToast = showToast;
+  window.__win11.openActionCenter = function () { if (!isOpen) openActionCenter(); };
 
 })();

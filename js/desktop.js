@@ -133,6 +133,174 @@
     }
   }
 
+  /* ============================================================
+     Wallpaper Personalization
+     ============================================================ */
+
+  const WALLPAPERS = [
+    {
+      id: 'bloom',
+      name: 'Bloom',
+      css: `radial-gradient(ellipse at 20% 30%, #c471ed 0%, #f64f59 30%, #12c2e9 60%, #0f0c29 100%)`
+    },
+    {
+      id: 'sunrise',
+      name: 'Sunrise',
+      css: `linear-gradient(135deg, #f093fb 0%, #f5576c 25%, #fda085 50%, #ffd89b 75%, #f6d365 100%)`
+    },
+    {
+      id: 'ocean',
+      name: 'Ocean',
+      css: `linear-gradient(135deg, #667eea 0%, #764ba2 30%, #1a1a4e 60%, #0a1628 100%)`
+    },
+    {
+      id: 'forest',
+      name: 'Forest',
+      css: `linear-gradient(135deg, #134e5e 0%, #2d6a4f 30%, #1b4332 60%, #081c15 100%)`
+    },
+    {
+      id: 'minimal',
+      name: 'Minimal Dark',
+      css: `linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16162a 100%)`
+    },
+    {
+      id: 'synthwave',
+      name: 'Synthwave',
+      css: `linear-gradient(180deg, #0f0c29 0%, #302b63 25%, #24243e 50%, #e94560 75%, #ff6f91 100%)`
+    }
+  ];
+
+  function getSavedWallpaper() {
+    return localStorage.getItem('win11-wallpaper') || 'bloom';
+  }
+
+  function applyWallpaper(id) {
+    const wp = WALLPAPERS.find(w => w.id === id) || WALLPAPERS[0];
+    const desktop = document.getElementById('desktop');
+    if (desktop) {
+      desktop.style.background = wp.css;
+      desktop.style.transition = 'background 400ms ease';
+    }
+    localStorage.setItem('win11-wallpaper', wp.id);
+    document.querySelectorAll('.wp-swatch').forEach(s => {
+      s.classList.toggle('active', s.dataset.id === id);
+    });
+  }
+
+  function openWallpaperWindow() {
+    closeContextMenu();
+    if (window.__win11 && window.__win11.openApp) {
+      window.__win11.createWindow({
+        id: 'wallpaper-picker',
+        title: 'Personalization',
+        icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>`,
+        width: 420,
+        height: 440
+      });
+
+      const win = document.querySelector('[data-app="wallpaper-picker"]');
+      if (win) {
+        const content = win.querySelector('.win-content');
+        if (content) {
+          content.innerHTML = `
+            <div class="wallpaper-window">
+              <div class="wp-title">Choose your background</div>
+              <div class="wp-subtitle">Select a wallpaper to set the desktop theme</div>
+              <div class="wp-grid">
+                ${WALLPAPERS.map(wp => `
+                  <div class="wp-swatch ${wp.id === getSavedWallpaper() ? 'active' : ''}"
+                       data-id="${wp.id}" data-name="${wp.name}"
+                       style="background: ${wp.css}"></div>
+                `).join('')}
+              </div>
+              <div class="wp-custom">
+                <input type="color" id="wpCustomColor" value="#c471ed" />
+                <span class="wp-custom-label">Custom color</span>
+              </div>
+            </div>
+          `;
+          content.querySelectorAll('.wp-swatch').forEach(s => {
+            s.addEventListener('click', () => applyWallpaper(s.dataset.id));
+          });
+          const customInput = document.getElementById('wpCustomColor');
+          if (customInput) {
+            customInput.addEventListener('input', (e) => {
+              const desktop = document.getElementById('desktop');
+              if (desktop) {
+                desktop.style.background = e.target.value;
+                desktop.style.transition = 'background 400ms ease';
+              }
+              document.querySelectorAll('.wp-swatch').forEach(s => s.classList.remove('active'));
+            });
+            customInput.addEventListener('change', () => {
+              localStorage.setItem('win11-wallpaper', 'custom');
+            });
+          }
+        }
+      }
+    }
+  }
+
+  function initWallpaper() {
+    const saved = getSavedWallpaper();
+    if (saved && saved !== 'custom') {
+      const wp = WALLPAPERS.find(w => w.id === saved);
+      const desktop = document.getElementById('desktop');
+      if (desktop && wp) {
+        desktop.style.background = wp.css;
+      }
+    }
+  }
+
+  /* ============================================================
+     Konami Code Easter Egg
+     ============================================================ */
+
+  const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let konamiIndex = 0;
+
+  function handleKonamiKey(e) {
+    if (e.key !== KONAMI[konamiIndex]) {
+      konamiIndex = 0;
+      return;
+    }
+    konamiIndex++;
+    if (konamiIndex === KONAMI.length) {
+      konamiIndex = 0;
+      triggerKonami();
+    }
+  }
+
+  function triggerKonami() {
+    if (typeof playKonamiSound !== 'undefined') {
+      // We need to call the one from windowManager. Since it's in the same file, it's accessible.
+      // Actually, this is desktop.js - let's just do it inline via the global.
+    }
+
+    const flash = document.getElementById('konamiFlash');
+    if (flash) {
+      flash.classList.add('visible');
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const notes = [262, 330, 392, 523, 659, 784, 1047];
+        notes.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.type = 'square';
+          const start = ctx.currentTime + i * 0.08;
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.04, start);
+          gain.gain.exponentialRampToValueAtTime(0.001, start + 0.15);
+          osc.start(start);
+          osc.stop(start + 0.15);
+        });
+      } catch (e) { /* no audio */ }
+      setTimeout(() => flash.classList.remove('visible'), 2500);
+    }
+  }
+
   function renderDesktopIcons() {
     if (!iconsGrid) return;
     iconsGrid.innerHTML = '';
@@ -176,8 +344,8 @@
         `;
         if (item.action === 'refresh') {
           el.addEventListener('click', () => { location.reload(); });
-        } else if (item.action === 'personalize') {
-          el.addEventListener('click', () => { launchApp('settings'); });
+} else if (item.action === 'personalize') {
+          openWallpaperWindow();
         } else if (item.action === 'about') {
           el.addEventListener('click', () => { launchApp('about'); });
         } else if (item.hasSub) {
@@ -272,6 +440,7 @@
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') clearSelection();
+    handleKonamiKey(e);
   });
 
   /* ============================================================
@@ -279,9 +448,10 @@
      ============================================================ */
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', renderDesktopIcons);
+    document.addEventListener('DOMContentLoaded', () => { renderDesktopIcons(); initWallpaper(); });
   } else {
     renderDesktopIcons();
+    initWallpaper();
   }
 
 })();

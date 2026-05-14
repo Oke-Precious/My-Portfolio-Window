@@ -2,8 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Windows 11 Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Oke Precious Abioye — Portfolio</title>
+  <meta name="description" content="Oke Precious Abioye — FullStack Developer based in Ogbomoso, Nigeria. Interactive Windows 11 portfolio showcasing projects, skills, and experience." />
+  <meta property="og:title" content="Oke Precious Abioye — Portfolio" />
+  <meta property="og:description" content="FullStack Developer | Interactive Windows 11 Portfolio | JavaScript, React, Node.js" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://github.com/Oke-Precious" />
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/global.css" />
   <link rel="stylesheet" href="css/mica.css" />
@@ -14,10 +19,25 @@
   <link rel="stylesheet" href="css/windows.css" />
   <link rel="stylesheet" href="css/startmenu.css" />
   <link rel="stylesheet" href="css/actioncenter.css" />
+  <link rel="stylesheet" href="css/polish.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
 </head>
 <body>
 
+  <!-- Global Overlay for backdrop blur -->
+  <div id="globalOverlay"></div>
+
+  <!-- Konami Easter Egg Flash -->
+  <div id="konamiFlash">
+    <h2>Achievement unlocked!</h2>
+    <p>Retro Gamer</p>
+  </div>
+
+<!-- Boot Screen -->
+  <div id="bootScreen" style="display:none">
+
   <!-- Lock Screen -->
+  <div id="lockScreen" style="display:none">
   <div id="lockScreen">
     <div id="lockScreen-content">
       <div id="lockClock"></div>
@@ -34,7 +54,7 @@
           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
         </svg>
       </div>
-      <div id="loginUsername">Alex</div>
+      <div id="loginUsername">Oke Precious</div>
       <form id="loginForm" autocomplete="off">
         <div id="loginInput-wrap">
           <input type="password" id="loginPassword" placeholder="guest" />
@@ -205,5 +225,7 @@
   <script src="js/taskbar.js"></script>
   <script src="js/startmenu.js"></script>
   <script src="js/actioncenter.js"></script>
+  <script src="js/taskview.js"></script>
+  <script src="js/responsive.js"></script>
 </body>
 </html>
