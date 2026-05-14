@@ -1,4 +1,4 @@
-<!-- Settings - About Me & Skills -->
+<!-- Settings - About Me, Skills & Smart System -->
 <style>
 .sett-layout {
   display: flex;
@@ -307,6 +307,173 @@
   transition: background 100ms;
 }
 .sett-submit-btn:hover { background: var(--win11-accent-hover); }
+
+/* Smart System Settings Styles */
+.settings-section {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.settings-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+.settings-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.settings-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.settings-item-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.settings-item-label-main {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  font-size: 13px;
+}
+.settings-item-label-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: none;
+  padding: 0;
+  flex-shrink: 0;
+}
+.toggle-switch.active {
+  background: #0078d4;
+}
+.toggle-switch::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: left 0.3s ease;
+}
+.toggle-switch.active::after {
+  left: 22px;
+}
+/* Slider */
+.settings-slider {
+  width: 100%;
+  max-width: 180px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+.settings-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #0078d4;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.settings-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+.settings-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #0078d4;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.settings-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+/* Wallpaper Grid */
+.wallpaper-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 14px;
+}
+.wallpaper-item {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+  background-size: cover;
+  background-position: center;
+}
+.wallpaper-item:hover {
+  transform: scale(1.05);
+  border-color: #0078d4;
+}
+.wallpaper-item.active {
+  border-color: #0078d4;
+  box-shadow: 0 0 12px rgba(0, 120, 212, 0.6);
+}
+.wallpaper-item-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  color: white;
+  padding: 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+/* Connectivity Toggles */
+.connectivity-toggles {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+.connectivity-toggle-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+</style>
 </style>
 
 <div class="sett-layout">
@@ -316,8 +483,8 @@
     </div>
     <div class="sett-nav">
       <div class="sett-nav-item active" data-section="system">
-        <span class="sni-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg></span>
-        About Me
+        <span class="sni-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.62l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.48.1.62l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.62l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.48-.1-.62l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></span>
+        System
       </div>
       <div class="sett-nav-item" data-section="installed">
         <span class="sni-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg></span>
@@ -339,46 +506,99 @@
   </div>
 
   <div class="sett-content">
-    <!-- System / About Me -->
+    <!-- System / Smart System Settings -->
     <div class="sett-section active" id="sec-system">
-      <div class="sett-page-title">About Me</div>
-      <div class="sett-hero-card">
-        <div class="sett-avatar">OPA</div>
-        <div class="sett-hero-info">
-          <h2>Oke Precious Abioye</h2>
-          <div class="sett-role">Full-Stack Developer</div>
-          <div class="sett-location">Ogbomoso, Nigeria</div>
-          <div class="sett-links">
-            <span class="sett-avail">Available for work</span>
-            <a class="sett-link-btn outline" href="https://github.com/Oke-Precious" target="_blank">GitHub</a>
-            <a class="sett-link-btn outline" href="https://linkedin.com/in/oke-precious-581ba5402" target="_blank">LinkedIn</a>
+      <div class="sett-page-title">System Settings</div>
+
+      <!-- Display Settings -->
+      <div class="settings-section">
+        <div class="settings-section-title">Display</div>
+        
+        <!-- Dark/Light Mode -->
+        <div class="settings-item">
+          <div class="settings-item-label">
+            <div class="settings-item-label-main">Dark Mode</div>
+            <div class="settings-item-label-sub">Toggle between light and dark theme</div>
+          </div>
+          <button class="toggle-switch" id="themeToggle" title="Toggle dark mode"></button>
+        </div>
+
+        <!-- Brightness -->
+        <div class="settings-item">
+          <div class="settings-item-label">
+            <div class="settings-item-label-main">Brightness</div>
+            <div class="settings-item-label-sub">Adjust screen brightness</div>
+          </div>
+          <input type="range" class="settings-slider" id="settingsBrightnessSlider" min="0" max="100" value="75" />
+        </div>
+      </div>
+
+      <!-- Audio Settings -->
+      <div class="settings-section">
+        <div class="settings-section-title">Audio</div>
+        
+        <!-- Volume -->
+        <div class="settings-item">
+          <div class="settings-item-label">
+            <div class="settings-item-label-main">Volume</div>
+            <div class="settings-item-label-sub">Adjust system volume level</div>
+          </div>
+          <input type="range" class="settings-slider" id="settingsVolumeSlider" min="0" max="100" value="65" />
+        </div>
+      </div>
+
+      <!-- Wallpaper Settings -->
+      <div class="settings-section">
+        <div class="settings-section-title">Personalization</div>
+        
+        <!-- Wallpaper -->
+        <div style="margin-bottom: 20px;">
+          <div class="settings-item-label-main" style="margin-bottom: 12px;">Wallpaper</div>
+          <div class="wallpaper-grid">
+            <div class="wallpaper-item" data-wallpaper="abstract" style="background-image: url('https://images.unsplash.com/photo-1557672172-298e090d0f80?w=200&q=50');"></div>
+            <div class="wallpaper-item" data-wallpaper="mountain" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&q=50');"></div>
+            <div class="wallpaper-item" data-wallpaper="cyberpunk" style="background-image: url('https://images.unsplash.com/photo-1550258987-920a2eae2e06?w=200&q=50');"></div>
           </div>
         </div>
       </div>
-      <div class="sett-subtitle">Device Info</div>
-      <div class="sett-info-grid">
-        <div class="sett-info-card">
-          <div class="sett-info-label">Name</div>
-          <div class="sett-info-value">Oke Precious Abioye</div>
-        </div>
-        <div class="sett-info-card">
-          <div class="sett-info-label">Role</div>
-          <div class="sett-info-value">Full-Stack Developer</div>
-        </div>
-        <div class="sett-info-card">
-          <div class="sett-info-label">Location</div>
-          <div class="sett-info-value">Ogbomoso, Nigeria</div>
-        </div>
-        <div class="sett-info-card">
-          <div class="sett-info-label">Status</div>
-          <div class="sett-info-value">Open to opportunities</div>
+
+      <!-- Performance Settings -->
+      <div class="settings-section">
+        <div class="settings-section-title">Performance</div>
+        
+        <!-- Battery Saver -->
+        <div class="settings-item">
+          <div class="settings-item-label">
+            <div class="settings-item-label-main">Battery Saver</div>
+            <div class="settings-item-label-sub">Disable visual effects to save performance</div>
+          </div>
+          <button class="toggle-switch" id="batterySaverToggle" title="Toggle battery saver mode"></button>
         </div>
       </div>
-      <div class="sett-subtitle">A Bit About Me</div>
-      <div class="sett-bio">
-        <p>I'm Oke Precious Abioye — a 400-Level Computer Science student at LAUTECH and a certified Professional in Software Engineering (Full Stack Web Development) from SQI College of ICT. I build things. Real things. From banking systems to e-commerce platforms.</p>
-        <p>10+ projects live on my GitHub, and every one of them tells the story of a developer who doesn't wait to be taught, but goes out and creates. My tech stack spans JavaScript, React, Node.js, Firebase, Python, and more — I work across the full stack with a focus on clean, scalable code.</p>
-        <p>Currently interning at SQI College of ICT, working with a team, leveraging AI tools, and sharpening my craft every single day. I'm open to collaborations, freelance projects, and full-time opportunities where I can make an impact.</p>
+
+      <!-- Connectivity Settings -->
+      <div class="settings-section">
+        <div class="settings-section-title">Connectivity</div>
+        
+        <!-- WiFi -->
+        <div class="connectivity-toggles">
+          <div class="connectivity-toggle-item">
+            <div class="settings-item-label">
+              <div class="settings-item-label-main">WiFi</div>
+              <div class="settings-item-label-sub">Network connectivity</div>
+            </div>
+            <button class="toggle-switch" id="wifiToggle" title="Toggle WiFi"></button>
+          </div>
+
+          <!-- Hotspot -->
+          <div class="connectivity-toggle-item">
+            <div class="settings-item-label">
+              <div class="settings-item-label-main">Hotspot</div>
+              <div class="settings-item-label-sub">Share internet connection</div>
+            </div>
+            <button class="toggle-switch" id="hotspotToggle" title="Toggle hotspot"></button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -495,13 +715,41 @@
           <div class="sett-skill-name">Python</div>
           <div class="sett-skill-track"><div class="sett-skill-fill" style="width:70%;background:#3776AB"></div></div>
         </div>
+    <!-- Skills -->
+    <div class="sett-section" id="sec-skills">
+      <div class="sett-page-title">Skills</div>
+      <div class="sett-skills-grid">
+        <div class="sett-skill-bar">
+          <div class="sett-skill-name">JavaScript / TypeScript</div>
+          <div class="sett-skill-track"><div class="sett-skill-fill" style="width:90%;background:#F7DF1E"></div></div>
+        </div>
+        <div class="sett-skill-bar">
+          <div class="sett-skill-name">React / Next.js</div>
+          <div class="sett-skill-track"><div class="sett-skill-fill" style="width:85%;background:#61DAFB"></div></div>
+        </div>
+        <div class="sett-skill-bar">
+          <div class="sett-skill-name">Node.js / Express</div>
+          <div class="sett-skill-track"><div class="sett-skill-fill" style="width:80%;background:#68A063"></div></div>
+        </div>
+        <div class="sett-skill-bar">
+          <div class="sett-skill-name">Python</div>
+          <div class="sett-skill-track"><div class="sett-skill-fill" style="width:70%;background:#3776AB"></div></div>
+        </div>
         <div class="sett-skill-bar">
           <div class="sett-skill-name">CSS / Tailwind</div>
           <div class="sett-skill-track"><div class="sett-skill-fill" style="width:88%;background:#38B2AC"></div></div>
         </div>
         <div class="sett-skill-bar">
+          <div class="sett-skill-name">MongoDB / Firebase</div>
+          <div class="sett-skill-track"><div class="sett-skill-fill" style="width:82%;background:#FFCA28"></div></div>
+        </div>
+        <div class="sett-skill-bar">
           <div class="sett-skill-name">Git / GitHub</div>
           <div class="sett-skill-track"><div class="sett-skill-fill" style="width:85%;background:#F05032"></div></div>
+        </div>
+        <div class="sett-skill-bar">
+          <div class="sett-skill-name">REST APIs</div>
+          <div class="sett-skill-track"><div class="sett-skill-fill" style="width:80%;background:#0078d4"></div></div>
         </div>
       </div>
     </div>
@@ -509,35 +757,39 @@
     <!-- Contact -->
     <div class="sett-section" id="sec-contact">
       <div class="sett-page-title">Get In Touch</div>
-      <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:24px;line-height:1.6">
-        Interested in working together? Feel free to reach out via the form below or through my social links.
-      </p>
-      <form class="sett-contact-form" onsubmit="event.preventDefault(); alert('Message sent! (Demo)')">
-        <input type="text" class="sett-input" placeholder="Your Name" />
-        <input type="email" class="sett-input" placeholder="your@email.com" />
-        <input type="text" class="sett-input" placeholder="Subject" />
-        <textarea class="sett-textarea" placeholder="Your message..."></textarea>
+      <div style="margin-bottom: 24px;">
+        <p style="color: rgba(255, 255, 255, 0.7); line-height: 1.6; margin-bottom: 16px;">Have a project in mind? Let's collaborate and build something amazing together. Feel free to reach out through any of these channels:</p>
+        <div class="sett-links">
+          <a class="sett-link-btn" href="https://github.com/Oke-Precious" target="_blank">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.343-3.369-1.343-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.547 2.91 1.182.092-.92.35-1.548.636-1.904-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.137 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+            GitHub
+          </a>
+          <a class="sett-link-btn" href="https://linkedin.com/in/oke-precious-581ba5402" target="_blank">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.39v-1.2h-2.5v8.5h2.5v-4.74c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.74h2.5M6.5 7a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3M5 11h3v8H5v-8z"/></svg>
+            LinkedIn
+          </a>
+        </div>
+      </div>
+      <div class="sett-subtitle">Send Message</div>
+      <form class="sett-contact-form" style="margin-top: 16px;">
+        <input type="text" class="sett-input" placeholder="Your Name" required />
+        <input type="email" class="sett-input" placeholder="Your Email" required />
+        <textarea class="sett-textarea" placeholder="Your Message..." required></textarea>
         <button type="submit" class="sett-submit-btn">Send Message</button>
       </form>
-      <div style="margin-top:32px;display:flex;gap:12px">
-        <a class="sett-link-btn outline" href="mailto:okeprecido@gmail.com">Email</a>
-        <a class="sett-link-btn outline" href="https://github.com/Oke-Precious" target="_blank">GitHub</a>
-        <a class="sett-link-btn outline" href="https://linkedin.com/in/oke-precious-581ba5402" target="_blank">LinkedIn</a>
-      </div>
     </div>
   </div>
 </div>
 
 <script>
-(function() {
-  document.querySelectorAll('.sett-nav-item').forEach(item => {
-    item.addEventListener('click', () => {
-      document.querySelectorAll('.sett-nav-item').forEach(i => i.classList.remove('active'));
-      document.querySelectorAll('.sett-section').forEach(s => s.classList.remove('active'));
-      item.classList.add('active');
-      const sec = document.getElementById('sec-' + item.dataset.section);
-      if (sec) sec.classList.add('active');
-    });
+// Settings Navigation
+document.querySelectorAll('.sett-nav-item').forEach(item => {
+  item.addEventListener('click', function() {
+    const section = this.dataset.section;
+    document.querySelectorAll('.sett-nav-item').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.sett-section').forEach(el => el.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById(`sec-${section}`).classList.add('active');
   });
-})();
+});
 </script>

@@ -1,0 +1,425 @@
+/* ============================================
+   THEME ENGINE - Smart System Features
+   ============================================ */
+
+:root {
+  /* Wallpaper System */
+  --wallpaper-url: url("https://images.unsplash.com/photo-1557672172-298e090d0f80?w=2560&q=80");
+  --wallpaper-transition: 0.5s ease;
+
+  /* Theme Variables - Light Mode (Default) */
+  --win11-bg-glass: rgba(255, 255, 255, 0.7);
+  --win11-text: #000;
+  --win11-text-secondary: #606060;
+  --win11-border: rgba(0, 0, 0, 0.06);
+  --win11-hover: rgba(0, 0, 0, 0.05);
+
+  /* Wallpaper Options */
+  --wallpaper-abstract: url("https://images.unsplash.com/photo-1557672172-298e090d0f80?w=2560&q=80");
+  --wallpaper-mountain: url("https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2560&q=80");
+  --wallpaper-cyberpunk: url("https://images.unsplash.com/photo-1550258987-920a2eae2e06?w=2560&q=80");
+}
+
+/* Dark Mode */
+:root.dark-mode {
+  --win11-bg-glass: rgba(30, 30, 30, 0.8);
+  --win11-text: #fff;
+  --win11-text-secondary: #b0b0b0;
+  --win11-border: rgba(255, 255, 255, 0.06);
+  --win11-hover: rgba(255, 255, 255, 0.05);
+}
+
+/* ============================================
+   DESKTOP BACKGROUND WITH WALLPAPER
+   ============================================ */
+
+#desktop {
+  background-image: var(--wallpaper-url);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  transition: background-image var(--wallpaper-transition);
+}
+
+/* Wallpaper-specific classes for quick switching */
+#desktop.wallpaper-abstract {
+  --wallpaper-url: var(--wallpaper-abstract);
+}
+
+#desktop.wallpaper-mountain {
+  --wallpaper-url: var(--wallpaper-mountain);
+}
+
+#desktop.wallpaper-cyberpunk {
+  --wallpaper-url: var(--wallpaper-cyberpunk);
+}
+
+/* ============================================
+   BRIGHTNESS OVERLAY
+   ============================================ */
+
+#brightnessOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  z-index: 9998;
+  transition: background-color 0.15s linear;
+}
+
+/* ============================================
+   VOLUME HUD (Heads-Up Display)
+   ============================================ */
+
+#volumeHUD {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 24px 32px;
+  border-radius: 12px;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  backdrop-filter: blur(10px);
+  min-width: 100px;
+  text-align: center;
+}
+
+#volumeHUD.visible {
+  opacity: 1;
+}
+
+#volumeHUD-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+#volumeHUD-bar {
+  width: 200px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+#volumeHUD-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0078d4, #50e6ff);
+  width: 65%;
+  transition: width 0s ease;
+}
+
+#volumeHUD-text {
+  font-size: 14px;
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ============================================
+   WIFI/CONNECTIVITY INDICATORS
+   ============================================ */
+
+.taskbar-connectivity {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+}
+
+.connectivity-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.connectivity-icon.connected {
+  color: #50c878;
+  opacity: 1;
+}
+
+.connectivity-icon.disconnected {
+  color: #999;
+  opacity: 0.5;
+}
+
+/* ============================================
+   BATTERY SAVER MODE
+   ============================================ */
+
+:root.battery-saver-on {
+  --blur-amount: 0px;
+}
+
+:root:not(.battery-saver-on) {
+  --blur-amount: 10px;
+}
+
+#windows-container.battery-saver-off .window {
+  backdrop-filter: blur(var(--blur-amount));
+}
+
+#windows-container.battery-saver-on .window {
+  backdrop-filter: none;
+}
+
+.taskbar.battery-saver-off {
+  backdrop-filter: blur(var(--blur-amount));
+}
+
+.taskbar.battery-saver-on {
+  backdrop-filter: none;
+}
+
+#startMenu.battery-saver-off {
+  backdrop-filter: blur(var(--blur-amount));
+}
+
+#startMenu.battery-saver-on {
+  backdrop-filter: none;
+}
+
+/* ============================================
+   THEME TRANSITIONS
+   ============================================ */
+
+body, #desktop, #taskbar, .window, #startMenu, #actionCenter,
+#lockScreen, .sm-pinned-grid, .sm-all-apps-list, .sm-rec-list {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Apply theme variables to common elements */
+.window {
+  background: var(--win11-bg-glass);
+  color: var(--win11-text);
+  border: 1px solid var(--win11-border);
+}
+
+.window-title {
+  color: var(--win11-text);
+}
+
+.window-body {
+  color: var(--win11-text);
+}
+
+#taskbar {
+  background: var(--win11-bg-glass);
+  border-top: 1px solid var(--win11-border);
+}
+
+#startMenu {
+  background: var(--win11-bg-glass);
+  color: var(--win11-text);
+}
+
+#actionCenter {
+  background: var(--win11-bg-glass);
+  color: var(--win11-text);
+}
+
+.ac-tab {
+  color: var(--win11-text-secondary);
+}
+
+.ac-tab.active {
+  color: var(--win11-text);
+  border-bottom-color: var(--win11-text);
+}
+
+.ac-slider {
+  accent-color: #0078d4;
+}
+
+/* ============================================
+   SETTINGS CONTROLS STYLING
+   ============================================ */
+
+.settings-section {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--win11-border);
+}
+
+.settings-section:last-child {
+  border-bottom: none;
+}
+
+.settings-section-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--win11-text);
+  margin-bottom: 12px;
+}
+
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  color: var(--win11-text-secondary);
+}
+
+.settings-item-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-item-label-main {
+  color: var(--win11-text);
+  font-weight: 500;
+}
+
+.settings-item-label-sub {
+  font-size: 12px;
+  color: var(--win11-text-secondary);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: #ccc;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: none;
+  padding: 0;
+}
+
+.toggle-switch.active {
+  background: #0078d4;
+}
+
+.toggle-switch::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: left 0.3s ease;
+}
+
+.toggle-switch.active::after {
+  left: 22px;
+}
+
+/* Slider */
+.settings-slider {
+  width: 100%;
+  max-width: 200px;
+  height: 4px;
+  border-radius: 2px;
+  background: #ddd;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.settings-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #0078d4;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.settings-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 8px rgba(0, 120, 212, 0.5);
+}
+
+.settings-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #0078d4;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.settings-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 8px rgba(0, 120, 212, 0.5);
+}
+
+/* Wallpaper Grid */
+.wallpaper-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.wallpaper-item {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  background-size: cover;
+  background-position: center;
+}
+
+.wallpaper-item:hover {
+  transform: scale(1.05);
+  border-color: #0078d4;
+}
+
+.wallpaper-item.active {
+  border-color: #0078d4;
+  box-shadow: 0 0 12px rgba(0, 120, 212, 0.5);
+}
+
+.wallpaper-item-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  color: white;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Connectivity Toggle Grid */
+.connectivity-toggles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.connectivity-toggle-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: var(--win11-hover);
+  border-radius: 8px;
+  border: 1px solid var(--win11-border);
+}
