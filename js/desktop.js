@@ -90,6 +90,19 @@
         <circle cx="24" cy="24" r="20" fill="url(#expGrad)"/>
         <path d="M24 8l5.5 11.2L41 20.4l-8.5 8.3 2 12L24 35.5 13.5 40.7l2-12-8.5-8.3 11.5-1.2L24 8z" fill="white" opacity="0.9"/>
       </svg>`
+    },
+    {
+      id: 'portfolio-viewer',
+      label: 'Portfolio',
+      tooltip: 'Portfolio',
+      svg: `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="portfolioGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#EC407A"/><stop offset="100%" style="stop-color:#C2185B"/></linearGradient></defs>
+        <rect x="4" y="6" width="40" height="28" rx="4" fill="url(#portfolioGrad)"/>
+        <path d="M16 42h16M24 34v8" stroke="url(#portfolioGrad)" stroke-width="3" stroke-linecap="round"/>
+        <rect x="8" y="12" width="12" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
+        <rect x="24" y="12" width="16" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
+        <rect x="24" y="20" width="12" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+      </svg>`
     }
   ];
 

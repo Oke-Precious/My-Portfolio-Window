@@ -201,6 +201,14 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       width: 900,
       height: 650
     },
+    'contact': {
+      id: 'contact',
+      title: 'Contact Me',
+      icon: ICONS.services,
+      htmlFile: 'apps/contact.html',
+      width: 700,
+      height: 750
+    },
     'about': {
       id: 'about',
       title: 'About this Portfolio',
@@ -256,7 +264,8 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     'github': 'edge',
     'recycle-bin': 'recycle-bin',
     'about': 'settings',
-    'contact': 'settings'
+    'contact': 'contact',
+    'portfolio-viewer': 'portfolio-viewer'
   };
 
   /* ============================================================
@@ -326,14 +335,37 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           return response.text();
         })
         .then(html => {
-          contentEl.innerHTML = html;
+          // Simple regex-based approach to remove and extract scripts
+          // This avoids DOMParser issues with complex HTML
           
-          // Execute any <script> tags in the loaded HTML
-          const scripts = contentEl.querySelectorAll('script');
-          scripts.forEach(oldScript => {
-            const newScript = document.createElement('script');
-            newScript.textContent = oldScript.textContent;
-            oldScript.parentNode.replaceChild(newScript, oldScript);
+          // Remove all script tags from HTML string
+          const htmlWithoutScripts = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+          
+          // Insert the HTML (styles + content, no scripts)
+          contentEl.innerHTML = htmlWithoutScripts;
+          
+          // Extract inline scripts using regex
+          const scriptRegex = /<script\b[^<]*>[\s\S]*?<\/script>/gi;
+          let scriptMatch;
+          const scripts = [];
+          
+          while ((scriptMatch = scriptRegex.exec(html)) !== null) {
+            const scriptTag = scriptMatch[0];
+            // Extract content between <script> and </script>
+            const content = scriptTag.replace(/<script[^>]*>/i, '').replace(/<\/script>/i, '');
+            if (content.trim()) {
+              scripts.push(content);
+            }
+          }
+          
+          // Execute scripts in order
+          scripts.forEach((scriptContent, idx) => {
+            try {
+              // Use Function to execute in global scope
+              new Function(scriptContent)();
+            } catch (e) {
+              console.error(`Script ${idx + 1} error in ${app.title || appId}:`, e.message);
+            }
           });
           
           if (typeof app.onLoad === 'function') {

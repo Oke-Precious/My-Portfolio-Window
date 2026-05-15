@@ -1,0 +1,457 @@
+<!-- Contact Me Form -->
+<style>
+.contact-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: var(--win11-font);
+  background: rgba(0, 0, 0, 0.15);
+  padding: 32px;
+  overflow-y: auto;
+}
+
+.contact-hero {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: slideInDown 400ms ease;
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.contact-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  background: linear-gradient(135deg, #5C9CE6 0%, #4078C0 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  box-shadow: 0 8px 24px rgba(92, 156, 230, 0.3);
+}
+
+.contact-hero h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 8px;
+}
+
+.contact-hero p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.contact-container {
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.contact-form {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 32px;
+  backdrop-filter: blur(10px);
+  animation: slideInUp 400ms ease 100ms both;
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group:last-of-type {
+  margin-bottom: 0;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.form-label .required {
+  color: #e74c3c;
+}
+
+.form-input,
+.form-textarea {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--win11-font);
+  outline: none;
+  transition: all 150ms ease;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--win11-accent);
+  box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
+}
+
+.form-input[type="email"]:invalid:not(:placeholder-shown),
+.form-input[type="text"]:invalid:not(:placeholder-shown) {
+  border-color: rgba(231, 76, 60, 0.5);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: var(--win11-font);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+  animation: slideInUp 400ms ease 200ms both;
+}
+
+.btn-send,
+.btn-reset {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 150ms ease;
+  outline: none;
+  font-family: var(--win11-font);
+}
+
+.btn-send {
+  background: linear-gradient(135deg, var(--win11-accent) 0%, #1066b0 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+}
+
+.btn-send:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 120, 212, 0.4);
+}
+
+.btn-send:active {
+  transform: translateY(0);
+}
+
+.btn-send.sending {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-reset {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-reset:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.btn-reset:active {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.form-message {
+  display: none;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 20px;
+  animation: slideInDown 300ms ease;
+}
+
+.form-message.success {
+  display: block;
+  background: rgba(46, 204, 113, 0.15);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  color: #2ecc71;
+}
+
+.form-message.error {
+  display: block;
+  background: rgba(231, 76, 60, 0.15);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  color: #e74c3c;
+}
+
+.form-message.info {
+  display: block;
+  background: rgba(52, 152, 219, 0.15);
+  border: 1px solid rgba(52, 152, 219, 0.3);
+  color: #3498db;
+}
+
+.form-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 600ms linear infinite;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.contact-footer {
+  text-align: center;
+  margin-top: 32px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.contact-footer a {
+  color: var(--win11-accent);
+  text-decoration: none;
+  transition: color 150ms;
+}
+
+.contact-footer a:hover {
+  color: #1066b0;
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .contact-layout {
+    padding: 20px;
+  }
+
+  .contact-form {
+    padding: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-hero h1 {
+    font-size: 24px;
+  }
+}
+</style>
+
+<div class="contact-layout">
+  <div class="contact-hero">
+    <div class="contact-icon">✉️</div>
+    <h1>Get In Touch</h1>
+    <p>Have a question or want to collaborate? I'd love to hear from you!</p>
+  </div>
+
+  <div class="contact-container">
+    <div class="contact-form">
+      <div class="form-message" id="formMessage"></div>
+
+      <form id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">
+              Full Name <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-input"
+              id="nameInput"
+              name="name"
+              placeholder="Your name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              Email <span class="required">*</span>
+            </label>
+            <input
+              type="email"
+              class="form-input"
+              id="emailInput"
+              name="email"
+              placeholder="your@email.com"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            Subject <span class="required">*</span>
+          </label>
+          <input
+            type="text"
+            class="form-input"
+            id="subjectInput"
+            name="subject"
+            placeholder="What is this about?"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            Message <span class="required">*</span>
+          </label>
+          <textarea
+            class="form-textarea"
+            id="messageInput"
+            name="message"
+            placeholder="Your message here... Tell me everything!"
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-send" id="sendBtn">
+            <span class="btn-send-text">Send Message</span>
+          </button>
+          <button type="reset" class="btn-reset">Clear</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="contact-footer">
+      <p>
+        I typically respond within 24 hours.<br />
+        You can also reach me on
+        <a href="https://linkedin.com/in/oke-precious" target="_blank"
+          >LinkedIn</a
+        >
+        or
+        <a href="https://github.com/Oke-Precious" target="_blank">GitHub</a>.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const form = document.getElementById('contactForm');
+  const sendBtn = document.getElementById('sendBtn');
+  const formMessage = document.getElementById('formMessage');
+
+  function showMessage(type, text) {
+    formMessage.className = `form-message ${type}`;
+    formMessage.innerHTML = text;
+    formMessage.style.display = 'block';
+  }
+
+  function hideMessage() {
+    formMessage.style.display = 'none';
+  }
+
+  function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Get form values
+    const name = document.getElementById('nameInput').value.trim();
+    const email = document.getElementById('emailInput').value.trim();
+    const subject = document.getElementById('subjectInput').value.trim();
+    const message = document.getElementById('messageInput').value.trim();
+
+    // Validate
+    if (!name) {
+      showMessage('error', '❌ Please enter your name');
+      return;
+    }
+
+    if (!email || !validateEmail(email)) {
+      showMessage('error', '❌ Please enter a valid email address');
+      return;
+    }
+
+    if (!subject) {
+      showMessage('error', '❌ Please enter a subject');
+      return;
+    }
+
+    if (!message) {
+      showMessage('error', '❌ Please enter a message');
+      return;
+    }
+
+    // Show sending state
+    sendBtn.classList.add('sending');
+    sendBtn.disabled = true;
+    const btnText = sendBtn.querySelector('.btn-send-text');
+    btnText.innerHTML =
+      '<span class="form-spinner"></span>Sending...';
+
+    try {
+      // Simulate sending (replace with real endpoint)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Log the data (in production, send to backend)
+      console.log('Contact form submitted:', { name, email, subject, message });
+
+      // Show success
+      showMessage(
+        'success',
+        '✅ Message sent successfully! I\'ll get back to you soon.'
+      );
+
+      // Reset form
+      form.reset();
+
+      // Reset button
+      setTimeout(() => {
+        sendBtn.classList.remove('sending');
+        sendBtn.disabled = false;
+        btnText.innerHTML = 'Send Message';
+        hideMessage();
+      }, 3000);
+    } catch (error) {
+      showMessage('error', '❌ Failed to send message. Please try again.');
+      sendBtn.classList.remove('sending');
+      sendBtn.disabled = false;
+      btnText.innerHTML = 'Send Message';
+    }
+  });
+})();
+</script>
