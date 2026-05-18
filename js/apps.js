@@ -6,6 +6,52 @@
   'use strict';
 
   /* ============================================================
+     Dynamic Base Path Resolution
+     Handles both local (file://, localhost, 127.0.0.1) and
+     production (Netlify) environments
+     ============================================================ */
+
+  const getBasePath = () => {
+    const href = window.location.href;
+    
+    // For file:// protocol (local file system)
+    if (href.startsWith('file://')) {
+      return './';
+    }
+    
+    // For localhost/127.0.0.1 (Live Server, local HTTP servers)
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return './';
+    }
+    
+    // For production environments (Netlify, etc.)
+    // If running from subdirectory, extract the base path
+    const path = window.location.pathname;
+    if (path.length > 1 && !path.includes('/index.html') && !path.includes('.html')) {
+      return path.endsWith('/') ? path : path + '/';
+    }
+    
+    // Default to relative path
+    return './';
+  };
+
+  const BASE_PATH = getBasePath();
+  
+  // Resolve file paths relative to BASE_PATH
+  const resolvePath = (filePath) => {
+    // If filePath starts with ./, already relative
+    if (filePath.startsWith('./')) {
+      return BASE_PATH === './' ? filePath : BASE_PATH + filePath.substring(2);
+    }
+    // If filePath starts with /, it's absolute (shouldn't happen with our setup)
+    if (filePath.startsWith('/')) {
+      return BASE_PATH + filePath.substring(1);
+    }
+    // Otherwise, treat as relative
+    return BASE_PATH + filePath;
+  };
+
+  /* ============================================================
      SVG Icons (16px for taskbar)
      ============================================================ */
 
@@ -329,7 +375,8 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 
     if (app.htmlFile) {
       // Use fetch with proper error handling for file:// protocol
-      fetch(app.htmlFile)
+      const resolvedPath = resolvePath(app.htmlFile);
+      fetch(resolvedPath)
         .then(response => {
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
           return response.text();
@@ -373,10 +420,15 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           }
         })
         .catch(error => {
-          // Fallback: show error message
+          // Enhanced error handling with path debugging
+          const errorMsg = `Failed to load ${app.title || appId}. Path: ${resolvedPath}`;
+          console.error(errorMsg, error);
+          
           contentEl.innerHTML = `<div style="padding:32px;color:rgba(255,255,255,0.4);font-size:13px;">
-            Could not load ${app.title || appId}<br><br>
-            <span style="font-size:12px;opacity:0.5">Network error. Make sure all app HTML files exist in the apps/ folder.</span>
+            <strong>Could not load ${app.title || appId}</strong><br><br>
+            <span style="font-size:12px;opacity:0.6;">Error: ${error.message || 'Unknown error'}</span><br>
+            <span style="font-size:11px;opacity:0.4;">Tried loading from: ${resolvedPath}</span><br>
+            <span style="font-size:12px;opacity:0.5;">Make sure all app HTML files exist in the apps/ folder.</span>
           </div>`;
         });
     }
@@ -387,5 +439,21 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
      ============================================================ */
 
   document.addEventListener('DOMContentLoaded', initializeStartMenu);
+
+  /* ============================================================
+     Expose path utilities for debugging
+     ============================================================ */
+
+  window.__DEBUG = window.__DEBUG || {};
+  window.__DEBUG.basePath = BASE_PATH;
+  window.__DEBUG.resolvePath = resolvePath;
+  window.__DEBUG.getBasePath = getBasePath;
+  
+  // Log initialization info in development
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    console.log('[Portfolio] Initialized with dynamic path resolution');
+    console.log('[Portfolio] Base Path:', BASE_PATH);
+    console.log('[Portfolio] Full URL:', window.location.href);
+  }
 
 })();
