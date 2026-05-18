@@ -311,6 +311,14 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <p style="font-size:11px;color:rgba(255,255,255,0.35);">Version 2.0 &mdash; Built with vanilla JS</p>
         </div>
       `
+    },
+    'personalize': {
+      id: 'personalize',
+      title: 'Personalization',
+      icon: ICONS.personalize,
+      htmlFile: './apps/personalize.html',
+      width: 900,
+      height: 700
     }
   };
 

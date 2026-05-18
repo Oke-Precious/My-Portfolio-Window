@@ -299,8 +299,6 @@
   // Get button elements
   const printBtn = document.getElementById('printBtn');
   const downloadDocxBtn = document.getElementById('downloadDocxBtn');
-  const downloadPdfBtn = document.getElementById('downloadPdfBtn');
-  const resumeContent = document.getElementById('resumeContent');
 
   // Print functionality
   printBtn.addEventListener('click', () => {
@@ -310,11 +308,6 @@
   // Download DOCX file
   downloadDocxBtn.addEventListener('click', () => {
     downloadDocx();
-  });
-
-  // Download as PDF
-  downloadPdfBtn.addEventListener('click', () => {
-    downloadPDF();
   });
 
   // Function to download DOCX file
@@ -353,46 +346,5 @@
       downloadDocxBtn.textContent = originalText;
     }, 2000);
   }
-
-  // Function to download resume as PDF
-  function downloadPDF() {
-    // Check if html2pdf library is available
-    if (typeof html2pdf === 'undefined') {
-      // Fallback: load library from CDN and then generate PDF
-      const script = document.createElement('script');
-      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-      script.onload = generatePDF;
-      document.head.appendChild(script);
-    } else {
-      generatePDF();
-    }
-  }
-
-  function generatePDF() {
-    const element = document.getElementById('resumeContent');
-    const filename = 'Oke_Precious_Abioye_Resume.pdf';
-
-    // HTML to PDF options
-    const options = {
-      margin: 10,
-      filename: filename,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, logging: false },
-      jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-    };
-
-    // Generate PDF
-    html2pdf().set(options).from(element).save();
-  }
-
-  // Show feedback on download buttons
-  downloadPdfBtn.addEventListener('click', () => {
-    const originalText = downloadPdfBtn.textContent;
-    downloadPdfBtn.textContent = '⏳ Generating...';
-    setTimeout(() => {
-      downloadPdfBtn.textContent = originalText;
-    }, 2000);
-  });
 })();
 </script>
