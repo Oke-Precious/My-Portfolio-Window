@@ -125,7 +125,7 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       id: 'file-explorer',
       title: 'My Projects',
       icon: ICONS.fileExplorer,
-      htmlFile: 'apps/file-explorer.html',
+      htmlFile: './apps/file-explorer.html',
       width: 960,
       height: 620
     },
@@ -133,7 +133,7 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       id: 'settings',
       title: 'Settings',
       icon: ICONS.settings,
-      htmlFile: 'apps/settings.html',
+      htmlFile: './apps/settings.html',
       width: 960,
       height: 700
     },
@@ -141,7 +141,7 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       id: 'notepad',
       title: 'Resume',
       icon: ICONS.notepad,
-      htmlFile: 'apps/notepad.html',
+      htmlFile: './apps/notepad.html',
       width: 960,
       height: 700
     },
@@ -149,7 +149,7 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       id: 'edge',
       title: 'GitHub',
       icon: ICONS.edge,
-      htmlFile: 'apps/edge-browser.html',
+      htmlFile: './apps/edge-browser.html',
       width: 1000,
       height: 700
     },
@@ -157,7 +157,7 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       id: 'recycle-bin',
       title: 'Recycle Bin',
       icon: ICONS.recycleBin,
-      htmlFile: 'apps/recycle-bin.html',
+      htmlFile: './apps/recycle-bin.html',
       width: 780,
       height: 560
     },
@@ -165,7 +165,7 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       id: 'calculator',
       title: 'Calculator',
       icon: ICONS.calculator,
-      htmlFile: 'apps/calculator.html',
+      htmlFile: './apps/calculator.html',
       width: 340,
       height: 520
     },
@@ -173,7 +173,7 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       id: 'game',
       title: 'Snake Game',
       icon: ICONS.game,
-      htmlFile: 'apps/game.html',
+      htmlFile: './apps/game.html',
       width: 500,
       height: 620
     },
@@ -181,7 +181,7 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       id: 'expertise',
       title: 'Expertise',
       icon: ICONS.expertise,
-      htmlFile: 'apps/expertise.html',
+      htmlFile: './apps/expertise.html',
       width: 800,
       height: 600
     },
@@ -189,7 +189,7 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       id: 'services',
       title: 'Services',
       icon: ICONS.services,
-      htmlFile: 'apps/services.html',
+      htmlFile: './apps/services.html',
       width: 900,
       height: 640
     },
@@ -197,7 +197,7 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       id: 'portfolio-viewer',
       title: 'Portfolio',
       icon: ICONS.portfolioViewer,
-      htmlFile: 'apps/portfolio-viewer.html',
+      htmlFile: './apps/portfolio-viewer.html',
       width: 900,
       height: 650
     },
@@ -205,7 +205,7 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       id: 'contact',
       title: 'Contact Me',
       icon: ICONS.services,
-      htmlFile: 'apps/contact.html',
+      htmlFile: './apps/contact.html',
       width: 700,
       height: 750
     },
