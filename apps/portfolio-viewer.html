@@ -1,4 +1,4 @@
-<!-- Portfolio Case Study Viewer -->
+<!-- Portfolio & Resume Viewer -->
 <style>
 .pv-root {
   display: flex;
@@ -7,6 +7,30 @@
   font-family: var(--win11-font);
   background: rgba(0, 0, 0, 0.2);
   overflow: hidden;
+}
+
+.pv-tabs {
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0 16px;
+}
+
+.pv-tab {
+  padding: 12px 20px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  border-bottom: 2px solid transparent;
+  transition: all 200ms;
+  white-space: nowrap;
+}
+
+.pv-tab:hover { color: rgba(255, 255, 255, 0.7); }
+.pv-tab.active { 
+  color: #667eea;
+  border-bottom-color: #667eea;
 }
 
 .pv-layout {
@@ -266,10 +290,151 @@
 .pv-content::-webkit-scrollbar { width: 5px; }
 .pv-content::-webkit-scrollbar-track { background: transparent; }
 .pv-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+/* Resume Styles */
+.pv-resume-header {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(102, 126, 234, 0.05) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 24px;
+}
+
+.pv-resume-name {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.pv-resume-title {
+  font-size: 13px;
+  color: #667eea;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.pv-resume-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pv-resume-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pv-resume-contact-item a {
+  color: #667eea;
+  text-decoration: none;
+  transition: color 200ms;
+}
+
+.pv-resume-contact-item a:hover { color: #a5b4fc; }
+
+.pv-resume-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pv-resume-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.pv-resume-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #667eea;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pv-resume-section-title::before {
+  content: '';
+  width: 10px;
+  height: 2px;
+  background: #667eea;
+  border-radius: 1px;
+}
+
+.pv-resume-item {
+  margin-bottom: 12px;
+}
+
+.pv-resume-item:last-child { margin-bottom: 0; }
+
+.pv-resume-item-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 2px;
+}
+
+.pv-resume-item-subtitle {
+  font-size: 11px;
+  color: #667eea;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.pv-resume-item-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.6;
+}
+
+.pv-skill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.pv-skill-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 150ms;
+}
+
+.pv-skill-item:hover {
+  background: rgba(102, 126, 234, 0.15);
+  border-color: rgba(102, 126, 234, 0.3);
+  color: #a5b4fc;
+}
+
+.pv-summary {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.8;
+}
+
 </style>
 
 <div class="pv-root">
-  <div class="pv-layout">
+  <!-- Tab Navigation -->
+  <div class="pv-tabs">
+    <div class="pv-tab active" data-tab="portfolio">Portfolio</div>
+    <div class="pv-tab" data-tab="resume">Resume</div>
+  </div>
+
+  <!-- Portfolio View -->
+  <div id="portfolio-view" class="pv-layout">
     <div class="pv-sidebar">
       <div class="pv-sidebar-header">
         <div class="pv-sidebar-title">Projects</div>
@@ -283,6 +448,97 @@
         <div class="pv-empty">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
           Select a project to view case study
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resume View -->
+  <div id="resume-view" style="display: none; flex: 1; overflow: hidden; flex-direction: column;">
+    <div class="pv-resume-header">
+      <div class="pv-resume-name">Oke Precious Abioye</div>
+      <div class="pv-resume-title">Full-Stack JavaScript Developer</div>
+      <div class="pv-resume-contact">
+        <div class="pv-resume-contact-item">📧 <a href="mailto:okeprecido@gmail.com">okeprecido@gmail.com</a></div>
+        <div class="pv-resume-contact-item">📱 +234 810 123 8416</div>
+        <div class="pv-resume-contact-item">📍 Ogbomoso, Nigeria</div>
+        <div class="pv-resume-contact-item"><a href="https://github.com/Oke-Precious" target="_blank">GitHub</a></div>
+        <div class="pv-resume-contact-item"><a href="https://specialdev.netlify.app" target="_blank">Portfolio</a></div>
+      </div>
+    </div>
+    <div class="pv-resume-content">
+      <!-- Professional Summary -->
+      <div class="pv-resume-section">
+        <div class="pv-resume-section-title">Professional Summary</div>
+        <p class="pv-summary">Passionate Computer Science final-year student at LAUTECH and intern at SQI College of ICT. Specialized in JavaScript with 10+ projects built, including e-commerce and banking systems. Actively integrating AI tools into development workflows for productivity and currently learning Firebase for backend integration.</p>
+      </div>
+
+      <!-- Education -->
+      <div class="pv-resume-section">
+        <div class="pv-resume-section-title">Education</div>
+        <div class="pv-resume-item">
+          <div class="pv-resume-item-title">B.Sc. Computer Science</div>
+          <div class="pv-resume-item-subtitle">Ladoke Akintola University of Technology (LAUTECH)</div>
+          <div class="pv-resume-item-desc">Level 400 (Current) | 2022 – Present</div>
+        </div>
+      </div>
+
+      <!-- Experience -->
+      <div class="pv-resume-section">
+        <div class="pv-resume-section-title">Professional Experience</div>
+        <div class="pv-resume-item">
+          <div class="pv-resume-item-title">Software Development Intern</div>
+          <div class="pv-resume-item-subtitle">SQI College of ICT</div>
+          <div class="pv-resume-item-desc">2025/2026 – Present</div>
+          <div class="pv-resume-item-desc" style="margin-top: 6px; color: rgba(255, 255, 255, 0.55);">Building and maintaining web applications in a professional setting. Collaborating on UI design, debugging, and testing. Leveraging AI tools to accelerate development.</div>
+        </div>
+      </div>
+
+      <!-- Technical Skills -->
+      <div class="pv-resume-section">
+        <div class="pv-resume-section-title">Technical Skills</div>
+        <div style="margin-bottom: 12px;">
+          <div style="font-size: 11.5px; color: rgba(255, 255, 255, 0.6); font-weight: 600; margin-bottom: 6px;">Languages</div>
+          <div class="pv-skill-grid">
+            <div class="pv-skill-item">JavaScript (ES6+)</div>
+            <div class="pv-skill-item">HTML5</div>
+            <div class="pv-skill-item">CSS3</div>
+            <div class="pv-skill-item">English</div>
+            <div class="pv-skill-item">Yoruba</div>
+          </div>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <div style="font-size: 11.5px; color: rgba(255, 255, 255, 0.6); font-weight: 600; margin-bottom: 6px;">Front-End</div>
+          <div class="pv-skill-grid">
+            <div class="pv-skill-item">DOM Manipulation</div>
+            <div class="pv-skill-item">Responsive Design</div>
+            <div class="pv-skill-item">CSS Flexbox</div>
+            <div class="pv-skill-item">CSS Grid</div>
+            <div class="pv-skill-item">CSS Animations</div>
+          </div>
+        </div>
+        <div style="margin-bottom: 0;">
+          <div style="font-size: 11.5px; color: rgba(255, 255, 255, 0.6); font-weight: 600; margin-bottom: 6px;">Tools & Concepts</div>
+          <div class="pv-skill-grid">
+            <div class="pv-skill-item">Git & GitHub</div>
+            <div class="pv-skill-item">Firebase (Learning)</div>
+            <div class="pv-skill-item">VS Code</div>
+            <div class="pv-skill-item">REST APIs</div>
+            <div class="pv-skill-item">Async/Await</div>
+            <div class="pv-skill-item">Local Storage</div>
+            <div class="pv-skill-item">OOP Principles</div>
+            <div class="pv-skill-item">Form Validation</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Certifications -->
+      <div class="pv-resume-section">
+        <div class="pv-resume-section-title">Certifications & Achievements</div>
+        <div class="pv-resume-item">
+          <div style="font-size: 12px; color: rgba(255, 255, 255, 0.65); margin-bottom: 6px;">✓ Professional in Software Engineering (Ongoing at SQI - 2026)</div>
+          <div style="font-size: 12px; color: rgba(255, 255, 255, 0.65); margin-bottom: 6px;">✓ 10+ JavaScript projects published on GitHub</div>
+          <div style="font-size: 12px; color: rgba(255, 255, 255, 0.65);">✓ Proficiency in leveraging AI for efficient coding and debugging</div>
         </div>
       </div>
     </div>
@@ -345,6 +601,19 @@
       demo: '#'
     },
     {
+      id: 'shapes-calculator',
+      name: 'Shapes Area Calculator',
+      category: 'Utility Application',
+      stack: ['JavaScript', 'HTML', 'CSS'],
+      stackColors: ['#F7DF1E', '#e34c26', '#264de4'],
+      desc: 'Interactive geometric calculator for computing areas of various shapes with a dynamic, user-friendly interface and real-time calculations.',
+      challenge: 'Creating a calculator that could handle multiple shape types while maintaining an intuitive UI and providing instant visual feedback as users enter values.',
+      solution: 'Built with vanilla JavaScript utilizing DOM manipulation for real-time calculations. Implemented shape-specific input fields that appear based on user selection. Used CSS Grid and Flexbox for responsive layout and added smooth animations for enhanced user experience.',
+      image: 'https://images.unsplash.com/photo-1579822261290-991b38693d1f?w=800&q=70',
+      github: 'https://github.com/Oke-Precious',
+      demo: '#'
+    },
+    {
       id: 'weather-dash',
       name: 'Weather Dashboard',
       category: 'API Integration',
@@ -362,6 +631,25 @@
   const listEl = document.getElementById('pv-list');
   const detailEl = document.getElementById('pv-detail');
   const searchEl = document.getElementById('pv-search');
+  const tabs = document.querySelectorAll('.pv-tab');
+  const portfolioView = document.getElementById('portfolio-view');
+  const resumeView = document.getElementById('resume-view');
+
+  // Tab switching
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      
+      if (tab.dataset.tab === 'resume') {
+        portfolioView.style.display = 'none';
+        resumeView.style.display = 'flex';
+      } else {
+        portfolioView.style.display = 'flex';
+        resumeView.style.display = 'none';
+      }
+    });
+  });
 
   function renderList(filter = '') {
     const filtered = projects.filter(p =>
