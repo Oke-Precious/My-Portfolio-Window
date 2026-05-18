@@ -1,0 +1,355 @@
+<!-- Resume Viewer with PDF Download -->
+<style>
+.resume-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: var(--win11-font);
+  background: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.resume-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 12px 16px;
+}
+
+.resume-title-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.resume-action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.resume-btn {
+  padding: 6px 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 150ms;
+  font-family: var(--win11-font);
+}
+
+.resume-btn:hover {
+  background: rgba(102, 126, 234, 0.2);
+  border-color: rgba(102, 126, 234, 0.4);
+}
+
+.resume-btn:active {
+  background: rgba(102, 126, 234, 0.3);
+}
+
+.resume-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.resume-header {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(102, 126, 234, 0.05) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 24px;
+  margin: -24px -24px 0 -24px;
+  border-radius: 8px 8px 0 0;
+}
+
+.resume-name {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.resume-title {
+  font-size: 13px;
+  color: #667eea;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.resume-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.resume-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.resume-contact-item a {
+  color: #667eea;
+  text-decoration: none;
+  transition: color 200ms;
+}
+
+.resume-contact-item a:hover { color: #a5b4fc; }
+
+.resume-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.resume-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #667eea;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.resume-section-title::before {
+  content: '';
+  width: 10px;
+  height: 2px;
+  background: #667eea;
+  border-radius: 1px;
+}
+
+.resume-item {
+  margin-bottom: 12px;
+}
+
+.resume-item:last-child { margin-bottom: 0; }
+
+.resume-item-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 2px;
+}
+
+.resume-item-subtitle {
+  font-size: 11px;
+  color: #667eea;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.resume-item-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.6;
+}
+
+.resume-summary {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.8;
+}
+
+.resume-skill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.resume-skill-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 150ms;
+}
+
+.resume-skill-item:hover {
+  background: rgba(102, 126, 234, 0.15);
+  border-color: rgba(102, 126, 234, 0.3);
+  color: #a5b4fc;
+}
+
+@media print {
+  .resume-header-bar { display: none; }
+  .resume-content { padding: 20px; overflow: visible; }
+  .resume-header { margin: 0; border-radius: 0; }
+}
+</style>
+
+<div class="resume-root">
+  <!-- Action Bar -->
+  <div class="resume-header-bar">
+    <div class="resume-title-text">Resume / Curriculum Vitae</div>
+    <div class="resume-action-buttons">
+      <button class="resume-btn" id="printBtn" title="Print Resume">🖨️ Print</button>
+      <button class="resume-btn" id="downloadBtn" title="Download as PDF">⬇️ Download PDF</button>
+    </div>
+  </div>
+
+  <!-- Resume Content -->
+  <div class="resume-content" id="resumeContent">
+    <!-- Header -->
+    <div class="resume-header">
+      <div class="resume-name">Oke Precious Abioye</div>
+      <div class="resume-title">Full-Stack JavaScript Developer</div>
+      <div class="resume-contact">
+        <div class="resume-contact-item">📧 <a href="mailto:okeprecido@gmail.com">okeprecido@gmail.com</a></div>
+        <div class="resume-contact-item">📱 +234 810 123 8416</div>
+        <div class="resume-contact-item">📍 Ogbomoso, Nigeria</div>
+        <div class="resume-contact-item"><a href="https://github.com/Oke-Precious" target="_blank">GitHub</a></div>
+        <div class="resume-contact-item"><a href="https://specialdev.netlify.app" target="_blank">Portfolio</a></div>
+      </div>
+    </div>
+
+    <!-- Professional Summary -->
+    <div class="resume-section">
+      <div class="resume-section-title">Professional Summary</div>
+      <p class="resume-summary">Passionate Computer Science final-year student at LAUTECH and intern at SQI College of ICT. Specialized in JavaScript with 10+ projects built, including e-commerce and banking systems. Actively integrating AI tools into development workflows for productivity and currently learning Firebase for backend integration.</p>
+    </div>
+
+    <!-- Education -->
+    <div class="resume-section">
+      <div class="resume-section-title">Education</div>
+      <div class="resume-item">
+        <div class="resume-item-title">B.Sc. Computer Science</div>
+        <div class="resume-item-subtitle">Ladoke Akintola University of Technology (LAUTECH)</div>
+        <div class="resume-item-desc">Level 400 (Current) | 2022 – Present</div>
+      </div>
+    </div>
+
+    <!-- Professional Experience -->
+    <div class="resume-section">
+      <div class="resume-section-title">Professional Experience</div>
+      <div class="resume-item">
+        <div class="resume-item-title">Software Development Intern</div>
+        <div class="resume-item-subtitle">SQI College of ICT</div>
+        <div class="resume-item-desc">2025/2026 – Present</div>
+        <div class="resume-item-desc" style="margin-top: 6px; color: rgba(255, 255, 255, 0.55);">Building and maintaining web applications in a professional setting. Collaborating on UI design, debugging, and testing. Leveraging AI tools to accelerate development.</div>
+      </div>
+    </div>
+
+    <!-- Technical Skills -->
+    <div class="resume-section">
+      <div class="resume-section-title">Technical Skills</div>
+      <div style="margin-bottom: 12px;">
+        <div style="font-size: 11.5px; color: rgba(255, 255, 255, 0.6); font-weight: 600; margin-bottom: 6px;">Languages</div>
+        <div class="resume-skill-grid">
+          <div class="resume-skill-item">JavaScript (ES6+)</div>
+          <div class="resume-skill-item">HTML5</div>
+          <div class="resume-skill-item">CSS3</div>
+          <div class="resume-skill-item">English</div>
+          <div class="resume-skill-item">Yoruba</div>
+        </div>
+      </div>
+      <div style="margin-bottom: 12px;">
+        <div style="font-size: 11.5px; color: rgba(255, 255, 255, 0.6); font-weight: 600; margin-bottom: 6px;">Front-End</div>
+        <div class="resume-skill-grid">
+          <div class="resume-skill-item">DOM Manipulation</div>
+          <div class="resume-skill-item">Responsive Design</div>
+          <div class="resume-skill-item">CSS Flexbox</div>
+          <div class="resume-skill-item">CSS Grid</div>
+          <div class="resume-skill-item">CSS Animations</div>
+        </div>
+      </div>
+      <div style="margin-bottom: 0;">
+        <div style="font-size: 11.5px; color: rgba(255, 255, 255, 0.6); font-weight: 600; margin-bottom: 6px;">Tools & Concepts</div>
+        <div class="resume-skill-grid">
+          <div class="resume-skill-item">Git & GitHub</div>
+          <div class="resume-skill-item">Firebase (Learning)</div>
+          <div class="resume-skill-item">VS Code</div>
+          <div class="resume-skill-item">REST APIs</div>
+          <div class="resume-skill-item">Async/Await</div>
+          <div class="resume-skill-item">Local Storage</div>
+          <div class="resume-skill-item">OOP Principles</div>
+          <div class="resume-skill-item">Form Validation</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certifications -->
+    <div class="resume-section">
+      <div class="resume-section-title">Certifications & Achievements</div>
+      <div class="resume-item">
+        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.65); margin-bottom: 6px;">✓ Professional in Software Engineering (Ongoing at SQI - 2026)</div>
+        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.65); margin-bottom: 6px;">✓ 10+ JavaScript projects published on GitHub</div>
+        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.65);">✓ Proficiency in leveraging AI for efficient coding and debugging</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  // Get button elements
+  const printBtn = document.getElementById('printBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const resumeContent = document.getElementById('resumeContent');
+
+  // Print functionality
+  printBtn.addEventListener('click', () => {
+    window.print();
+  });
+
+  // Download as PDF using html2pdf library
+  downloadBtn.addEventListener('click', () => {
+    downloadPDF();
+  });
+
+  // Function to download resume as PDF
+  function downloadPDF() {
+    // Check if html2pdf library is available
+    if (typeof html2pdf === 'undefined') {
+      // Fallback: load library from CDN and then generate PDF
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+      script.onload = generatePDF;
+      document.head.appendChild(script);
+    } else {
+      generatePDF();
+    }
+  }
+
+  function generatePDF() {
+    const element = document.getElementById('resumeContent');
+    const filename = 'Oke_Precious_Abioye_Resume.pdf';
+
+    // HTML to PDF options
+    const options = {
+      margin: 10,
+      filename: filename,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
+      jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    // Generate PDF
+    html2pdf().set(options).from(element).save();
+  }
+
+  // Show a temporary message when download starts
+  downloadBtn.addEventListener('click', () => {
+    const originalText = downloadBtn.textContent;
+    downloadBtn.textContent = '⏳ Generating...';
+    setTimeout(() => {
+      downloadBtn.textContent = originalText;
+    }, 2000);
+  });
+})();
+</script>

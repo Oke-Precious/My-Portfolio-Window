@@ -159,6 +159,17 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <circle cx="12" cy="12" r="10" fill="url(#ab-g)"/>
       <circle cx="12" cy="7" r="1.5" fill="white"/>
       <rect x="11" y="10" width="2" height="8" rx="1" fill="white"/>
+    </svg>`,
+
+    resume: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="res-g" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:#AB47BC"/><stop offset="100%" style="stop-color:#7B1FA2"/>
+      </linearGradient></defs>
+      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" fill="url(#res-g)"/>
+      <path d="M14 2v6h6" fill="#6A1B9A"/>
+      <circle cx="12" cy="11" r="1.5" fill="white" opacity="0.8"/>
+      <path d="M8 15h8M8 18h6" stroke="white" stroke-width="1" opacity="0.6"/>
+      <path d="M8 13h4" stroke="white" stroke-width="1.5" opacity="0.9"/>
     </svg>`
   };
 
@@ -185,10 +196,18 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
     },
     'notepad': {
       id: 'notepad',
-      title: 'Resume',
+      title: 'Notepad',
       icon: ICONS.notepad,
       htmlFile: './apps/notepad.html',
       width: 960,
+      height: 700
+    },
+    'resume': {
+      id: 'resume',
+      title: 'Resume',
+      icon: ICONS.resume,
+      htmlFile: './apps/resume.html',
+      width: 900,
       height: 700
     },
     'edge': {
@@ -306,7 +325,7 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 
   window.__DESKTOP_LAUNCH_MAP = {
     'my-projects': 'file-explorer',
-    'resume': 'notepad',
+
     'github': 'edge',
     'recycle-bin': 'recycle-bin',
     'about': 'settings',
