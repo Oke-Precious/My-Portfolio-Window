@@ -1,11 +1,1483 @@
-<!-- Settings - About Me & Skills -->
-<style>
-.sett-layout {
-  display: flex;
-  height: 100%;
-  font-family: var(--win11-font);
-  background: rgba(0, 0, 0, 0.15);
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      color: var(--win11-text);
+      background: var(--win11-bg-glass);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .settings-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    .settings-header h1 {
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .breadcrumb {
+      font-size: 12px;
+      color: var(--win11-text-secondary);
+    }
+
+    /* Main container */
+    .settings-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    .settings-sidebar {
+      width: 280px;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .sidebar-section {
+      padding: 8px 0;
+    }
+
+    .sidebar-section-title {
+      padding: 12px 16px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--win11-text-secondary);
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-item {
+      padding: 10px 16px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 150ms ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      user-select: none;
+    }
+
+    .sidebar-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .sidebar-item.active {
+      border-left-color: var(--win11-accent);
+      background: rgba(var(--win11-accent-rgb), 0.1);
+      color: var(--win11-accent);
+    }
+
+    .sidebar-icon {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    /* Content Area */
+    .settings-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    .content-section {
+      display: none;
+      animation: fadeIn 150ms ease;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Section Heading */
+    .section-heading {
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+
+    .section-breadcrumb {
+      font-size: 12px;
+      color: var(--win11-text-secondary);
+      margin-bottom: 12px;
+    }
+
+    /* Group containers */
+    .settings-group {
+      margin-bottom: 32px;
+    }
+
+    .group-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .settings-item {
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .settings-item:last-child {
+      border-bottom: none;
+    }
+
+    .settings-item-left {
+      flex: 1;
+    }
+
+    .settings-label {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .settings-description {
+      font-size: 12px;
+      color: var(--win11-text-secondary);
+    }
+
+    /* Range Slider */
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--win11-accent);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: all 150ms ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--win11-accent);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: all 150ms ease;
+    }
+
+    input[type="range"]::-moz-range-thumb:hover {
+      transform: scale(1.1);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Toggle Switch */
+    .toggle-switch {
+      width: 50px;
+      height: 28px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      cursor: pointer;
+      position: relative;
+      transition: all 200ms ease;
+      display: flex;
+      align-items: center;
+      padding: 2px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch.on {
+      background: var(--win11-accent);
+    }
+
+    .toggle-switch::after {
+      content: '';
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      position: absolute;
+      left: 2px;
+      transition: all 200ms ease;
+    }
+
+    .toggle-switch.on::after {
+      left: 24px;
+    }
+
+    /* Pill Toggle (two-state) */
+    .pill-toggle {
+      display: flex;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 4px;
+      gap: 4px;
+      width: fit-content;
+    }
+
+    .pill-toggle-btn {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      color: var(--win11-text-secondary);
+      cursor: pointer;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 150ms ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill-toggle-btn.active {
+      background: var(--win11-accent);
+      color: white;
+    }
+
+    /* Slider with icons */
+    .slider-with-icons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slider-icon {
+      font-size: 18px;
+      opacity: 0.6;
+    }
+
+    .slider-icon.left {
+      opacity: 0.5;
+    }
+
+    .slider-icon.right {
+      opacity: 1;
+    }
+
+    .slider-container {
+      flex: 1;
+    }
+
+    /* Button styles */
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      background: var(--win11-accent);
+      color: white;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 150ms ease;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--win11-text);
+    }
+
+    /* Network list */
+    .network-list {
+      margin-top: 16px;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    .network-item {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: background 150ms ease;
+    }
+
+    .network-item:last-child {
+      border-bottom: none;
+    }
+
+    .network-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .network-info {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .network-icon {
+      font-size: 16px;
+    }
+
+    .network-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .network-name {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .network-status {
+      font-size: 11px;
+      color: var(--win11-text-secondary);
+    }
+
+    .network-badge {
+      background: var(--win11-accent);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    /* Battery Card */
+    .battery-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .battery-visual {
+      width: 80px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .battery-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .battery-info {
+      flex: 1;
+    }
+
+    .battery-status {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .battery-estimate {
+      font-size: 12px;
+      color: var(--win11-text-secondary);
+    }
+
+    /* Power Mode */
+    .power-modes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .power-mode-card {
+      padding: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 150ms ease;
+      text-align: center;
+    }
+
+    .power-mode-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .power-mode-card.active {
+      border-color: var(--win11-accent);
+      background: rgba(var(--win11-accent-rgb), 0.1);
+    }
+
+    .power-mode-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .power-mode-label {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* Wallpaper Grid */
+    .wallpaper-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .wallpaper-swatch {
+      aspect-ratio: 16 / 10;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      overflow: hidden;
+      position: relative;
+      transition: all 150ms ease;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .wallpaper-swatch:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: scale(1.02);
+    }
+
+    .wallpaper-swatch.active {
+      border-color: var(--win11-accent);
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2), inset 0 0 0 2px var(--win11-accent);
+    }
+
+    .wallpaper-checkmark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--win11-accent);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 150ms ease;
+    }
+
+    .wallpaper-swatch.active .wallpaper-checkmark {
+      opacity: 1;
+    }
+
+    .wallpaper-name {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+      color: white;
+      padding: 8px 6px;
+      font-size: 11px;
+      font-weight: 500;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 150ms ease;
+    }
+
+    .wallpaper-swatch:hover .wallpaper-name {
+      opacity: 1;
+    }
+
+    /* Color Grid */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .color-swatch {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 150ms ease;
+      position: relative;
+    }
+
+    .color-swatch:hover {
+      transform: scale(1.05);
+    }
+
+    .color-swatch.active {
+      border-color: white;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+    }
+
+    .color-swatch.active::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Hotspot Card */
+    .hotspot-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+
+    .hotspot-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .hotspot-row:last-child {
+      border-bottom: none;
+    }
+
+    .hotspot-label {
+      font-size: 13px;
+      color: var(--win11-text-secondary);
+    }
+
+    .hotspot-value {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .password-field {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .password-toggle {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      opacity: 0.6;
+      transition: opacity 150ms ease;
+    }
+
+    .password-toggle:hover {
+      opacity: 1;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Light mode overrides */
+    body.light-mode {
+      color: #1a1a1a;
+    }
+
+    body.light-mode .sidebar-item {
+      color: #333;
+    }
+
+    body.light-mode .settings-group,
+    body.light-mode .network-list,
+    body.light-mode .battery-card,
+    body.light-mode .hotspot-card {
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    /* Modal for Wi-Fi connection */
+    .settings-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--win11-bg-glass);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 24px;
+      z-index: 1000;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      display: none;
+      min-width: 300px;
+    }
+
+    .settings-modal.active {
+      display: block;
+      animation: slideIn 200ms ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 999;
+      display: none;
+    }
+
+    .modal-overlay.active {
+      display: block;
+    }
+
+    .modal-header {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--win11-text);
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .modal-buttons .btn {
+      flex: 1;
+    }
+
+    .modal-buttons .btn.secondary {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+
+  <!-- Wi-Fi Modal -->
+  <div class="settings-modal" id="wifiModal">
+    <div class="modal-header">Connect to network</div>
+    <p style="font-size: 12px; color: var(--win11-text-secondary); margin-bottom: 12px;" id="wifiNetworkName"></p>
+    <input type="password" class="modal-input" id="wifiPassword" placeholder="Enter password">
+    <div class="modal-buttons">
+      <button class="btn secondary" onclick="closeWifiModal()">Cancel</button>
+      <button class="btn" onclick="connectToWifi()">Connect</button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="settings-header">
+    <h1>Settings</h1>
+    <div class="breadcrumb" id="sectionBreadcrumb">Settings > System > Display</div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="settings-container">
+    
+    <!-- Sidebar -->
+    <div class="settings-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">System</div>
+        <div class="sidebar-item active" data-section="display">
+          <div class="sidebar-icon">🖥️</div>
+          Display
+        </div>
+        <div class="sidebar-item" data-section="sound">
+          <div class="sidebar-icon">🔊</div>
+          Sound
+        </div>
+        <div class="sidebar-item" data-section="battery">
+          <div class="sidebar-icon">🔋</div>
+          Battery
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Network & Internet</div>
+        <div class="sidebar-item" data-section="network">
+          <div class="sidebar-icon">📡</div>
+          Wi-Fi & Networks
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Personalization</div>
+        <div class="sidebar-item" data-section="personalization">
+          <div class="sidebar-icon">🎨</div>
+          Personalization
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="settings-content">
+
+      <!-- ==================== DISPLAY ==================== -->
+      <div class="content-section active" data-section="display">
+        <div class="section-breadcrumb">Settings > System > Display</div>
+        <h2 class="section-heading">Display</h2>
+
+        <!-- Brightness -->
+        <div class="settings-group">
+          <div class="group-title">Brightness</div>
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <div class="settings-label">Adjust brightness</div>
+              <div class="settings-description">Current: <span id="brightnessValue">100</span>%</div>
+            </div>
+          </div>
+          <div class="slider-with-icons">
+            <div class="slider-icon left">☀️</div>
+            <div class="slider-container">
+              <input type="range" id="brightnessSlider" min="30" max="100" value="100">
+            </div>
+            <div class="slider-icon right">☀️</div>
+          </div>
+        </div>
+
+        <!-- Dark/Light Mode -->
+        <div class="settings-group">
+          <div class="group-title">Theme</div>
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <div class="settings-label">Dark or light mode</div>
+              <div class="settings-description">Choose your preferred theme</div>
+            </div>
+            <div class="pill-toggle" id="themeToggle">
+              <button class="pill-toggle-btn active" data-theme="dark">
+                <span>🌙</span> Dark
+              </button>
+              <button class="pill-toggle-btn" data-theme="light">
+                <span>☀️</span> Light
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Night Light -->
+        <div class="settings-group">
+          <div class="group-title">Night Light</div>
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <div class="settings-label">Night Light</div>
+              <div class="settings-description">Reduces blue light for comfortable viewing</div>
+            </div>
+            <button class="toggle-switch" id="nightLightToggle" data-setting="nightLight"></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== SOUND ==================== -->
+      <div class="content-section" data-section="sound">
+        <div class="section-breadcrumb">Settings > System > Sound</div>
+        <h2 class="section-heading">Sound</h2>
+
+        <!-- Volume -->
+        <div class="settings-group">
+          <div class="group-title">Volume</div>
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <div class="settings-label">Master Volume</div>
+              <div class="settings-description">Current: <span id="volumeValue">70</span>%</div>
+            </div>
+          </div>
+          <div class="slider-with-icons">
+            <div class="slider-icon left">🔇</div>
+            <div class="slider-container">
+              <input type="range" id="volumeSlider" min="0" max="100" value="70">
+            </div>
+            <div class="slider-icon right">🔊</div>
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <button class="btn" onclick="playTestChime()">🔊 Test Sound</button>
+            <button class="toggle-switch" id="muteToggle" data-setting="volumeMuted" style="width: auto;"></button>
+            <span style="font-size: 12px; color: var(--win11-text-secondary);" id="muteLabel">Mute</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== BATTERY ==================== -->
+      <div class="content-section" data-section="battery">
+        <div class="section-breadcrumb">Settings > System > Battery</div>
+        <h2 class="section-heading">Battery</h2>
+
+        <!-- Battery Status Card -->
+        <div class="battery-card">
+          <div class="battery-visual">
+            <svg class="battery-svg" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+              <!-- Battery outline -->
+              <rect x="8" y="12" width="76" height="36" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+              <!-- Battery nub -->
+              <rect x="86" y="22" width="6" height="16" rx="1" fill="currentColor"/>
+              <!-- Battery fill (animated) -->
+              <rect id="batteryFill" x="10" y="14" width="72" height="32" rx="3" fill="var(--win11-accent)"/>
+            </svg>
+          </div>
+          <div class="battery-info">
+            <div class="battery-status" id="batteryStatus">78% — Plugged in, charging</div>
+            <div class="battery-estimate" id="batteryTime">Estimated time remaining: 3 hours 24 minutes</div>
+          </div>
+        </div>
+
+        <!-- Battery Saver -->
+        <div class="settings-group">
+          <div class="group-title">Battery Saver</div>
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <div class="settings-label">Battery Saver</div>
+              <div class="settings-description">Extends battery life by limiting performance</div>
+            </div>
+            <button class="toggle-switch" id="batterySaverToggle" data-setting="batterySaver"></button>
+          </div>
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <div class="settings-label">Turn on automatically at</div>
+              <div class="settings-description">Enable battery saver when battery reaches this level</div>
+            </div>
+            <select style="padding: 8px 12px; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; background: rgba(255,255,255,0.05); color: var(--win11-text); font-size: 13px; cursor: pointer;">
+              <option>10%</option>
+              <option selected>20%</option>
+              <option>30%</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Power Mode -->
+        <div class="settings-group">
+          <div class="group-title">Power Mode</div>
+          <div class="power-modes">
+            <div class="power-mode-card" data-power-mode="efficiency">
+              <div class="power-mode-icon">⚡</div>
+              <div class="power-mode-label">Best power efficiency</div>
+            </div>
+            <div class="power-mode-card active" data-power-mode="balanced">
+              <div class="power-mode-icon">⚙️</div>
+              <div class="power-mode-label">Balanced</div>
+            </div>
+            <div class="power-mode-card" data-power-mode="performance">
+              <div class="power-mode-icon">🚀</div>
+              <div class="power-mode-label">Best performance</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== NETWORK ==================== -->
+      <div class="content-section" data-section="network">
+        <div class="section-breadcrumb">Settings > Network & Internet > Wi-Fi</div>
+        <h2 class="section-heading">Wi-Fi & Networks</h2>
+
+        <!-- Wi-Fi Toggle -->
+        <div class="settings-group">
+          <div class="group-title">Wi-Fi</div>
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <div class="settings-label">Wi-Fi</div>
+              <div class="settings-description" id="wifiStatus">Searching for networks...</div>
+            </div>
+            <button class="toggle-switch on" id="wifiToggle" data-setting="wifiEnabled"></button>
+          </div>
+        </div>
+
+        <!-- Network List -->
+        <div id="networkListContainer" style="display: none;">
+          <div class="group-title">Available networks</div>
+          <div class="network-list" id="networkList"></div>
+        </div>
+
+        <!-- Mobile Hotspot -->
+        <div class="settings-group">
+          <div class="group-title">Mobile Hotspot</div>
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <div class="settings-label">Mobile Hotspot</div>
+              <div class="settings-description">Share your internet connection</div>
+            </div>
+            <button class="toggle-switch" id="hotspotToggle" data-setting="hotspotEnabled"></button>
+          </div>
+          <div id="hotspotDetails" style="display: none;">
+            <div class="hotspot-card">
+              <div class="hotspot-row">
+                <span class="hotspot-label">Network name</span>
+                <span class="hotspot-value">Oke's Portfolio PC</span>
+              </div>
+              <div class="hotspot-row">
+                <span class="hotspot-label">Password</span>
+                <div class="password-field">
+                  <span class="hotspot-value" id="hotspotPassword">••••••••••••</span>
+                  <button class="password-toggle" onclick="toggleHotspotPassword()">👁️</button>
+                </div>
+              </div>
+              <div class="hotspot-row">
+                <span class="hotspot-label">Connected devices</span>
+                <span class="hotspot-value">0 devices</span>
+              </div>
+              <button class="btn" style="width: 100%; margin-top: 12px;">📤 Share</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Airplane Mode -->
+        <div class="settings-group">
+          <div class="group-title">Airplane Mode</div>
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <div class="settings-label">Airplane Mode</div>
+              <div class="settings-description">Disables Wi-Fi and hotspot</div>
+            </div>
+            <button class="toggle-switch" id="airplaneModeToggle" data-setting="airplaneModeEnabled"></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== PERSONALIZATION ==================== -->
+      <div class="content-section" data-section="personalization">
+        <div class="section-breadcrumb">Settings > Personalization</div>
+        <h2 class="section-heading">Personalization</h2>
+
+        <!-- Background -->
+        <div class="settings-group">
+          <div class="group-title">Background</div>
+          <div style="font-size: 12px; color: var(--win11-text-secondary); margin-bottom: 12px;">Choose from 8 beautiful wallpapers</div>
+          <div class="wallpaper-grid" id="settingsWallpaperGrid"></div>
+        </div>
+
+        <!-- Accent Color -->
+        <div class="settings-group">
+          <div class="group-title">Accent color</div>
+          <div style="font-size: 12px; color: var(--win11-text-secondary); margin-bottom: 12px;">Choose an accent color for UI elements</div>
+          <div class="color-grid" id="accentColorGrid"></div>
+        </div>
+
+        <!-- Theme (synced with Display) -->
+        <div class="settings-group">
+          <div class="group-title">Theme</div>
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <div class="settings-label">Dark or light mode</div>
+              <div class="settings-description">Choose your preferred theme</div>
+            </div>
+            <div class="pill-toggle" id="personalizationThemeToggle">
+              <button class="pill-toggle-btn active" data-theme="dark">
+                <span>🌙</span> Dark
+              </button>
+              <button class="pill-toggle-btn" data-theme="light">
+                <span>☀️</span> Light
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Get base path dynamically
+    function getBasePath() {
+      if (window.location.protocol === 'file:') {
+        return './';
+      }
+      const pathname = window.location.pathname;
+      if (pathname.includes('localhost') || pathname.includes('127.0.0.1')) {
+        return './';
+      }
+      // For production, extract the base path
+      const parts = pathname.split('/').filter(p => p && p !== 'apps' && p !== 'settings.html');
+      return parts.length > 0 ? '/' + parts.join('/') + '/' : './';
+    }
+
+    const BASE_PATH = getBasePath();
+
+    // ==================== SETTINGS STATE ====================
+    let settings = {
+      brightness: window.__win11?.brightness || 100,
+      theme: window.__win11?.theme || 'dark',
+      nightLight: window.__win11?.nightLight || false,
+      volume: window.__win11?.volume ? Math.round(window.__win11.volume * 100) : 70,
+      volumeMuted: window.__win11?.volumeMuted || false,
+      wifiEnabled: window.__win11?.wifiEnabled !== false,
+      wifiConnectedNetwork: window.__win11?.wifiConnectedNetwork || 'HomeNetwork_5G',
+      hotspotEnabled: window.__win11?.hotspotEnabled || false,
+      airplaneModeEnabled: window.__win11?.airplaneModeEnabled || false,
+      batterySaver: window.__win11?.batterySaver || false,
+      powerMode: window.__win11?.powerMode || 'balanced',
+      batteryLevel: window.__win11?.batteryLevel || 78
+    };
+
+    // ==================== SIDEBAR NAVIGATION ====================
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+      item.addEventListener('click', () => {
+        // Remove active from all
+        document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        const section = item.getAttribute('data-section');
+        showSection(section);
+      });
+    });
+
+    function showSection(section) {
+      // Hide all sections
+      document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+      // Show selected section
+      document.querySelector(`[data-section="${section}"].content-section`).classList.add('active');
+
+      // Update breadcrumb
+      const breadcrumbs = {
+        display: 'Settings > System > Display',
+        sound: 'Settings > System > Sound',
+        battery: 'Settings > System > Battery',
+        network: 'Settings > Network & Internet > Wi-Fi',
+        personalization: 'Settings > Personalization'
+      };
+      document.getElementById('sectionBreadcrumb').textContent = breadcrumbs[section] || 'Settings';
+    }
+
+    // ==================== BRIGHTNESS SLIDER ====================
+    const brightnessSlider = document.getElementById('brightnessSlider');
+    const brightnessValue = document.getElementById('brightnessValue');
+
+    brightnessSlider.addEventListener('input', (e) => {
+      const value = parseInt(e.target.value);
+      brightnessValue.textContent = value;
+      settings.brightness = value;
+      window.__win11.applyBrightness(value);
+    });
+
+    // ==================== THEME TOGGLE ====================
+    document.querySelectorAll('[id*="ThemeToggle"] .pill-toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const toggle = btn.parentElement;
+        toggle.querySelectorAll('.pill-toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const theme = btn.getAttribute('data-theme');
+        settings.theme = theme;
+        window.__win11.applyTheme(theme);
+
+        // Sync other theme toggles
+        document.querySelectorAll('[id*="ThemeToggle"] .pill-toggle-btn[data-theme="' + theme + '"]').forEach(b => {
+          b.classList.add('active');
+          b.parentElement.querySelectorAll('.pill-toggle-btn').forEach(x => {
+            if (x !== b) x.classList.remove('active');
+          });
+        });
+      });
+    });
+
+    // ==================== NIGHT LIGHT ====================
+    const nightLightToggle = document.getElementById('nightLightToggle');
+    nightLightToggle.addEventListener('click', () => {
+      nightLightToggle.classList.toggle('on');
+      settings.nightLight = nightLightToggle.classList.contains('on');
+      window.__win11.applyNightLight(settings.nightLight);
+      window.__win11.showToast(settings.nightLight ? '💤 Night Light on' : '💤 Night Light off');
+    });
+
+    // ==================== VOLUME SLIDER ====================
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumeValue = document.getElementById('volumeValue');
+
+    volumeSlider.addEventListener('input', (e) => {
+      const value = parseInt(e.target.value);
+      volumeValue.textContent = value;
+      settings.volume = value;
+      window.__win11.volume = value / 100;
+      window.__win11.saveSetting('volume', value);
+    });
+
+    function playTestChime() {
+      window.__win11.playTestChime();
+      window.__win11.showToast('🔊 Playing test sound');
+    }
+
+    // ==================== MUTE TOGGLE ====================
+    const muteToggle = document.getElementById('muteToggle');
+    muteToggle.addEventListener('click', () => {
+      muteToggle.classList.toggle('on');
+      settings.volumeMuted = muteToggle.classList.contains('on');
+      window.__win11.volumeMuted = settings.volumeMuted;
+      window.__win11.saveSetting('volumeMuted', settings.volumeMuted);
+      document.getElementById('muteLabel').textContent = settings.volumeMuted ? 'Unmute' : 'Mute';
+    });
+
+    // ==================== WI-FI TOGGLE ====================
+    const wifiToggle = document.getElementById('wifiToggle');
+    const networkListContainer = document.getElementById('networkListContainer');
+    const wifiStatus = document.getElementById('wifiStatus');
+
+    const networks = [
+      { name: 'HomeNetwork_5G', strength: 4, secured: true },
+      { name: 'Office-WiFi', strength: 3, secured: true },
+      { name: 'iPhone_Hotspot', strength: 2, secured: true },
+      { name: 'Guest_Network', strength: 2, secured: false },
+      { name: 'Public_WiFi', strength: 3, secured: false }
+    ];
+
+    function renderNetworks() {
+      const html = networks.map(net => `
+        <div class="network-item" onclick="openWifiModal('${net.name}')">
+          <div class="network-info">
+            <div class="network-icon">${net.secured ? '🔒' : '📡'}</div>
+            <div class="network-details">
+              <div class="network-name">${net.name}</div>
+              <div class="network-status">${Array(net.strength).fill('▮').join('')}${Array(4-net.strength).fill('▯').join('')}</div>
+            </div>
+          </div>
+          ${net.name === settings.wifiConnectedNetwork ? '<div class="network-badge">Connected</div>' : ''}
+        </div>
+      `).join('');
+      
+      document.getElementById('networkList').innerHTML = html;
+    }
+
+    wifiToggle.addEventListener('click', () => {
+      wifiToggle.classList.toggle('on');
+      settings.wifiEnabled = wifiToggle.classList.contains('on');
+      window.__win11.wifiEnabled = settings.wifiEnabled;
+      window.__win11.saveSetting('wifiEnabled', settings.wifiEnabled);
+
+      if (settings.wifiEnabled) {
+        networkListContainer.style.display = 'block';
+        wifiStatus.textContent = '✓ Connected to ' + settings.wifiConnectedNetwork;
+        renderNetworks();
+        window.__win11.showToast('📡 Wi-Fi enabled');
+      } else {
+        networkListContainer.style.display = 'none';
+        wifiStatus.textContent = 'Wi-Fi is turned off';
+        window.__win11.showToast('📡 Wi-Fi disabled');
+      }
+    });
+
+    // ==================== WI-FI CONNECTION MODAL ====================
+    let selectedNetwork = '';
+
+    function openWifiModal(networkName) {
+      if (!settings.wifiEnabled) return;
+      selectedNetwork = networkName;
+      document.getElementById('wifiNetworkName').textContent = 'Enter password for ' + networkName;
+      document.getElementById('wifiPassword').value = '';
+      document.getElementById('modalOverlay').classList.add('active');
+      document.getElementById('wifiModal').classList.add('active');
+      document.getElementById('wifiPassword').focus();
+    }
+
+    function closeWifiModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+      document.getElementById('wifiModal').classList.remove('active');
+      selectedNetwork = '';
+    }
+
+    function connectToWifi() {
+      if (!selectedNetwork) return;
+      settings.wifiConnectedNetwork = selectedNetwork;
+      window.__win11.wifiConnectedNetwork = selectedNetwork;
+      window.__win11.saveSetting('wifiConnectedNetwork', selectedNetwork);
+      wifiStatus.textContent = '✓ Connected to ' + selectedNetwork;
+      renderNetworks();
+      window.__win11.showToast('✓ Connected to ' + selectedNetwork);
+      closeWifiModal();
+    }
+
+    // ==================== HOTSPOT TOGGLE ====================
+    const hotspotToggle = document.getElementById('hotspotToggle');
+    const hotspotDetails = document.getElementById('hotspotDetails');
+
+    hotspotToggle.addEventListener('click', () => {
+      hotspotToggle.classList.toggle('on');
+      settings.hotspotEnabled = hotspotToggle.classList.contains('on');
+      window.__win11.hotspotEnabled = settings.hotspotEnabled;
+      window.__win11.saveSetting('hotspotEnabled', settings.hotspotEnabled);
+
+      if (settings.hotspotEnabled) {
+        hotspotDetails.style.display = 'block';
+        window.__win11.showToast('📡 Hotspot enabled');
+      } else {
+        hotspotDetails.style.display = 'none';
+        window.__win11.showToast('📡 Hotspot disabled');
+      }
+    });
+
+    function toggleHotspotPassword() {
+      const passwordEl = document.getElementById('hotspotPassword');
+      if (passwordEl.textContent === '••••••••••••') {
+        passwordEl.textContent = 'portfolio2025';
+      } else {
+        passwordEl.textContent = '••••••••••••';
+      }
+    }
+
+    // ==================== AIRPLANE MODE ====================
+    const airplaneModeToggle = document.getElementById('airplaneModeToggle');
+
+    airplaneModeToggle.addEventListener('click', () => {
+      airplaneModeToggle.classList.toggle('on');
+      settings.airplaneModeEnabled = airplaneModeToggle.classList.contains('on');
+      window.__win11.airplaneModeEnabled = settings.airplaneModeEnabled;
+      window.__win11.saveSetting('airplaneModeEnabled', settings.airplaneModeEnabled);
+
+      const wifiNetworkSection = document.querySelector('.settings-group');
+      if (settings.airplaneModeEnabled) {
+        networkListContainer.style.pointerEvents = 'none';
+        networkListContainer.style.opacity = '0.5';
+        window.__win11.showToast('✈️ Airplane mode on');
+      } else {
+        networkListContainer.style.pointerEvents = 'auto';
+        networkListContainer.style.opacity = '1';
+        window.__win11.showToast('✈️ Airplane mode off');
+      }
+    });
+
+    // ==================== BATTERY SAVER ====================
+    const batterySaverToggle = document.getElementById('batterySaverToggle');
+
+    batterySaverToggle.addEventListener('click', () => {
+      batterySaverToggle.classList.toggle('on');
+      settings.batterySaver = batterySaverToggle.classList.contains('on');
+      window.__win11.applyBatterySaver(settings.batterySaver);
+    });
+
+    // ==================== POWER MODE ====================
+    document.querySelectorAll('.power-mode-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.power-mode-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        const mode = card.getAttribute('data-power-mode');
+        settings.powerMode = mode;
+        window.__win11.powerMode = mode;
+        window.__win11.saveSetting('powerMode', mode);
+        window.__win11.showToast('⚡ Power mode: ' + mode);
+      });
+    });
+
+    // ==================== WALLPAPERS (from wallpapers.js) ====================
+    function initWallpaperGrid() {
+      if (!window.__win11.wallpapers) return;
+      
+      const html = window.__win11.wallpapers.map(wp => `
+        <div class="wallpaper-swatch ${wp.id === (localStorage.getItem('win11_wallpaper') || 'bloom') ? 'active' : ''}" 
+             data-wallpaper-id="${wp.id}" 
+             style="background: ${wp.css};"
+             onclick="selectWallpaper('${wp.id}')">
+          <div class="wallpaper-checkmark">✓</div>
+          <div class="wallpaper-name">${wp.name}</div>
+        </div>
+      `).join('');
+      
+      document.getElementById('settingsWallpaperGrid').innerHTML = html;
+    }
+
+    function selectWallpaper(id) {
+      document.querySelectorAll('.wallpaper-swatch').forEach(s => s.classList.remove('active'));
+      document.querySelector(`[data-wallpaper-id="${id}"]`).classList.add('active');
+      const wp = window.__win11.wallpapers.find(w => w.id === id);
+      window.__win11.applyWallpaper(wp);
+      window.__win11.showToast('🎨 Wallpaper changed');
+    }
+
+    // ==================== ACCENT COLORS ====================
+    const accentColors = [
+      { name: 'Blue', hex: '#0078D4', rgb: '0, 120, 212' },
+      { name: 'Purple', hex: '#667eea', rgb: '102, 126, 234' },
+      { name: 'Pink', hex: '#EC407A', rgb: '236, 64, 122' },
+      { name: 'Red', hex: '#E81828', rgb: '232, 24, 40' },
+      { name: 'Orange', hex: '#FF8C00', rgb: '255, 140, 0' },
+      { name: 'Green', hex: '#107C10', rgb: '16, 124, 16' }
+    ];
+
+    function initAccentColorGrid() {
+      const currentAccent = localStorage.getItem('win11_accent') || '#0078D4';
+      
+      const html = accentColors.map(color => `
+        <div class="color-swatch ${color.hex === currentAccent ? 'active' : ''}" 
+             style="background: ${color.hex};"
+             onclick="selectAccentColor('${color.hex}', '${color.rgb}')"
+             title="${color.name}">
+        </div>
+      `).join('');
+      
+      document.getElementById('accentColorGrid').innerHTML = html;
+    }
+
+    function selectAccentColor(hex, rgb) {
+      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+      event.target.closest('.color-swatch').classList.add('active');
+      
+      document.documentElement.style.setProperty('--win11-accent', hex);
+      document.documentElement.style.setProperty('--win11-accent-rgb', rgb);
+      window.__win11.saveSetting('accent', hex);
+      window.__win11.showToast('🎨 Accent color updated');
+    }
+
+    // ==================== INITIALIZE ====================
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set initial states
+      brightnessSlider.value = settings.brightness;
+      brightnessValue.textContent = settings.brightness;
+
+      volumeSlider.value = settings.volume;
+      volumeValue.textContent = settings.volume;
+
+      if (settings.theme === 'light') {
+        document.querySelectorAll('.pill-toggle-btn[data-theme="light"]').forEach(btn => {
+          btn.classList.add('active');
+          btn.parentElement.querySelectorAll('.pill-toggle-btn[data-theme="dark"]').forEach(b => b.classList.remove('active'));
+        });
+      }
+
+      if (settings.nightLight) {
+        nightLightToggle.classList.add('on');
+      }
+
+      if (settings.wifiEnabled) {
+        wifiToggle.classList.add('on');
+        networkListContainer.style.display = 'block';
+        renderNetworks();
+      }
+
+      if (settings.hotspotEnabled) {
+        hotspotToggle.classList.add('on');
+        hotspotDetails.style.display = 'block';
+      }
+
+      if (settings.airplaneModeEnabled) {
+        airplaneModeToggle.classList.add('on');
+      }
+
+      if (settings.batterySaver) {
+        batterySaverToggle.classList.add('on');
+      }
+
+      if (settings.volumeMuted) {
+        muteToggle.classList.add('on');
+        document.getElementById('muteLabel').textContent = 'Unmute';
+      }
+
+      // Initialize wallpapers and colors
+      initWallpaperGrid();
+      initAccentColorGrid();
+
+      // Set power mode
+      document.querySelectorAll('.power-mode-card').forEach(card => {
+        if (card.getAttribute('data-power-mode') === settings.powerMode) {
+          card.classList.add('active');
+        } else {
+          card.classList.remove('active');
+        }
+      });
+    });
+
+    // Close modal on escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeWifiModal();
+      }
+    });
+  </script>
+</body>
+</html>
 .sett-sidebar {
   width: 280px;
   background: rgba(255, 255, 255, 0.03);
