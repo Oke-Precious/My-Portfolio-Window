@@ -197,8 +197,8 @@
   <div class="resume-header-bar">
     <div class="resume-title-text">Resume / Curriculum Vitae</div>
     <div class="resume-action-buttons">
+      <button class="resume-btn" id="downloadDocxBtn" title="Download DOCX">⬇️ Download DOCX</button>
       <button class="resume-btn" id="printBtn" title="Print Resume">🖨️ Print</button>
-      <button class="resume-btn" id="downloadBtn" title="Download as PDF">⬇️ Download PDF</button>
     </div>
   </div>
 
@@ -298,7 +298,8 @@
 (function () {
   // Get button elements
   const printBtn = document.getElementById('printBtn');
-  const downloadBtn = document.getElementById('downloadBtn');
+  const downloadDocxBtn = document.getElementById('downloadDocxBtn');
+  const downloadPdfBtn = document.getElementById('downloadPdfBtn');
   const resumeContent = document.getElementById('resumeContent');
 
   // Print functionality
@@ -306,10 +307,52 @@
     window.print();
   });
 
-  // Download as PDF using html2pdf library
-  downloadBtn.addEventListener('click', () => {
+  // Download DOCX file
+  downloadDocxBtn.addEventListener('click', () => {
+    downloadDocx();
+  });
+
+  // Download as PDF
+  downloadPdfBtn.addEventListener('click', () => {
     downloadPDF();
   });
+
+  // Function to download DOCX file
+  function downloadDocx() {
+    // Get the base path for resolving the file location
+    const getBasePath = () => {
+      const href = window.location.href;
+      if (href.startsWith('file://')) {
+        return './';
+      }
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return './';
+      }
+      const path = window.location.pathname;
+      if (path.length > 1 && !path.includes('/index.html') && !path.includes('.html')) {
+        return path.endsWith('/') ? path : path + '/';
+      }
+      return './';
+    };
+
+    const basePath = getBasePath();
+    const docxPath = basePath + '../Oke_Precious_Abioye_CV.docx';
+    
+    // Create a temporary link and trigger download
+    const link = document.createElement('a');
+    link.href = docxPath;
+    link.download = 'Oke_Precious_Abioye_CV.docx';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Show feedback
+    const originalText = downloadDocxBtn.textContent;
+    downloadDocxBtn.textContent = '✓ Downloaded';
+    setTimeout(() => {
+      downloadDocxBtn.textContent = originalText;
+    }, 2000);
+  }
 
   // Function to download resume as PDF
   function downloadPDF() {
@@ -343,12 +386,12 @@
     html2pdf().set(options).from(element).save();
   }
 
-  // Show a temporary message when download starts
-  downloadBtn.addEventListener('click', () => {
-    const originalText = downloadBtn.textContent;
-    downloadBtn.textContent = '⏳ Generating...';
+  // Show feedback on download buttons
+  downloadPdfBtn.addEventListener('click', () => {
+    const originalText = downloadPdfBtn.textContent;
+    downloadPdfBtn.textContent = '⏳ Generating...';
     setTimeout(() => {
-      downloadBtn.textContent = originalText;
+      downloadPdfBtn.textContent = originalText;
     }, 2000);
   });
 })();

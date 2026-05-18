@@ -170,6 +170,15 @@ calculator: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <circle cx="12" cy="11" r="1.5" fill="white" opacity="0.8"/>
       <path d="M8 15h8M8 18h6" stroke="white" stroke-width="1" opacity="0.6"/>
       <path d="M8 13h4" stroke="white" stroke-width="1.5" opacity="0.9"/>
+    </svg>`,
+
+    personalize: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="pers-g" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:#7C3AED"/><stop offset="100%" style="stop-color:#5B21B6"/>
+      </linearGradient></defs>
+      <circle cx="12" cy="12" r="10" fill="url(#pers-g)"/>
+      <path d="M12 7v10M7 12h10" stroke="white" stroke-width="1.5"/>
+      <circle cx="12" cy="12" r="1.5" fill="white" opacity="0.6"/>
     </svg>`
   };
 

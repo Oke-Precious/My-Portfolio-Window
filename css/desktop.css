@@ -8,13 +8,19 @@
   bottom: var(--win11-taskbar-height);
   overflow: hidden;
   z-index: var(--win11-z-desktop);
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 40%, #24243e 70%, #1a1a2e 100%);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  transition: background 600ms ease, background-image 600ms ease;
 }
 
 #desktop::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #0f0c29 0%, #302b63 40%, #24243e 70%, #1a1a2e 100%);
+  background: none;
   z-index: 0;
 }
 

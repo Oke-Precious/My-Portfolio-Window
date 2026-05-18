@@ -1,0 +1,395 @@
+<!-- Personalization & Settings Window -->
+<style>
+.personalize-root {
+  display: flex;
+  height: 100%;
+  font-family: var(--win11-font);
+  background: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.personalize-sidebar {
+  width: 220px;
+  background: rgba(0, 0, 0, 0.3);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.personalize-nav-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  border-left: 3px solid transparent;
+  transition: all 150ms;
+  white-space: nowrap;
+}
+
+.personalize-nav-item:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.personalize-nav-item.active {
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.15);
+  border-left-color: #667eea;
+}
+
+.personalize-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.personalize-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 12px;
+}
+
+.wallpaper-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.wallpaper-swatch {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.6;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 150ms;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+.wallpaper-swatch:hover {
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.wallpaper-swatch.active {
+  border-color: #0078D4;
+  border-width: 3px;
+  box-shadow: 0 0 12px rgba(0, 120, 212, 0.4);
+}
+
+.wallpaper-checkmark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 32px;
+  color: #0078D4;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transition: opacity 150ms;
+}
+
+.wallpaper-swatch.active .wallpaper-checkmark {
+  opacity: 1;
+}
+
+.wallpaper-name {
+  margin-top: 8px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  font-weight: 500;
+}
+
+.custom-section {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.color-picker-input {
+  width: 60px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  background: white;
+}
+
+.color-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 150ms;
+  font-family: var(--win11-font);
+}
+
+.color-btn:hover {
+  background: rgba(102, 126, 234, 0.2);
+  border-color: rgba(102, 126, 234, 0.4);
+}
+
+.accent-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+
+.accent-swatch {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 150ms;
+}
+
+.accent-swatch:hover {
+  transform: scale(1.1);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.accent-swatch.active {
+  border-color: white;
+  border-width: 3px;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+}
+
+.placeholder-content {
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .personalize-sidebar {
+    width: 160px;
+  }
+  .wallpaper-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .accent-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+</style>
+
+<div class="personalize-root">
+  <!-- Sidebar Navigation -->
+  <div class="personalize-sidebar">
+    <div class="personalize-nav-item active" data-tab="background">Background</div>
+    <div class="personalize-nav-item" data-tab="colors">Colors</div>
+    <div class="personalize-nav-item" data-tab="darkmode">Dark Mode</div>
+    <div class="personalize-nav-item" data-tab="lockscreen">Lock Screen</div>
+  </div>
+
+  <!-- Content Area -->
+  <div class="personalize-content">
+    <!-- Background Tab -->
+    <div id="bg-tab" class="personalize-tab active">
+      <div class="personalize-section-title">Choose your background</div>
+      <div class="wallpaper-grid" id="wallpaperGrid"></div>
+
+      <div style="margin-top: 24px;">
+        <div class="personalize-section-title">Custom color</div>
+        <div class="custom-section">
+          <input type="color" id="customColorPicker" class="color-picker-input" value="#0078D4" />
+          <button class="color-btn" id="setCustomBtn">Set as background</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Colors Tab -->
+    <div id="colors-tab" class="personalize-tab" style="display: none;">
+      <div class="personalize-section-title">Accent color</div>
+      <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-bottom: 16px;">Choose an accent color for highlights and interactive elements throughout Windows.</p>
+      <div class="accent-grid" id="accentGrid"></div>
+    </div>
+
+    <!-- Dark Mode Tab -->
+    <div id="darkmode-tab" class="personalize-tab" style="display: none;">
+      <div class="placeholder-content">
+        Dark mode is always enabled in this portfolio theme. 🌙
+      </div>
+    </div>
+
+    <!-- Lock Screen Tab -->
+    <div id="lockscreen-tab" class="personalize-tab" style="display: none;">
+      <div class="placeholder-content">
+        Lock screen customization coming soon. 🔒
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  // Get wallpapers from global state
+  const wallpapers = window.__win11.wallpapers || [];
+  const accentColors = [
+    { id: 'blue', name: 'Blue', hex: '#0078D4' },
+    { id: 'purple', name: 'Purple', hex: '#667eea' },
+    { id: 'pink', name: 'Pink', hex: '#EC407A' },
+    { id: 'red', name: 'Red', hex: '#E81828' },
+    { id: 'orange', name: 'Orange', hex: '#FF8C00' },
+    { id: 'green', name: 'Green', hex: '#107C10' }
+  ];
+
+  const currentWallpaper = localStorage.getItem('win11_wallpaper') || 'bloom';
+  const currentAccent = localStorage.getItem('win11_accent') || '#0078D4';
+
+  // Initialize wallpaper grid
+  function initWallpaperGrid() {
+    const grid = document.getElementById('wallpaperGrid');
+    if (!grid) return;
+
+    wallpapers.forEach(wp => {
+      const container = document.createElement('div');
+      
+      const swatch = document.createElement('div');
+      swatch.className = 'wallpaper-swatch';
+      if (currentWallpaper === wp.id) {
+        swatch.classList.add('active');
+      }
+      swatch.style.background = wp.css;
+      swatch.setAttribute('data-wallpaper-id', wp.id);
+      
+      const checkmark = document.createElement('div');
+      checkmark.className = 'wallpaper-checkmark';
+      checkmark.textContent = '✓';
+      swatch.appendChild(checkmark);
+      
+      swatch.addEventListener('click', () => {
+        // Remove active from all swatches
+        document.querySelectorAll('.wallpaper-swatch').forEach(s => s.classList.remove('active'));
+        swatch.classList.add('active');
+        
+        // Apply wallpaper
+        if (window.__win11 && window.__win11.applyWallpaper) {
+          window.__win11.applyWallpaper(wp);
+        }
+      });
+      
+      container.appendChild(swatch);
+      
+      const name = document.createElement('div');
+      name.className = 'wallpaper-name';
+      name.textContent = wp.name;
+      container.appendChild(name);
+      
+      grid.appendChild(container);
+    });
+  }
+
+  // Initialize accent color grid
+  function initAccentGrid() {
+    const grid = document.getElementById('accentGrid');
+    if (!grid) return;
+
+    accentColors.forEach(color => {
+      const swatch = document.createElement('div');
+      swatch.className = 'accent-swatch';
+      if (currentAccent === color.hex) {
+        swatch.classList.add('active');
+      }
+      swatch.style.background = color.hex;
+      swatch.title = color.name;
+      
+      swatch.addEventListener('click', () => {
+        // Remove active from all swatches
+        document.querySelectorAll('.accent-swatch').forEach(s => s.classList.remove('active'));
+        swatch.classList.add('active');
+        
+        // Apply accent color
+        document.documentElement.style.setProperty('--win11-accent', color.hex);
+        localStorage.setItem('win11_accent', color.hex);
+      });
+      
+      grid.appendChild(swatch);
+    });
+  }
+
+  // Custom color picker
+  function initCustomColorPicker() {
+    const picker = document.getElementById('customColorPicker');
+    const btn = document.getElementById('setCustomBtn');
+    
+    if (!picker || !btn) return;
+
+    picker.addEventListener('input', (e) => {
+      const color = e.target.value;
+      localStorage.setItem('win11_wallpaper_custom_color', color);
+    });
+
+    btn.addEventListener('click', () => {
+      const color = picker.value;
+      if (window.__win11 && window.__win11.applyCustomWallpaper) {
+        window.__win11.applyCustomWallpaper(color);
+        
+        // Remove active from wallpaper swatches
+        document.querySelectorAll('.wallpaper-swatch').forEach(s => s.classList.remove('active'));
+        
+        // Show feedback
+        const originalText = btn.textContent;
+        btn.textContent = '✓ Applied';
+        setTimeout(() => {
+          btn.textContent = originalText;
+        }, 1500);
+      }
+    });
+
+    // Load saved custom color
+    const savedCustom = localStorage.getItem('win11_wallpaper_custom_color');
+    if (savedCustom) {
+      picker.value = savedCustom;
+    }
+  }
+
+  // Tab navigation
+  function initTabs() {
+    const navItems = document.querySelectorAll('.personalize-nav-item');
+    const tabs = document.querySelectorAll('.personalize-tab');
+
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const tabId = item.getAttribute('data-tab');
+        
+        // Remove active from all nav items and tabs
+        navItems.forEach(ni => ni.classList.remove('active'));
+        tabs.forEach(t => t.style.display = 'none');
+        
+        // Add active to clicked item and corresponding tab
+        item.classList.add('active');
+        const tab = document.getElementById(`${tabId}-tab`);
+        if (tab) {
+          tab.style.display = 'flex';
+          tab.style.flexDirection = 'column';
+        }
+      });
+    });
+  }
+
+  // Initialize everything
+  initWallpaperGrid();
+  initAccentGrid();
+  initCustomColorPicker();
+  initTabs();
+})();
+</script>
